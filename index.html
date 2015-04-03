@@ -1,7 +1,64 @@
 <!doctype html>
 <html>
   <head>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"><script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="bower_components/howler/howler.min.js"></script>
+  <button class="play">Play</button>
+  <button class="stop">Stop</button>
+  <script>
+      var audioCtx = new (window.AudioContext || window.webkitAudioContext)(); // define audio context
+      
+
+      var timeInitial = audioCtx.currentTime;
+
+      var tick = new Howl({urls: ['http://www.javascriptoo.com/application/html/pong.wav'], volume: 0.075});
+
+      var count = 0;
+      setInterval(function() {
+        console.log(count % 4);
+        count++;
+        tick.play();
+      }, 500);
+
+      var recording = new Howl(
+        {
+          urls: ['./audio.m4a'],
+          loop: true,
+          autoplay: true
+        });
+
+      // recording.play();
+
+      $('.play').on('click', function(){
+
+        var checksWhenToPlay = setInterval(function() {
+          if (audioCtx.currentTime % 4 <= 0.1) {
+            recording.unmute();
+            clearInterval(checksWhenToPlay);
+          }
+        }, 1);
+
+        // console.log('playing');
+        // var barTime = 4;
+
+        // var currentTime = audioCtx.currentTime;
+        // var timeOfNextCycle = Math.ceil(currentTime) + barTime - 1;
+        // var delay = 
+        // setInterval()
+        // var timeToPlay = console.log(audioCtx.currentTime);
+
+
+        // recording.play();
+      });
+
+      $('.stop').on('click', function(){
+        console.log('pausing')
+        recording.mute();
+      });
+
+
+  </script>
+
   </head>
   <body>
   </body>
