@@ -1,122 +1,265 @@
-<!doctype html>
+<html>
+<head>
+
+<meta charset="utf-8">
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="bufferLoader.js"></script>
+
+</head>
+<body>
+<canvas></canvas>
+  <button id="sound1" value="0">Play</button>
+  <button id="sound2" value="1">Play</button>
+</div>
+
+<script>
+
+/////////// Initialize AudioContext, Bufferloader ////////
+var context; 
+var bufferLoader;
+
+var init = function() {
+
+  var contextClass = (window.AudioContext || 
+    window.webkitAudioContext || 
+    window.mozAudioContext || 
+    window.oAudioContext || 
+    window.msAudioContext);
+
+  // var finishedLoading = function(bufferList) {
+  //   // Create two sources and play them both together.
+  //   source1 = context.createBufferSource();
+  //   source2 = context.createBufferSource();
+  //   source1.buffer = bufferList[0];
+  //   source2.buffer = bufferList[1];
+
+  //   source1.connect(context.destination);
+  //   source2.connect(context.destination);
+  //   // source1.start(0);
+  //   // source2.start(0);
+  // };
+
+  if (contextClass) {
+    // alert("it works")
+    context = new contextClass();
+    console.log('context created: ', context);
+
+    bufferLoader = new BufferLoader(
+      context,
+      [
+        'metronome2.mp3',
+        'tambourines2.mp3',
+      ]
+      );
+
+    console.log('context modified: ', context);
+
+
+    bufferLoader.load();
+
+  } else {
+    // Web Audio API is not available. Ask the user to use a supported browser.
+  }
+
+  // setInterval = (function(){
+  // source.loopEnd -= 0.1
+  // }, 20)
+
+  // source.loopStart;
+  // source.loopEnd;
+};
+
+window.onload = init;
+
+
+///////// Create Instance of AudioContext //////////
+////////////////////////////////////////////////////
+// var data = [
+// {url: "metronome2.mp3", speed:2, port:0, recordedAtBpm: 120}, 
+// {url: "audio.m4a", speed:2, port:1, recordedAtBpm: 120}
+// ];
+
+// buffer = null;
+
+// var getFile = function(url, callback) {
+//   var request = new XMLHttpRequest();
+//   request.open("GET", url, true);
+//   request.responseType = "arraybuffer";
+
+//   request.onload = function() {
+//     context.decodeAudioData(request.response, function(data) {
+//           callback(data, undefined);
+//         }, function() {
+//           callback(undefined, "Error decoding the file " + url);
+//         });
+//   }
+//   request.send();
+// }
+
+var play = function() {
+  // getFile(sound.url, function(data) {
+
+    var source = context.createBufferSource();
+    source.buffer = bufferLoader.bufferList[0];
+    source.loop = true;
+    // source.playbackRate.value = playbackControl.value;
+    source.connect(context.destination);
+    source.start();
+    source.loopStart = 0;
+    source.loopEnd = 2;
+
+    sound.source.onended = function() {
+      console.log('Your audio has finished playing');
+
+    }
+
+    console.log("DATA:", data)
+    console.log(sound.source);
+  // };
+};
+
+var pause = function(sound) {
+  console.log(sound)
+  sound.source.stop();
+}
+
+var toggle = function(button) {
+  // var data = button.split(" ")
+  // console.log(data);
+  console.log(button.value)
+  if (button.innerHTML == "Play") {
+    button.innerHTML = "Pause";
+    play();
+  } else {
+    button.innerHTML = "Play";
+    pause();
+  }
+}
+
+// playbackControl.oninput = function() {
+//   sound.playbackRate.value = playbackControl.value;
+//   playbackValue.innerHTML = playbackControl.value;
+// }
+
+$(document).ready(function(){
+  $("#sound1"). on("click", function(e) {
+    toggle(e.target);
+  });
+  $("#sound2"). on("click", function(e) {
+    toggle(e.target);
+
+  })
+  
+});
+</script>
+
+</body>
+</html>
+
+
+
+
+<!-- <!doctype html>
 <html>
   <head>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-  <script src="bower_components/howler/howler.min.js"></script>
   <button class="play">Play</button>
-  <button class="stop">Stop</button>
-  <button class="tempoChange">TempoChange</button>
-
-  <button class="playBass">Play Bassline</button>
-  <button class="stopBass">Stop Bassline </button>
-  <button class="tempoChangeBass">TempoChange Bassline</button>
 
 
   <script>
-      var audioCtx = new (window.AudioContext || window.webkitAudioContext)(); // define audio context
-      
 
-      var timeInitial = audioCtx.currentTime;
+    /////////// Initialize AudioContext /////////
 
-      var tick = new Howl({urls: ['http://www.javascriptoo.com/application/html/pong.wav'], volume: 0.15});
+    var contextClass = (window.AudioContext || 
+      window.webkitAudioContext || 
+      window.mozAudioContext || 
+      window.oAudioContext || 
+      window.msAudioContext);
 
-      var count = 0;
-      setInterval(function() {
-        console.log(count % 4);
-        count++;
-        // tick.play();
-      }, 500);
+    if (contextClass) {
+      // Web Audio API is available.
+      var context = new contextClass();
+    } else {
+      alert('web Audio API not available, try using Chrome or another browser.');
+      // Web Audio API is not available. Ask the user to use a supported browser.
+    }
 
-      var recording = new Howl(
-        {
-          urls: ['./audio.m4a'],
-          loop: true,
-          autoplay: false,
-          volume: 2
-        });
+    //////////// Metronome Creation ///////////////
 
-      var metronome = new Howl(
-        {
-          urls: ['./metronome2.mp3'],
-          loop: true,
-          autoplay: false
-        });
-      
-      var bassline = new Howl(
-        {
-          urls: ['./tambourines2.mp3'],
-          loop: true,
-          autoplay: false,
-          volume: 0.5
-        });
+    // Create the source node. Will want to name this properly based on the audio file for later.
+    var metronomeSource = context.createBufferSource();
 
-      // recording.play();
+    // Create the gain node.
+    var metronomeGain = context.createGain();
 
-      $('.tempoChange').on('click', function() {
-        console.log('changing tempo');
-        recording.unload();
-        recording = new Howl(
-        {
-          urls: ['./audio.m4a'],
-          loop: true,
-          autoplay: true,
-          rate: 0.5
-        });
+    // Connect the source to the filter, and the filter
+    // to the destination.
+    // http://orm-chimera-prod.s3.amazonaws.com/1234000001552/images/waap_0103.png
+    metronomeSource.connect(metronomeGain);
+    metronomeGain.connect(context.destination);
+
+
+    /////////// Load Metronome Buffer ///////////
+
+    var request = new XMLHttpRequest();
+    request.open('GET', 'metronome2.mp3', true);
+    request.responseType = 'arraybuffer';
+
+    // Decode asynchronously
+    request.onload = function() {
+      // Ask the audio context to decode the incoming
+      // response data.
+      console.log('about to decode audio data: ', request.response);
+      context.decodeAudioData(request.response, function(theBuffer) {
+        console.log('decoded data, here\'s the audio buffer object: ', theBuffer);
+        buffer = theBuffer;
+        metronomeSource.buffer = buffer;
+        
+        // In an online example, this was done in the play function, but I thought it made
+        // More sense to break out the code here, or anywhere else before we call play.
+        metronomeSource.loop = true;
+
+      }, function onError(err) {
+        console.error(err);
       });
-      
-      $('.tempoChangeBass').on('click', function() {
-        console.log('changing tempo');
-        bassline.unload();
-        bassline = new Howl(
-        {
-          urls: ['./bassline.mp3'],
-          loop: true,
-          autoplay: true,
-          rate: 0.5
-        });
-      });
+    }
 
-      $('.play').on('click', function(){
-        metronome.play();
-        bassline.play();
-      });
+    request.send();
 
-      $('.playBass').on('click', function(){ 
-        console.log('playing');
-        var barTime = 2;
+    //////////// Audio Controls (pause, play, etc)  ////////////
 
+    var play = function(src){
+      // ASANA: Stop the recording two seconds from the offset. Offset is second argument.
+      src.start(0, 0, 2);
+      startTime = context.currentTime;
+      src.loop = true;
+    }
 
-        // Get current time, then find remainder when you've divided by bartime to get how much distance we have till bartime;
-        var currentTime = audioCtx.currentTime;
-        var remainder = currentTime % barTime;
-        console.log('currentTime:', currentTime);
-
-
-        var delay = barTime - remainder;
-        console.log('delay: ', delay);
-
-        console.log('expected time of play: ', delay + currentTime);
-
-        setTimeout(function() {
-          console.log('playing at ', audioCtx.currentTime);
-          bassline.unmute();
-          console.log('played at ', audioCtx.currentTime);
-
-        }, delay * 1000);
-
+    /////////// Add Event Listeners to Buttons /////
+    
+    // ASANA: Play a layer in Web Audio API
+    $('.play').on('click', function() {
+      play(metronomeSource);
       });
 
-      
 
-      $('.stop').on('click', function(){
-        console.log('pausing');
-        recording.mute();
-      });
 
-      $('.stopBass').on('click', function(){
-        console.log('pausing');
-        bassline.mute();
-      });
+      // var currentTime = audioCtx.currentTime;
+        // var remainder = currentTime % barTime;
+        // console.log('currentTime:', currentTime);
+
+
+        // var delay = barTime - remainder;
+        // console.log('delay: ', delay);
+
+        // console.log('expected time of play: ', delay + currentTime);
+
+        // setTimeout(function() {
+        //   console.log('playing at ', audioCtx.currentTime);
+        //   bassline.unmute();
+        //   console.log('played at ', audioCtx.currentTime);
+
+        // }, delay * 1000);
 
 
   </script>
@@ -125,3 +268,189 @@
   <body>
   </body>
 </html>
+
+
+<html>
+<head>
+<script type='text/javascript'>
+
+
+var ctx; //audio context
+var buf; //audio buffer
+
+
+//init the sound system
+function init() {
+    console.log("in init");
+    try {
+        ctx = new AudioContext(); //is there a better API for this?
+        loadFile();
+    } catch(e) {
+        alert('you need webaudio support');
+    }
+}
+window.addEventListener('load',init,false);
+
+//load and decode mp3 file
+function loadFile() {
+    var req = new XMLHttpRequest();
+    req.open("GET","metronome2.mp3",true);
+    req.responseType = "arraybuffer";
+    req.onload = function() {
+        //decode the loaded data
+        ctx.decodeAudioData(req.response, function(buffer) {
+            buf = buffer;
+            setupButtons();
+        });
+    };
+    req.send();
+}
+
+//play the loaded file
+function play() {
+    //create a source node from the buffer
+    var src = ctx.createBufferSource(); 
+    src.buffer = buf;
+    //connect to the final output node (the speakers)
+    src.connect(ctx.destination);
+    //play immediately
+    src.start();
+}
+
+function stop() {
+  var src = ctx.createBufferSource(); 
+  src.buffer = buf;
+  //connect to the final output node (the speakers)
+  src.connect(ctx.destination);
+  //play immediately
+  src.stop();
+}
+
+function setupButtons() {
+    document.getElementById('play1').onclick = function() {
+        play();
+    }
+
+    document.getElementById('play1').onclick = function() {
+        stop();
+    }
+
+    document.getElementById('play2').onclick = function() {
+        var time = ctx.currentTime;
+        for(var i=0; i<4; i++) {
+            var src = ctx.createBufferSource(); 
+            src.buffer = buf;
+            //connect to the final output node (the speakers)
+            src.connect(ctx.destination);
+            //play immediately
+            src.start(time+i/4);
+        }
+    }
+}
+
+
+</script>
+</head>
+<body>
+<h1>Sound Effects Demo</h1>
+<form>
+<input type='button' id='play1' value='play once'/>
+<input type='button' id='stop1' value='pause play'/>
+<input type='button' id='play2' value='play staggered'/>
+</form>
+
+<script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-9436360-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+</script></body>
+</html>
+
+
+<!-- <html>
+<head>
+
+<meta charset="utf-8">
+</head>
+<body>
+<canvas></canvas>
+  <button id=play-pause>Play</button>
+    <input class="playback-rate-control" type="range" min="0.25" max="3" step="0.05" value="1">
+<span class="playback-rate-value">1.0</span>
+</div>
+
+<script>
+
+
+var ctx = new AudioContext();
+var url = "audio.m4a";
+buffer = null;
+
+var getFile = function(url, callback) {
+  var request = new XMLHttpRequest();
+  request.open("GET", url, true);
+  request.responseType = "arraybuffer";
+
+  request.onload = function() {
+    ctx.decodeAudioData(request.response, function(data) {
+          callback(data, undefined);
+        }, function() {
+          callback(undefined, "Error decoding the file " + url);
+        });
+  }
+  request.send();
+}
+
+var play = function() {
+  getFile(url, function(data) {
+    source = ctx.createBufferSource();
+    source.buffer = data;
+    source.loop = true;
+    // source.playbackRate.value = playbackControl.value;
+    source.connect(ctx.destination);
+    source.start(0);
+
+    console.log("DATA:", data)
+    console.log(source);
+  });
+}
+
+var pause = function() {
+  source.stop(0);
+}
+
+var toggle = function(button) {
+  if (button.innerHTML == "Play") {
+    button.innerHTML = "Pause";
+    play();
+  } else {
+    button.innerHTML = "Play";
+    pause();
+  }
+}
+
+// playbackControl.oninput = function() {
+//   source.playbackRate.value = playbackControl.value;
+//   playbackValue.innerHTML = playbackControl.value;
+// }
+
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelector("#play-pause").addEventListener("click", function(e) {
+    toggle(e.target);
+  });
+});
+</script>
+
+</body>
+</html>
+
+
+
+
+ --> -->
