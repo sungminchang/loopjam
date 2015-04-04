@@ -37,16 +37,16 @@
 
       var metronome = new Howl(
         {
-          urls: ['./metronome.mp3'],
+          urls: ['./metronome2.mp3'],
           loop: true,
-          autoplay: true
+          autoplay: false
         });
       
       var bassline = new Howl(
         {
-          urls: ['./tambourines.mp3'],
+          urls: ['./tambourines2.mp3'],
           loop: true,
-          autoplay: true,
+          autoplay: false,
           volume: 0.5
         });
 
@@ -76,30 +76,12 @@
         });
       });
 
-      $('.play').on('click', function(){ 
-
-        var checksWhenToPlay = setInterval(function() {
-          if (audioCtx.currentTime % 4 <= 0.1) {
-            console.log('audioCtx.currentTime: ', audioCtx.currentTime);
-            console.log('audioCtx.currentTime % 4: ', audioCtx.currentTime % 4);
-            recording.unmute();
-            clearInterval(checksWhenToPlay);
-          }
-        });
-
+      $('.play').on('click', function(){
+        metronome.play();
+        bassline.play();
       });
 
       $('.playBass').on('click', function(){ 
-
-        // var checksWhenToPlay = setInterval(function() {
-        //   if (audioCtx.currentTime % 8 <= 0.1) {
-        //     console.log('audioCtx.currentTime: ', audioCtx.currentTime);
-        //     console.log('audioCtx.currentTime % 4: ', audioCtx.currentTime % 4);
-        //     bassline.unmute();
-        //     clearInterval(checksWhenToPlay);
-        //   }
-        // });
-
         console.log('playing');
         var barTime = 2;
 
@@ -109,28 +91,15 @@
         var remainder = currentTime % barTime;
         console.log('currentTime:', currentTime);
 
-        // Get the time till the next cycle, ie. when a bar will
-        // start anew, relative to the current time.
-
-        // two scenarios
-          // currenttime === 0.01
-            // Math.ceil this, will only need to add barTime - 1;
-          // currenttime === 1.01
-            // Only need to find  math.ceil(currenttime) - currentTime;
-        // var timeOfNextCycle = Math.ceil(currentTime) + barTime;
-
-        // var delay = timeOfNextCycle - currentTime;
 
         var delay = barTime - remainder;
         console.log('delay: ', delay);
 
-        // console.log('timeOfNextCycle: ', timeOfNextCycle);
         console.log('expected time of play: ', delay + currentTime);
 
         setTimeout(function() {
           console.log('playing at ', audioCtx.currentTime);
           bassline.unmute();
-          // metronome.stop().play();
           console.log('played at ', audioCtx.currentTime);
 
         }, delay * 1000);
