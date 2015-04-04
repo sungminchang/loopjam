@@ -5,55 +5,148 @@
   <script src="bower_components/howler/howler.min.js"></script>
   <button class="play">Play</button>
   <button class="stop">Stop</button>
+  <button class="tempoChange">TempoChange</button>
+
+  <button class="playBass">Play Bassline</button>
+  <button class="stopBass">Stop Bassline </button>
+  <button class="tempoChangeBass">TempoChange Bassline</button>
+
+
   <script>
       var audioCtx = new (window.AudioContext || window.webkitAudioContext)(); // define audio context
       
 
       var timeInitial = audioCtx.currentTime;
 
-      var tick = new Howl({urls: ['http://www.javascriptoo.com/application/html/pong.wav'], volume: 0.075});
+      var tick = new Howl({urls: ['http://www.javascriptoo.com/application/html/pong.wav'], volume: 0.15});
 
       var count = 0;
       setInterval(function() {
         console.log(count % 4);
         count++;
-        tick.play();
+        // tick.play();
       }, 500);
 
       var recording = new Howl(
         {
           urls: ['./audio.m4a'],
           loop: true,
+          autoplay: false,
+          volume: 2
+        });
+
+      var metronome = new Howl(
+        {
+          urls: ['./metronome.mp3'],
+          loop: true,
           autoplay: true
+        });
+      
+      var bassline = new Howl(
+        {
+          urls: ['./tambourines.mp3'],
+          loop: true,
+          autoplay: true,
+          volume: 0.5
         });
 
       // recording.play();
 
-      $('.play').on('click', function(){
+      $('.tempoChange').on('click', function() {
+        console.log('changing tempo');
+        recording.unload();
+        recording = new Howl(
+        {
+          urls: ['./audio.m4a'],
+          loop: true,
+          autoplay: true,
+          rate: 0.5
+        });
+      });
+      
+      $('.tempoChangeBass').on('click', function() {
+        console.log('changing tempo');
+        bassline.unload();
+        bassline = new Howl(
+        {
+          urls: ['./bassline.mp3'],
+          loop: true,
+          autoplay: true,
+          rate: 0.5
+        });
+      });
+
+      $('.play').on('click', function(){ 
 
         var checksWhenToPlay = setInterval(function() {
           if (audioCtx.currentTime % 4 <= 0.1) {
+            console.log('audioCtx.currentTime: ', audioCtx.currentTime);
+            console.log('audioCtx.currentTime % 4: ', audioCtx.currentTime % 4);
             recording.unmute();
             clearInterval(checksWhenToPlay);
           }
-        }, 1);
+        });
 
-        // console.log('playing');
-        // var barTime = 4;
-
-        // var currentTime = audioCtx.currentTime;
-        // var timeOfNextCycle = Math.ceil(currentTime) + barTime - 1;
-        // var delay = 
-        // setInterval()
-        // var timeToPlay = console.log(audioCtx.currentTime);
-
-
-        // recording.play();
       });
 
+      $('.playBass').on('click', function(){ 
+
+        // var checksWhenToPlay = setInterval(function() {
+        //   if (audioCtx.currentTime % 8 <= 0.1) {
+        //     console.log('audioCtx.currentTime: ', audioCtx.currentTime);
+        //     console.log('audioCtx.currentTime % 4: ', audioCtx.currentTime % 4);
+        //     bassline.unmute();
+        //     clearInterval(checksWhenToPlay);
+        //   }
+        // });
+
+        console.log('playing');
+        var barTime = 2;
+
+
+        // Get current time, then find remainder when you've divided by bartime to get how much distance we have till bartime;
+        var currentTime = audioCtx.currentTime;
+        var remainder = currentTime % barTime;
+        console.log('currentTime:', currentTime);
+
+        // Get the time till the next cycle, ie. when a bar will
+        // start anew, relative to the current time.
+
+        // two scenarios
+          // currenttime === 0.01
+            // Math.ceil this, will only need to add barTime - 1;
+          // currenttime === 1.01
+            // Only need to find  math.ceil(currenttime) - currentTime;
+        // var timeOfNextCycle = Math.ceil(currentTime) + barTime;
+
+        // var delay = timeOfNextCycle - currentTime;
+
+        var delay = barTime - remainder;
+        console.log('delay: ', delay);
+
+        // console.log('timeOfNextCycle: ', timeOfNextCycle);
+        console.log('expected time of play: ', delay + currentTime);
+
+        setTimeout(function() {
+          console.log('playing at ', audioCtx.currentTime);
+          bassline.unmute();
+          // metronome.stop().play();
+          console.log('played at ', audioCtx.currentTime);
+
+        }, delay * 1000);
+
+      });
+
+      
+
       $('.stop').on('click', function(){
-        console.log('pausing')
+        console.log('pausing');
         recording.mute();
+      });
+
+      $('.stopBass').on('click', function(){
+        console.log('pausing');
+        bassline.mute();
       });
 
 
