@@ -1,7 +1,15 @@
-var BufferLoader = function(context, urlList, callback) {
+var BufferLoader = function(context, data, callback) {
   console.log('inside bufferLoader, about to modify context', context);
+  
+  var urls = [];
+
+  for (var i = 0; i < data.length; i++) {
+    urls.push(data[i].url);
+  }
+  console.log('urls: ', urls);
+
   this.context = context;
-  this.urlList = urlList;
+  this.urlList = urls;
   this.onload = callback;
   this.bufferList = new Array();
   // Need to keep references to each of the sources
@@ -13,6 +21,7 @@ var BufferLoader = function(context, urlList, callback) {
 BufferLoader.prototype.loadBuffer = function(url, index) {
   // Load buffer asynchronously
   var request = new XMLHttpRequest();
+  console.log('About to load buffer of this url: ', url);
   request.open("GET", url, true);
   request.responseType = "arraybuffer";
 
@@ -33,7 +42,6 @@ BufferLoader.prototype.loadBuffer = function(url, index) {
         // That correlate to each loopnode, e.g. 'loopnodeA',
         // 'loopnodeB', etc
 
-        loader.sources[index] = 
         // if (++loader.loadCount == loader.urlList.length)
           // loader.onload(loader.bufferList);
       },
@@ -51,8 +59,9 @@ BufferLoader.prototype.loadBuffer = function(url, index) {
 };
 
 BufferLoader.prototype.load = function() {
-  for (var i = 0; i < this.urlList.length; ++i)
-  this.loadBuffer(this.urlList[i], i);
+  for (var i = 0; i < this.urlList.length; ++i) {
+    this.loadBuffer(this.urlList[i], i);
+  }
 };
 
 
