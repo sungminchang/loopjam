@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script src="bufferLoader.js"></script>
+<script src="recordingSources.js"></script>
 
 </head>
 <body>
@@ -74,10 +75,10 @@ window.onload = init;
 
 ///////// Create Instance of AudioContext //////////
 ////////////////////////////////////////////////////
-// var data = [
-// {url: "metronome2.mp3", speed:2, port:0, recordedAtBpm: 120}, 
-// {url: "audio.m4a", speed:2, port:1, recordedAtBpm: 120}
-// ];
+var data = [
+{url: "metronome2.mp3", speed:2, port:0, recordedAtBpm: 120}, 
+{url: "tambourines2.mp3", speed:2, port:1, recordedAtBpm: 120}
+];
 
 // buffer = null;
 
@@ -96,32 +97,34 @@ window.onload = init;
 //   request.send();
 // }
 
-var play = function() {
+var play = function(sound) {
   // getFile(sound.url, function(data) {
 
-    var source = context.createBufferSource();
-    source.buffer = bufferLoader.bufferList[0];
-    source.loop = true;
+    sound.source = context.createBufferSource();
+    HOLDERSOURCE = source;
+    sound.source.buffer = bufferLoader.bufferList[0];
+    sound.source.loop = true;
     // source.playbackRate.value = playbackControl.value;
     source.connect(context.destination);
     source.start();
     source.loopStart = 0;
     source.loopEnd = 2;
 
-    sound.source.onended = function() {
+    source.onended = function() {
       console.log('Your audio has finished playing');
+    };
 
-    }
-
-    console.log("DATA:", data)
-    console.log(sound.source);
+    // console.log('DATA: ', data)
+    console.log('source', source);
   // };
 };
 
 var pause = function(sound) {
-  console.log(sound)
+  var source = context.createBufferSource();
+  source.buffer = bufferLoader.bufferList[0];
+  console.log('About to pause, logging source: ', source);
   sound.source.stop();
-}
+};
 
 var toggle = function(button) {
   // var data = button.split(" ")
@@ -134,7 +137,7 @@ var toggle = function(button) {
     button.innerHTML = "Play";
     pause();
   }
-}
+};
 
 // playbackControl.oninput = function() {
 //   sound.playbackRate.value = playbackControl.value;
