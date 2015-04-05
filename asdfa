@@ -77,14 +77,32 @@ var play = function(button) {
 
     console.log('playing a sound: ', soundData);
 
+    /////////
+    var barTime = soundData.speed;
+
+
+    // Get current time, then find remainder when you've divided by bartime to get how much distance we have till bartime;
+    var currentTime = context.currentTime;
+    var remainder = currentTime % barTime;
+    console.log('currentTime:', currentTime);
+
+
+    var delay = barTime - remainder;
+    console.log('delay: ', delay);
+
+    console.log('expected time of play: ', delay + currentTime);
+
     var source = soundData.source = context.createBufferSource();
     soundData.source.buffer = bufferLoader.bufferList[soundIndex];
     soundData.source.loop = true;
     // source.playbackRate.value = playbackControl.value;
+    var gainNode = soundData.source.gainNode = context.createGain();
+    soundData.source.connect(gainNode);
+
     soundData.source.connect(context.destination);
-    soundData.source.start();
+    soundData.source.start(currentTime + delay);
     soundData.source.loopStart = 0;
-    soundData.source.loopEnd = 2;
+    soundData.source.loopEnd = barTime;
 
     source.onended = function() {
       console.log('Your audio has finished playing');
