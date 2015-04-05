@@ -16,12 +16,12 @@ var createLoopNode = function(loopClass, xPos, yPos){
   var container = svg.append("g")
     .attr("transform", "translate(" + w/2 + "," + h/2 + ")");
 
-  container.selectAll("g.planet").data(planets).enter().append("g")
+  container.selectAll("g").data(planets).enter().append("g")
     .each(function(d, i) {
-      d3.select(this).append("circle").attr("class", "orbit")
+      d3.select(this).append("circle").attr("class", "disc")
         .attr("r", d.R);
       d3.select(this).append("circle").attr("r", d.r).attr("cx",xPos)
-        .attr("cy", -yPos).attr("class", "planet");
+        .attr("cy", -yPos).attr("class", "cue");
     });
 
   d3Container.svg = svg;

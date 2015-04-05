@@ -41,15 +41,24 @@ $(function() {
     },
     muteLoopNode: function(loopNode, t){
       // t : the audioCtx time when mute event got triggered
+      t = t || this.audioCtx.currentTime;
+      
+      var disc = loopNode.d3Obj.container.select("circle.disc");
+      disc.attr("class", "disc mute");
 
     },
     unmuteLoopNode: function(loopNode, t){
       // t : the audioCtx time when mute event got triggered
-      console.log(loopNode);
+      t = t || this.audioCtx.currentTime;
+      
+      var disc = loopNode.d3Obj.container.select("circle.disc");
+      disc.attr("class", "disc unmute");
     },
     recordLoopNode: function(loopNode, t){
       // t : the audioCtx time when record event got triggered
-      console.log(loopNode);
+      t = t || this.audioCtx.currentTime;
+      
+
       
     },
 
@@ -57,9 +66,8 @@ $(function() {
       // bpm : the new tempo
       // t : the audioCtx time when tempo changed
       t = t || this.audioCtx.currentTime;
-      // 
-      this.tempoAdjustment = this.tempoAdjustment + t * (3/2) * (bpm - this.Params.bpm);
 
+      this.tempoAdjustment = this.tempoAdjustment + t * (3/2) * (bpm - this.Params.bpm);
       this.Params.bpm = bpm;
 
 
@@ -78,16 +86,16 @@ $(function() {
           var svg = loopNodes[i].d3Obj.svg;
           var multiplier = loopNodes[i].multiplier;
 
-          svg.selectAll(".planet").attr("transform", function(d) {
+          svg.selectAll(".cue").attr("transform", function(d) {
             // amount to rotate from original (xPos:0, yPos:1) position
             var rotateDeg = (delta * speed - tempoAdjustment) / multiplier;
 
             // animation at 90, 180, 270, and 360 degree
 
             if(rotateDeg % 90 < 20 || rotateDeg % 90 > 80){
-              svg.selectAll(".planet").attr("class", "planet darkplanet");
+              svg.selectAll(".cue").attr("class", "cue darkplanet");
             } else{
-              svg.selectAll(".planet").attr("class", "planet");
+              svg.selectAll(".cue").attr("class", "cue");
             }
             return "rotate(" + rotateDeg  +")";
           });
