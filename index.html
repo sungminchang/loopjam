@@ -16,7 +16,7 @@
 
 <script>
 
-/////////// Initialize AudioContext, Bufferloader ////////
+/////////// Initialize AudioContext, Bufferloader, Recordings /////////
 ////////////////////////////////////////////////////
 
 var context; 
@@ -29,33 +29,39 @@ var data = [
 
 var init = function() {
 
+  // Check for variations of prefixed versions of the Web Audio API
   var contextClass = (window.AudioContext || 
     window.webkitAudioContext || 
     window.mozAudioContext || 
     window.oAudioContext || 
     window.msAudioContext);
 
-
   if (contextClass) {
     // alert("it works")
     context = new contextClass();
     console.log('context created: ', context);
 
+    // Initialize a new instance of the BufferLoader class,
+    // passing in our context and data object. BufferLoader
+    // will buffer all of the recordings and hold onto
+    // references for the buffers.
     bufferLoader = new BufferLoader(
       context,
       data
       );
 
-    console.log('context modified: ', context);
-
-
+    // Invoking bufferLoader's .load method does the actual
+    // buffering and loading of the recordings, and stores
+    // the buffers on the bufferloader instance.
     bufferLoader.load();
 
   } else {
-    alert('Web Audio API is not available');
     // Web Audio API is not available. Ask the user to use a supported browser.
+    alert('Web Audio API is not available');
   }
 
+  // Not sure what these lines of codes do, commented them out
+  // for now.
   // setInterval = (function(){
   // source.loopEnd -= 0.1
   // }, 20)
@@ -64,51 +70,75 @@ var init = function() {
   // source.loopEnd;
 };
 
+// Register 'init' as the function to execute once
+// the window emits its 'load' event.
 window.onload = init;
 
-
-///////// Create Instance of AudioContext //////////
-////////////////////////////////////////////////////
+///////// Create Instance of AudioContext ///////////
+/////////////////////////////////////////////////////
 
 var play = function(button) {
-  // getFile(sound.url, function(data) {
-    var soundIndex = button.value;
-    var soundData = data[soundIndex];
+  // Grab the value associated with the button,
+  // will be used to identify the sound associated with the button.
+  var soundIndex = button.value;
 
-    console.log('playing a sound: ', soundData);
+  // Grab the data object associated with the button.
+  var soundData = data[soundIndex];
 
-    /////////
-    var barTime = soundData.speed;
+  console.log('playing a sound: ', soundData);
 
+  // Grab the amount of time a bar takes to complete.
+  var barTime = soundData.speed;
 
-    // Get current time, then find remainder when you've divided by bartime to get how much distance we have till bartime;
-    var currentTime = context.currentTime;
-    var remainder = currentTime % barTime;
-    console.log('currentTime:', currentTime);
+  var currentTime = context.currentTime;
 
+  // The remainder tells us how much of the bartime we have 
+  // completed thus far.
+  var remainder = currentTime % barTime;
+  console.log('currentTime:', currentTime);
 
-    var delay = barTime - remainder;
-    console.log('delay: ', delay);
+  // The delay calculates how much we'll have to delay
+  // the playing of the sound so that we can perfectly
+  // match the time of the next beat.
+  var delay = barTime - remainder;
+  console.log('delay: ', delay);
 
-    console.log('expected time of play: ', delay + currentTime);
+  console.log('expected time of play: ', delay + currentTime);
 
-    var source = soundData.source = context.createBufferSource();
-    soundData.source.buffer = bufferLoader.bufferList[soundIndex];
-    soundData.source.loop = true;
-    // source.playbackRate.value = playbackControl.value;
-    var gainNode = soundData.source.gainNode = context.createGain();
-    soundData.source.connect(gainNode);
+  // Reassign the source associated with the soundData object
+  // to a new buffer source. This way, we can reference the same
+  // source to stop playing the loop. However, once stopped,
+  // the source is basically discarded and you must create
+  // a new one. One play per source.
+  var source = soundData.source = context.createBufferSource();
 
-    soundData.source.connect(context.destination);
-    soundData.source.start(currentTime + delay);
-    soundData.source.loopStart = 0;
-    soundData.source.loopEnd = barTime;
+  // Associate the new source instance with the loaded buffer.
+  soundData.source.buffer = bufferLoader.bufferList[soundIndex];
+  soundData.source.loop = true;
+  // source.playbackRate.value = playbackControl.value;
 
-    source.onended = function() {
-      console.log('Your audio has finished playing');
-    };
+  // Create a gainNode, through which we will pass the soundData.
+  var gainNode = soundData.gainNode = context.createGain();
+  // Connect the source to the gainNode.
+  soundData.source.connect(gainNode);
 
-    console.log('source', source);
+  //Connect the gainNode to the destination.
+  soundData.gainNode.connect(context.destination);
+
+  // Play the sound, delaying the sound by the delay necessary
+  // to make the sound play at the start of a new measure.
+  soundData.source.start(currentTime + delay);
+
+  // Define what parts of the soundfile will be played.
+  // In this case, second 0 to second barTime will be played.
+  soundData.source.loopStart = 0;
+  soundData.source.loopEnd = barTime;
+
+  source.onended = function() {
+    console.log('Your audio has finished playing');
+  };
+
+  console.log('source', source);
 };
 
 var pause = function(button) {
