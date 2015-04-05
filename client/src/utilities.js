@@ -1,9 +1,9 @@
-var TrackParams = function(_t, _bpm){
+var TrackParams = function(_t, _bpm, _startTimeStamp){
   // INPUT:
-    // _t = global time
+    // _t = global time (in sec)
     // _bpm = global tempo (in beats per min)
   
-  this.t = _t; //Note: I'm assuming this to be the timer time from audio.
+  this.t = _t || 0; //Note: I'm assuming this to be the timer time from audio.
   this.bpm = _bpm || 120;
 };
 
@@ -13,7 +13,7 @@ TrackParams.prototype.bar = function(){
   return 240 / this.bpm;    
 };
 TrackParams.prototype.angPos_rad = function(multiplier){
-  // angular position in radian
+  // angular position in radian, assuming 0 corresponds to top of circle
   return 2 * Math.PI * this.t / (multiplier * this.bar());
 };
 TrackParams.prototype.angPos = function(multiplier){
@@ -23,10 +23,14 @@ TrackParams.prototype.angPos = function(multiplier){
 
 TrackParams.prototype.xPos = function(multiplier){
   // x-position for given multiplier, assuming radius is 1
-  return Math.cos(this.angPos_rad(multiplier));
+  return Math.cos((1 / 2 * Math.PI) + this.angPos_rad(multiplier));
 };
 
 TrackParams.prototype.yPos = function(multiplier){
   // y-position for given multiplier, assuming radius is 1
-  return Math.sin(this.angPos_rad(multiplier));
+  return Math.sin((1 / 2 * Math.PI) + this.angPos_rad(multiplier));
+};
+TrackParams.prototype.speed = function(){
+  // speed parameter for D3 rotation.
+  return 360 / this.bar();    
 };

@@ -1,0 +1,32 @@
+.orbit {
+  stroke : #000000;
+  fill : none;
+}
+.planet {
+  stroke : #000000;
+  fill : #FFFFFF;
+}
+.darkplanet {
+  stroke : #000000;
+  fill : #000000;
+}
+
+.sun {
+  stroke : #000000;
+  fill : #000000;
+}
+
+.mute {
+  stroke : #A9A9A9;
+  fill : #A9A9A9;
+}
+
+.unmute {
+  stroke : #6495ED;
+  fill : #6495ED;
+}
+
+.record {
+  stroke : #FF6347;
+  fill : #FF6347;
+}
