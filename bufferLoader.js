@@ -4,8 +4,10 @@ var BufferLoader = function(context, urlList, callback) {
   this.urlList = urlList;
   this.onload = callback;
   this.bufferList = new Array();
+  // Need to keep references to each of the sources
+  this.sources = {};
   this.loadCount = 0;
-  
+
 };
 
 BufferLoader.prototype.loadBuffer = function(url, index) {
@@ -26,6 +28,12 @@ BufferLoader.prototype.loadBuffer = function(url, index) {
           return;
         }
         loader.bufferList[index] = buffer;
+
+        // I imagine seeing sources containing keys
+        // That correlate to each loopnode, e.g. 'loopnodeA',
+        // 'loopnodeB', etc
+
+        loader.sources[index] = 
         // if (++loader.loadCount == loader.urlList.length)
           // loader.onload(loader.bufferList);
       },
