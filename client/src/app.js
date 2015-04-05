@@ -55,10 +55,50 @@ $(function() {
       disc.attr("class", "disc unmute");
     },
     recordLoopNode: function(loopNode, t){
+      // this needs to get cleaned up
+
       // t : the audioCtx time when record event got triggered
       t = t || this.audioCtx.currentTime;
-      
 
+      var disc = loopNode.d3Obj.container.select("circle.disc");
+      // put loopnode in wait mode
+      disc.attr("class", "disc wait");
+
+      var speed = this.Params.speed();
+      var tempoAdjustment = this.tempoAdjustment;
+      var multiplier = loopNode.multiplier;
+
+      var startWaitDeg = (t * speed - tempoAdjustment) / multiplier;
+      var startRecordDeg = startWaitDeg + 360 - (startWaitDeg % 360);
+      var startPlayDeg = startRecordDeg + 360;
+
+      d3.timer(function(){
+        var currentTime = this.audioCtx.currentTime;        
+        var currentDeg = (currentTime * speed - tempoAdjustment) / multiplier;
+        console.log(currentDeg);
+        if(currentDeg >= startRecordDeg){
+          disc.attr("class", "disc record");
+          startPlayTimer.call(this);
+
+          return true;
+        }
+      }.bind(this));
+
+
+      var startPlayTimer = function(callback){
+        d3.timer(function(){
+          var currentTime = this.audioCtx.currentTime;        
+          var currentDeg = (currentTime * speed - tempoAdjustment) / multiplier;
+          console.log(currentDeg);
+          if(currentDeg >= startPlayDeg){
+            disc.attr("class", "disc unmute");
+            if(callback){
+              callback();
+            }
+            return true;
+          }
+        }.bind(this));
+      };
       
     },
 
@@ -74,7 +114,7 @@ $(function() {
 
     },
     setD3Timer: function(){
-      d3.timer(function() {
+      d3.timer(function(){
         var loopNodes = this.loopNodes;
         var audioCtxTime = this.audioCtx.currentTime;
         var speed = this.Params.speed();

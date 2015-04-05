@@ -1,4 +1,4 @@
-var TrackParams = function(_t, _bpm, _startTimeStamp){
+var TrackParams = function(_t, _bpm){
   // INPUT:
     // _t = global time (in sec)
     // _bpm = global tempo (in beats per min)
