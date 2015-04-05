@@ -2,7 +2,7 @@ var BufferLoader = function(context, data, callback) {
   console.log('inside bufferLoader, about to modify context', context);
   
   var urls = [];
-
+  // Convert the data object into a list of url's as strings
   for (var i = 0; i < data.length; i++) {
     urls.push(data[i].url);
   }
@@ -37,10 +37,6 @@ BufferLoader.prototype.loadBuffer = function(url, index) {
           return;
         }
         loader.bufferList[index] = buffer;
-
-        // I imagine seeing sources containing keys
-        // That correlate to each loopnode, e.g. 'loopnodeA',
-        // 'loopnodeB', etc
 
         // if (++loader.loadCount == loader.urlList.length)
           // loader.onload(loader.bufferList);
