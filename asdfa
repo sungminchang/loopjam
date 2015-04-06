@@ -10,6 +10,17 @@
 </head>
 <body>
 <canvas></canvas>
+
+
+<div id="volumeBox"> Volume 1: <span id="showvolume0">100</span>
+  <input soundIndex="0" id="volume0" type="range" min="0.0" max="100.0" step="1" value="100" style="height: 20px; width: 200px" oninput="volume0 = event.target.value; document.getElementById('showvolume0').innerText=volume0;">
+</div>
+
+<div id="volumeBox"> Volume 2: <span id="showvolume1">100</span>
+  <input soundIndex="1" id="volume1" type="range" min="0.0" max="100.0" step="1" value="100" style="height: 20px; width: 200px" oninput="volume1 = event.target.value; document.getElementById('showvolume1').innerText=volume1;">
+</div>
+
+
   <button id="sound1" value="0">Play</button>
   <button id="sound2" value="1">Play</button>
 </div>
@@ -168,17 +179,54 @@ var toggle = function(button) {
   }
 };
 
+var changeVolume = function(slider, t){
+  var volume, soundIndex, soundData, gainNode;
+
+  volume = slider.value;
+  console.log('volume: ', volume);
+  soundIndex = $(slider).attr('soundIndex');
+  console.log('soundIndex: ', soundIndex);
+  soundData = data[soundIndex];
+  gainNode = soundData.gainNode;
+
+  gainNode.gain.value = volume/100;
+  // slider : the new Volume
+  // t : the audioCtx time when Volume changed
+  // t = t || context.currentTime;
+
+  // this.volumeAdjustment = this.volumeAdjustment + t * (3/2) * (bpm - this.Params.bpm);
+  // this.Params.bpm = bpm;
+};
+
+
 // playbackControl.oninput = function() {
 //   sound.playbackRate.value = playbackControl.value;
 //   playbackValue.innerHTML = playbackControl.value;
 // }
 
+
+///////////// Register Event Listeners ///////////////
+//////////////////////////////////////////////////////
+
 $(document).ready(function(){
-  $("#sound1").on("click", function(e) {
-    console.log('button clicked');
+
+  // $('#slider').slider();
+
+  $('#volume0').on('change', function(e){
+    console.log(e.target.value);
+    changeVolume(e.target);
+  });
+
+  $('#volume1').on('change', function(e){
+    console.log(e.target.value);
+    changeVolume(e.target);
+  });
+
+  $('#sound1').on('click', function(e) {
     toggle(e.target);
   });
-  $("#sound2").on("click", function(e) {
+
+  $('#sound2').on('click', function(e) {
     toggle(e.target);
   });
   
