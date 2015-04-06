@@ -1,13 +1,15 @@
 var track;
 $(function() {
   track = {
-    initialize: function(audioContext, bpm, startTimeStamp){
+    initialize: function(audioContext, bpm){
       // this is the audio context
       var AudioContext = window.AudioContext || window.webkitAudioContext;
       var audioCtx = new AudioContext();
       this.audioCtx = audioContext || audioCtx;
 
       this.tempoAdjustment = 0; //adjustment parameter when user changes tempo. initially set at 0.
+      this.bpm  = bpm || 120;
+
       this.Params = new TrackParams(0, bpm);
       // storage array for all the containing loop node
       this.loopNodes = [];
@@ -68,7 +70,8 @@ $(function() {
       // put loopnode in wait mode
       disc.attr("class", "disc wait");
 
-      var speed = this.Params.speed();
+      var bar = calcBar(this.bpm);
+      var speed = calcSpeed(bar);
       var tempoAdjustment = this.tempoAdjustment;
       var multiplier = loopNode.multiplier;
 
@@ -111,8 +114,8 @@ $(function() {
       // t : the audioCtx time when tempo changed
       t = t || this.audioCtx.currentTime;
 
-      this.tempoAdjustment = this.tempoAdjustment + t * (3/2) * (bpm - this.Params.bpm);
-      this.Params.bpm = bpm;
+      this.tempoAdjustment = this.tempoAdjustment + t * (3/2) * (bpm - this.bpm);
+      this.bpm = bpm;
 
 
 
@@ -121,10 +124,9 @@ $(function() {
       d3.timer(function(){
         var loopNodes = this.loopNodes;
         var audioCtxTime = this.audioCtx.currentTime;
-        var speed = this.Params.speed();
+        var bar = calcBar(this.bpm);
+        var speed = calcSpeed(bar);
         var tempoAdjustment = this.tempoAdjustment;
-
-        console.log(audioCtxTime);
 
         // do this for each loopnode
         for(var i = 0; i < loopNodes.length; i++){
