@@ -18,17 +18,21 @@ $(function() {
 
     },
     populateLoopNodes: function(){
-      var loopnode1 = createLoopNode('.loopnode1', this.Params.xPos(1) * 150, this.Params.yPos(1) * 150);
+      // initialize loopnodes
+      var startAngle = 0; //starting angle should be 0
+      var radius = 150;
+
+      var loopnode1 = createLoopNode('.loopnode1', xPos(startAngle , radius), yPos(startAngle , radius));
       var loopnode1Obj = {d3Obj: loopnode1, class: '.loopnode1', multiplier: 1};
-      var loopnode2 = createLoopNode('.loopnode2', this.Params.xPos(2) * 150, this.Params.yPos(2) * 150);
+      var loopnode2 = createLoopNode('.loopnode2', xPos(startAngle , radius), yPos(startAngle , radius));
       var loopnode2Obj = {d3Obj: loopnode2, class: '.loopnode2', multiplier: 2};
-      var loopnode3 = createLoopNode('.loopnode3', this.Params.xPos(4) * 150, this.Params.yPos(4) * 150);
+      var loopnode3 = createLoopNode('.loopnode3', xPos(startAngle , radius), yPos(startAngle , radius));
       var loopnode3Obj = {d3Obj: loopnode3, class: '.loopnode3', multiplier: 4};
-      var loopnode4 = createLoopNode('.loopnode4', this.Params.xPos(8) * 150, this.Params.yPos(8) * 150);
+      var loopnode4 = createLoopNode('.loopnode4', xPos(startAngle , radius), yPos(startAngle , radius));
       var loopnode4Obj = {d3Obj: loopnode4, class: '.loopnode4', multiplier: 8};
-      var loopnode5 = createLoopNode('.loopnode5', this.Params.xPos(16) * 150, this.Params.yPos(16) * 150);
+      var loopnode5 = createLoopNode('.loopnode5', xPos(startAngle , radius), yPos(startAngle , radius));
       var loopnode5Obj = {d3Obj: loopnode5, class: '.loopnode5', multiplier: 16};
-      var loopnode6 = createLoopNode('.loopnode6', this.Params.xPos(32) * 150, this.Params.yPos(32) * 150);
+      var loopnode6 = createLoopNode('.loopnode6', xPos(startAngle , radius), yPos(startAngle , radius));
       var loopnode6Obj = {d3Obj: loopnode6, class: '.loopnode6', multiplier: 32};
       this.loopNodes.push(loopnode1Obj);
       this.loopNodes.push(loopnode2Obj);
@@ -119,6 +123,8 @@ $(function() {
         var audioCtxTime = this.audioCtx.currentTime;
         var speed = this.Params.speed();
         var tempoAdjustment = this.tempoAdjustment;
+
+        console.log(audioCtxTime);
 
         // do this for each loopnode
         for(var i = 0; i < loopNodes.length; i++){

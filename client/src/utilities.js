@@ -69,36 +69,40 @@ var angPos = function(t, bar, tempoAdjustment, multiplier){
 };
 
 var xPos = function(angPos, r){
-  // OUTPUT: x-position for given angle in degree, assuming radius is 1
+  // OUTPUT: x-position for given angle in degree
   // INPUT: 
     // angPos: angular position in degree
     // r: radius (default: 1)
-  return Math.cos((1 / 2 * Math.PI) + angPos * 2 * Math.PI / 360);
+  r = r || 1;
+  return r * Math.cos((1 / 2 * Math.PI) + angPos * 2 * Math.PI / 360);
 };
 
 var xPos_rad = function(angPos_rad, r){
-  // OUTPUT: x-position for given angle in degree, assuming radius is 1
+  // OUTPUT: x-position for given angle in degree
   // INPUT: 
     // angPos: angular position in degree
     // r: radius (default: 1)
-  return Math.cos((1 / 2 * Math.PI) + angPos);
+  r = r || 1;
+  return r * Math.cos((1 / 2 * Math.PI) + angPos);
 };
 
 
 var yPos = function(angPos, r){
-  // OUTPUT: y-position for given angle in degree, assuming radius is 1
+  // OUTPUT: y-position for given angle in degree
   // INPUT: 
     // angPos: angular position in degree
     // r: radius (default: 1)
-  return Math.sin((1 / 2 * Math.PI) + angPos * 2 * Math.PI / 360);
+  r = r || 1;
+  return r * Math.sin((1 / 2 * Math.PI) + angPos * 2 * Math.PI / 360);
 };
 
 var yPos_rad = function(angPos_rad, r){
-  // OUTPUT: y-position for given angle in degree, assuming radius is 1
+  // OUTPUT: y-position for given angle in degree
   // INPUT: 
     // angPos: angular position in degree
     // r: radius (default: 1)
-  return Math.sin((1 / 2 * Math.PI) + angPos);
+  r = r || 1;
+  return r * Math.sin((1 / 2 * Math.PI) + angPos);
 };
 
 var speed = function(bar){
