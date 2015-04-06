@@ -25,6 +25,7 @@
       <button type="button" class = "tempoButton3">changeTempo 240</button>
       <button type="button" class = "tempoButton4">changeTempo 480</button>
     </div>
+    <div id="tempoBox">Tempo: <span id="showTempo">120</span>BPM <input id="tempo" type="range" min="30.0" max="480.0" step="1" value="120" style="height: 20px; width: 200px" oninput="tempo = event.target.value; document.getElementById('showTempo').innerText=tempo;"></div>
     <div>
       <button type="button" class = "muteLoop1">mute LoopNode 1</button>
       <button type="button" class = "unmuteLoop1">unmute mute LoopNode 1</button>

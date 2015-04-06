@@ -13,7 +13,7 @@ $(function() {
       this.loopNodes = [];
 
       this.populateLoopNodes();
-      this.setD3Timer();
+      this.setCueAnimation();
       this.addListeners();
 
     },
@@ -113,7 +113,7 @@ $(function() {
 
 
     },
-    setD3Timer: function(){
+    setCueAnimation: function(){
       d3.timer(function(){
         var loopNodes = this.loopNodes;
         var audioCtxTime = this.audioCtx.currentTime;
@@ -161,6 +161,11 @@ $(function() {
       }.bind(this));
       $('.tempoButton4').on('click', function(){
         this.changeTempo(480);
+      }.bind(this));
+
+      $('#tempo').on('change', function(e){
+        console.log(e.target.value);
+        this.changeTempo(e.target.value);
       }.bind(this));
 
       $('.muteLoop1').on('click', function(){
