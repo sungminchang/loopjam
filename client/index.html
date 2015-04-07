@@ -28,18 +28,19 @@
     });
   </script>
 
-  <div class="col-xs-6 col-sm-6 col-md-4">
-    <div class="loopnode1">
+    <div class="col-sm-6 col-md-4">
+      <div class="loopnode1">
+      </div>
+
+      <button id="sound1" value="0">Play</button>
+
+      <div id="volumeBox"> Volume: <span id="showvolume0">100</span>
+        <input soundIndex="0" id="volume0" type="range" min="0.0" max="100.0" step="1" value="100" style="height: 20px; width: 200px" oninput="volume0 = event.target.value; document.getElementById('showvolume0').innerText=volume0;">
+      </div>
     </div>
 
-    <button id="sound1" value="0">Play</button>
 
-    <div id="volumeBox"> Volume: <span id="showvolume0">100</span>
-      <input soundIndex="0" id="volume0" type="range" min="0.0" max="100.0" step="1" value="100" style="height: 20px; width: 200px" oninput="volume0 = event.target.value; document.getElementById('showvolume0').innerText=volume0;">
-    </div>
-  </div>
-
-  <div class="col-xs-6 col-sm-6 col-md-4">
+  <div class="col-sm-6 col-md-4">
     <div class="loopnode2">
     </div>
 
@@ -50,7 +51,7 @@
     </div>
   </div>
 
-  <div class="col-xs-6 col-sm-6 col-md-4">
+  <div class="col-sm-6 col-md-4">
     <div class="loopnode3">
     </div>
 
@@ -61,7 +62,7 @@
     </div>
   </div>
 
-  <div class="col-xs-6 col-sm-6 col-md-4">
+  <div class="col-sm-6 col-md-4">
     <div class="loopnode4">
     </div>
 
@@ -72,7 +73,7 @@
     </div>
   </div>
 
-  <div class="col-xs-6 col-sm-6 col-md-4">
+  <div class="col-sm-6 col-md-4">
     <div class="loopnode5">
     </div>
 
@@ -83,7 +84,7 @@
     </div>
   </div>
 
-  <div class="col-xs-6 col-sm-6 col-md-4">
+  <div class="col-sm-6 col-md-4">
     <div class="loopnode6">
     </div>
 
