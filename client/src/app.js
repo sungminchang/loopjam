@@ -1,6 +1,6 @@
-var track;
+var trackOld;
 $(function() {
-  track = {
+  trackOld = {
     initialize: function(audioContext, bpm){
       // this is the audio context
       var AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -10,7 +10,6 @@ $(function() {
       this.tempoAdjustment = 0; //adjustment parameter when user changes tempo. initially set at 0.
       this.bpm  = bpm || 120;
 
-      this.Params = new TrackParams(0, bpm);
       // storage array for all the containing loop node
       this.loopNodes = [];
 
@@ -45,7 +44,7 @@ $(function() {
 
 
     },
-    muteLoopNode: function(loopNode, t){
+    pauseLoopNodeAnimation: function(loopNode, t){
       // t : the audioCtx time when mute event got triggered
       t = t || this.audioCtx.currentTime;
       
@@ -53,14 +52,14 @@ $(function() {
       disc.attr("class", "disc mute");
 
     },
-    unmuteLoopNode: function(loopNode, t){
+    playLoopNodeAnimation: function(loopNode, t){
       // t : the audioCtx time when mute event got triggered
       t = t || this.audioCtx.currentTime;
       
       var disc = loopNode.d3Obj.container.select("circle.disc");
       disc.attr("class", "disc unmute");
     },
-    recordLoopNode: function(loopNode, t){
+    recordLoopNodeAnimation: function(loopNode, t){
       // this needs to get cleaned up
 
       // t : the audioCtx time when record event got triggered
@@ -154,7 +153,7 @@ $(function() {
       // Events
       this.loopNodes.forEach(function(loopNodeObj){
         $(loopNodeObj.class).on('click', function(){
-          this.recordLoopNode(loopNodeObj);
+          this.recordLoopNodeAnimation(loopNodeObj);
         }.bind(this));
       }.bind(this));
 
@@ -177,15 +176,27 @@ $(function() {
       }.bind(this));
 
       $('.muteLoop1').on('click', function(){
-        this.muteLoopNode(this.loopNodes[0]);
+        this.pauseLoopNodeAnimation(this.loopNodes[0]);
       }.bind(this));
       $('.unmuteLoop1').on('click', function(){
-        this.unmuteLoopNode(this.loopNodes[0]);
+        this.playLoopNodeAnimation(this.loopNodes[0]);
       }.bind(this));
       $('.recordLoop1').on('click', function(){
-        this.recordLoopNode(this.loopNodes[0]);
+        this.recordLoopNodeAnimation(this.loopNodes[0]);
       }.bind(this));
 
     }
   };
+});
+
+var TrackModel = Backbone.Model.extend({
+  initialize: function(){
+
+  },
+  setAudioContext: function(){ 
+    var AudioContext = window.AudioContext || window.webkitAudioContext;
+    var audioCtx = new AudioContext();
+    this.audioCtx = audioContext || audioCtx;
+  }
+
 });
