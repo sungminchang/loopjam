@@ -322,10 +322,8 @@ $(function() {
       var soundData = data[soundIndex];
 
       console.log('playing a sound: ', soundData);
-
       // Grab the amount of time a bar takes to complete.
       var barTime = soundData.speed;
-
       var currentTime = this.context.currentTime;
 
       // The remainder tells us how much of the bartime we have 
@@ -359,8 +357,11 @@ $(function() {
       // Connect the source to the gainNode.
       soundData.source.connect(gainNode);
 
-      //Connect the gainNode to the destination.
+      // Connect the gainNode to the destination.
       soundData.gainNode.connect(this.context.destination);
+
+      // Sets the playback rate to the value of bpm / rate of the bpm being recorded
+      soundData.source.playbackRate.value = parseInt(this.bpm) / soundData.recordedAtBpm
 
       // Play the sound, delaying the sound by the delay necessary
       // to make the sound play at the start of a new measure.

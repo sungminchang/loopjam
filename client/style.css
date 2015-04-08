@@ -1,5 +1,8 @@
 @import '//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css';
 @import '//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap-theme.min.css';
+@import '//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.4/css/bootstrap-select.min.css';
+@import '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css';
+
 
 ul { 
   list-style: none; 
@@ -22,25 +25,38 @@ ul {
 }
 
 .sun {
-  stroke : #000000;
   fill : #000000;
 }
 
 .mute {
-  stroke : #A9A9A9;
   fill : #A9A9A9;
 }
 
 .unmute {
-  stroke : green;
   fill : green;
 }
 
 .record {
-  stroke : #FF6347;
   fill : #FF6347;
+
 }
 .wait {
-  stroke : #FFFF00;
-  fill : #FFFF00;
+  animation:wait 1s;
+  -moz-animation:wait 1s infinite; /* Firefox */
+  -webkit-animation:wait 1s infinite; /* Safari and Chrome */
+
+}
+
+@-moz-keyframes wait /* Firefox */
+{
+  0%   {fill : purple;}
+  50%  {fill : blue;}
+  100%   {stroke : purple; fill : purple;}
+}
+
+  @-webkit-keyframes wait /* Safari and Chrome */
+{
+  0%   {stroke : purple; fill : purple;}
+  50%  {fill : blue;}
+  100%   {stroke : purple; fill : purple;}
 }
