@@ -484,6 +484,11 @@ $(function() {
 
       //audio 
 
+      $('#metronomeVol').on('input', function(e){
+        console.log(e.target.value);
+        this.changeVolume(e.target);
+      }.bind(this));
+
       $('#volume1').on('input', function(e){
         console.log(e.target.value);
         this.changeVolume(e.target);

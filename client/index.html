@@ -47,7 +47,7 @@
     <option value="8">4x</option>
   </select>
  
- <p class="navbar-text"><strong><i class="fa fa-clock-o"></i> Metronome:</strong></p><button class="btn btn-default navbar-btn" id="sound0" value="0">Play</button>
+ <p class="navbar-text"><strong><i class="fa fa-clock-o"></i> Metronome:</strong></p><button class="btn btn-default navbar-btn" id="sound0" value="0">Play</button> <span id="metronomeVolume" class="navbar-text">100</span><input soundIndex="0" id="metronomeVol" class="navbar-text" type="range" min="0.0" max="100.0" step="1" value="100" style="height: 20px; width: 200px" oninput="metronomeVol = event.target.value; document.getElementById('metronomeVolume').innerText=metronomeVol;">
  </div>
   </nav>
 
