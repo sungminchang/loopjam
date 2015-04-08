@@ -5,6 +5,7 @@
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
     <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.4/js/bootstrap-select.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
     <!-- <script src="src/recorderMainExecution.js"></script> -->
     <script src="src/recordmp3.js"></script>
@@ -22,31 +23,51 @@
     $(function(){
 
       trackOld.initialize();
-
+      $('.selectpicker').selectpicker();
     });
   </script>
 
-    <p>Metronome</p>
-    <button class="btn btn-default" id="sound0" value="0">Play</button>
+  <nav class="navbar navbar-default inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">
+          <i class="fa fa-circle-o-notch"></i> Loopjam
 
-    <select class="multiplier">
-      <option value="2">1x</option>
-      <option value="4">2x</option>
-      <option value="8">4x</option>
-    </select>
+        </a>
+      </div>
+  
+    </div>
+  <div class="pull-right">
+  <p class="navbar-text"><strong><i class="fa fa-music"></i> Tempo:</strong> </p> <span id="showTempo" class="navbar-text">120</span><p class="navbar-text">BPM</p> <input id="tempo" class="navbar-text" type="range" min="30.0" max="180.0" step="1" value="120" style="height: 20px; width: 200px" oninput="tempo = event.target.value; document.getElementById('showTempo').innerText=tempo;">
 
-    <div id="tempoBox">Tempo: <span id="showTempo">120</span>BPM <input id="tempo" type="range" min="30.0" max="180.0" step="1" value="120" style="height: 20px; width: 200px" oninput="tempo = event.target.value; document.getElementById('showTempo').innerText=tempo;"></div>
+  <div class="navbar-text"><strong><i class="fa fa-times"></i> Multiplier:</strong></div>
+  <select class="multiplier navbar-text ">
+    <option value="2">1x</option>
+    <option value="4">2x</option>
+    <option value="8">4x</option>
+  </select>
+ 
+ <p class="navbar-text"><strong><i class="fa fa-clock-o"></i> Metronome:</strong></p><button class="btn btn-default navbar-btn" id="sound0" value="0">Play</button>
+ </div>
+  </nav>
+
 
 
     <!-- <h2>Recordings</h2> -->
       <!-- <ul id="recordingslist"></ul> -->
 
+
+  <!-- <div class="col-md-2">
+  <button class="btn btn-default">Add Sound</button>
+  </div>
+  <div class="col-md-10"> -->
+  
       <div class="col-sm-6 col-md-4">
          <div class="loopnode1">
          </div>
 
-         <button class="btn btn-default" id="sound1" value="1">Play</button>
-         <button class="btn btn-danger record-new" value="1">record</button>
+         <button class="btn btn-success" id="sound1" value="1">Play</button>
+         <button class="btn btn-danger record-new" value="1"><i class="fa fa-circle"></i> Record</button>
 
 
          <div id="volumeBox"> Volume: <span id="showvolume1">100</span>
@@ -59,8 +80,8 @@
         <div class="loopnode2">
         </div>
 
-        <button class="btn btn-default" id="sound2" value="2">Play</button>
-        <button class="btn btn-danger record-new" value="2">record</button>
+        <button class="btn btn-success" id="sound2" value="2">Play</button>
+        <button class="btn btn-danger record-new" value="2"><i class="fa fa-circle"></i> Record</button>
 
         <div id="volumeBox"> Volume: <span id="showvolume2">100</span>
           <input soundIndex="2" id="volume2" type="range" min="0.0" max="100.0" step="1" value="100" style="height: 20px; width: 200px" oninput="volume2 = event.target.value; document.getElementById('showvolume2').innerText=volume2;">
@@ -71,8 +92,8 @@
         <div class="loopnode3">
         </div>
 
-        <button class="btn btn-default" id="sound3" value="3">Play</button>
-        <button class="btn btn-danger record-new" value="3">record</button>
+        <button class="btn btn-success" id="sound3" value="3">Play</button>
+        <button class="btn btn-danger record-new" value="3"><i class="fa fa-circle"></i> Record</button>
 
         <div id="volumeBox"> Volume: <span id="showvolume3">100</span>
           <input soundIndex="3" id="volume3" type="range" min="0.0" max="100.0" step="1" value="100" style="height: 20px; width: 200px" oninput="volume3 = event.target.value; document.getElementById('showvolume3').innerText=volume3;">
@@ -83,8 +104,8 @@
         <div class="loopnode4">
         </div>
 
-        <button class="btn btn-default" id="sound4" value="4">Play</button>
-        <button class="btn btn-danger record-new" value="4">record</button>
+        <button class="btn btn-success" id="sound4" value="4">Play</button>
+        <button class="btn btn-danger record-new" value="4"><i class="fa fa-circle"></i> Record</button>
 
          <div id="volumeBox"> Volume: <span id="showvolume4">100</span>
            <input soundIndex="4" id="volume4" type="range" min="0.0" max="100.0" step="1" value="100" style="height: 20px; width: 200px" oninput="volume4 = event.target.value; document.getElementById('showvolume4').innerText=volume4;">
@@ -95,8 +116,8 @@
         <div class="loopnode5">
         </div>
 
-        <button class="btn btn-default" id="sound5" value="5">Play</button>
-        <button class="btn btn-danger record-new" value="5">record</button>
+        <button class="btn btn-success" id="sound5" value="5">Play</button>
+        <button class="btn btn-danger record-new" value="5"><i class="fa fa-circle"></i> Record</button>
 
         <div id="volumeBox"> Volume: <span id="showvolume5">100</span>
           <input soundIndex="5" id="volume5" type="range" min="0.0" max="100.0" step="1" value="100" style="height: 20px; width: 200px" oninput="volume5 = event.target.value; document.getElementById('showvolume5').innerText=volume5;">
@@ -107,20 +128,22 @@
         <div class="loopnode6">
         </div>
 
-        <button class="btn btn-default" id="sound6" value="6">Play</button>
-        <button class="btn btn-danger record-new" value="6">record</button>
+        <button class="btn btn-success" id="sound6" value="6">Play</button>
+        <button class="btn btn-danger record-new" value="6"><i class="fa fa-circle"></i> Record</button>
 
         <div id="volumeBox"> Volume: <span id="showvolume6">100</span>
           <input soundIndex="6" id="volume6" type="range" min="0.0" max="100.0" step="1" value="100" style="height: 20px; width: 200px" oninput="volume6 = event.target.value; document.getElementById('showvolume6').innerText=volume6;">
         </div>
       </div>
 
-    </div>
+<!--     </div> -->
+  </div>
+  
 
   
     <div id = "track"></div>
-    <h2>Log</h2>
-    <pre id="log"></pre>
+<!--     <h2>Log</h2>
+    <pre id="log"></pre> -->
 
     
 
