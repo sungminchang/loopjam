@@ -32,8 +32,8 @@ ul {
 }
 
 .unmute {
-  stroke : #6495ED;
-  fill : #6495ED;
+  stroke : green;
+  fill : green;
 }
 
 .record {

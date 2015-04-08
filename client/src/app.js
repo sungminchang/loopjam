@@ -181,15 +181,15 @@ $(function() {
       var loopnode1 = createLoopNode('.loopnode1', xPos(startAngle , radius), yPos(startAngle , radius));
       var loopnode1Obj = {d3Obj: loopnode1, class: '.loopnode1', multiplier: 1};
       var loopnode2 = createLoopNode('.loopnode2', xPos(startAngle , radius), yPos(startAngle , radius));
-      var loopnode2Obj = {d3Obj: loopnode2, class: '.loopnode2', multiplier: 2};
+      var loopnode2Obj = {d3Obj: loopnode2, class: '.loopnode2', multiplier: 1};
       var loopnode3 = createLoopNode('.loopnode3', xPos(startAngle , radius), yPos(startAngle , radius));
-      var loopnode3Obj = {d3Obj: loopnode3, class: '.loopnode3', multiplier: 4};
+      var loopnode3Obj = {d3Obj: loopnode3, class: '.loopnode3', multiplier: 1};
       var loopnode4 = createLoopNode('.loopnode4', xPos(startAngle , radius), yPos(startAngle , radius));
-      var loopnode4Obj = {d3Obj: loopnode4, class: '.loopnode4', multiplier: 8};
+      var loopnode4Obj = {d3Obj: loopnode4, class: '.loopnode4', multiplier: 1};
       var loopnode5 = createLoopNode('.loopnode5', xPos(startAngle , radius), yPos(startAngle , radius));
-      var loopnode5Obj = {d3Obj: loopnode5, class: '.loopnode5', multiplier: 16};
+      var loopnode5Obj = {d3Obj: loopnode5, class: '.loopnode5', multiplier: 1};
       var loopnode6 = createLoopNode('.loopnode6', xPos(startAngle , radius), yPos(startAngle , radius));
-      var loopnode6Obj = {d3Obj: loopnode6, class: '.loopnode6', multiplier: 32};
+      var loopnode6Obj = {d3Obj: loopnode6, class: '.loopnode6', multiplier: 1};
       this.loopNodes.push(loopnode1Obj);
       this.loopNodes.push(loopnode2Obj);
       this.loopNodes.push(loopnode3Obj);
@@ -316,6 +316,7 @@ $(function() {
       // Grab the value associated with the button,
       // will be used to identify the sound associated with the button.
       var soundIndex = button.value;
+      console.log('soundIndex from play: ', soundIndex);
 
       // Grab the data object associated with the button.
       var soundData = data[soundIndex];
@@ -410,6 +411,8 @@ $(function() {
       console.log('volume: ', volume);
       soundIndex = $(slider).attr('soundIndex');
       console.log('soundIndex: ', soundIndex);
+      console.log('data: ', data);
+
       soundData = data[soundIndex];
       gainNode = soundData.gainNode;
 
@@ -427,9 +430,16 @@ $(function() {
     addListeners: function(){
       // Events
       $('.record-new').on("click", function(e){
+        counter = parseInt(e.target.value);
+        this.loopNodes[counter - 1].multiplier = parseInt($('.multiplier').val() / 2)
+        this.recordLoopNodeAnimation(this.loopNodes[counter - 1]);
         this.recorderDelay.call(this);
       }.bind(this));
 
+      $("#sound0").on("click", function(e) {
+        console.log('button clicked');
+        this.toggle(e.target);
+      }.bind(this));
       $("#sound1").on("click", function(e) {
         console.log('button clicked');
         this.toggle(e.target);
@@ -450,24 +460,11 @@ $(function() {
         this.toggle(e.target);
       }.bind(this));
 
-      this.loopNodes.forEach(function(loopNodeObj){
-        $(loopNodeObj.class).on('click', function(){
-          this.recordLoopNodeAnimation(loopNodeObj);
-        }.bind(this));
-      }.bind(this));
-
-      $('.tempoButton1').on('click', function(){
-        this.changeTempo(60);
-      }.bind(this));
-      $('.tempoButton2').on('click', function(){
-        this.changeTempo(120);
-      }.bind(this));
-      $('.tempoButton3').on('click', function(){
-        this.changeTempo(240);
-      }.bind(this));
-      $('.tempoButton4').on('click', function(){
-        this.changeTempo(480);
-      }.bind(this));
+      // this.loopNodes.forEach(function(loopNodeObj){
+      //   $(loopNodeObj.class).on('click', function(){
+      //     this.recordLoopNodeAnimation(loopNodeObj);
+      //   }.bind(this));
+      // }.bind(this));
 
       $('#tempo').on('input', function(e){
         console.log(e.target.value);
@@ -486,12 +483,32 @@ $(function() {
 
       //audio 
 
-      $('#volume0').on('input', function(e){
+      $('#volume1').on('input', function(e){
         console.log(e.target.value);
         this.changeVolume(e.target);
       }.bind(this));
 
-      $('#volume1').on('input', function(e){
+      $('#volume2').on('input', function(e){
+        console.log(e.target.value);
+        this.changeVolume(e.target);
+      }.bind(this));
+
+      $('#volume3').on('input', function(e){
+        console.log(e.target.value);
+        this.changeVolume(e.target);
+      }.bind(this));
+
+      $('#volume4').on('input', function(e){
+        console.log(e.target.value);
+        this.changeVolume(e.target);
+      }.bind(this));
+
+      $('#volume5').on('input', function(e){
+        console.log(e.target.value);
+        this.changeVolume(e.target);
+      }.bind(this));
+
+      $('#volume6').on('input', function(e){
         console.log(e.target.value);
         this.changeVolume(e.target);
       }.bind(this));
