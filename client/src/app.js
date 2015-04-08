@@ -1,8 +1,9 @@
 var trackOld;
 var data = [
-{url: "audio/click.mp3", speed:2, port:0, recordedAtBpm: 120}, 
-{url: "audio/metronome2.mp3", speed:2, port:1, recordedAtBpm: 120}
+{url: "audio/click.mp3", speed:2, port:0, recordedAtBpm: 120} 
 ];
+
+counter = 1;
 
 
 $(function() {
@@ -19,6 +20,22 @@ $(function() {
           this.context = audioContext || new contextClass();
           console.log('context created: ', this.context);
 
+          //Gets microphone input from user
+          navigator.getUserMedia = ( navigator.getUserMedia ||
+                           navigator.webkitGetUserMedia ||
+                           navigator.mozGetUserMedia ||
+                           navigator.msGetUserMedia);
+          
+
+          navigator.getUserMedia({audio: true}, this.startUserMedia.bind(this), function(e) {
+            console.log('No live audio input: ' + e);
+          });
+
+          console.log('Audio context set up.');
+          console.log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
+
+          window.URL = window.URL || window.webkitURL
+
           // Initialize a new instance of the BufferLoader class,
           // passing in our context and data object. BufferLoader
           // will buffer all of the recordings and hold onto
@@ -26,7 +43,7 @@ $(function() {
           this.bufferLoader = new BufferLoader(
             this.context,
             data
-            );
+            );;
 
           // Invoking bufferLoader's .load method does the actual
           // buffering and loading of the recordings, and stores
@@ -41,6 +58,7 @@ $(function() {
       this.tempoAdjustment = 0; //adjustment parameter when user changes tempo. initially set at 0.
       this.bpm  = bpm || 120;
 
+
       // storage array for all the containing loop node
       this.loopNodes = [];
 
@@ -48,6 +66,112 @@ $(function() {
       this.setCueAnimation();
       this.addListeners();
 
+    },
+    startUserMedia: function(stream) {
+      console.log(this.context)
+      var input = this.context.createMediaStreamSource(stream);
+      console.log('Media stream created.' );
+      console.log("input sample rate " +input.context.sampleRate);
+      
+      // input.connect(context.destination);
+      console.log('Input connected to audio context destination.');
+      
+      this.recorder = new Recorder(input);
+      console.log('Recorder initialised.');
+    },
+    recorderDelay: function() {
+
+      console.log('Starting Record:');
+
+      // Grab the amount of time a bar takes to complete.
+      var barTime = parseInt($('.multiplier').val());
+      var currentTime = this.context.currentTime;
+      
+      console.log("barTime", barTime)
+
+      //Set up blank object for loop node      
+      if(!data[counter]) data[counter] = {};
+
+      // Sets up variables for loop node
+      data[counter].speed = barTime
+      data[counter].port = 0;
+      data[counter].recordedAtBpm = this.bpm;
+
+      // The remainder tells us how much of the bartime we have 
+      // completed thus far.
+      var remainder = currentTime % barTime;
+
+      var delay = barTime - remainder;
+      
+      var delayInMilliseconds = parseInt(delay.toString().replace(/\./g,'').slice(0,4)) 
+      
+      console.log("Context Current-time", this.context.currentTime)
+      console.log("Record will start in:", delayInMilliseconds, "ms")
+      console.log("Record will stop in:", delayInMilliseconds + barTime * 1000, "ms")
+      
+      var barTimeInMS = barTime * 1000
+
+      setTimeout(this.startRecording.bind(this), delayInMilliseconds - 100)
+      setTimeout(this.stopRecording.bind(this), delayInMilliseconds + barTimeInMS + 50)
+      setTimeout(this.preBuffer.bind(this), delayInMilliseconds + barTimeInMS + 500)
+    },
+    startRecording: function() {
+      console.log("time started recording:", this.context.currentTime)
+
+      this.recorder && this.recorder.record();
+      // button.disabled = true;
+      // button.nextElementSibling.disabled = false;
+      console.log('Recording...');
+      console.time("recording1")
+    },
+
+    stopRecording: function() {
+          
+      console.log("time stopped recording:", this.context.currentTime)
+      this.recorder && this.recorder.stop();
+      console.timeEnd("recording1")
+      // button.disabled = true;
+      // button.previousElementSibling.disabled = false;
+      console.log('Stopped recording.');
+      // create WAV download link using audio data blob
+      this.createDownloadLink();
+      this.recorder.clear();
+    },
+    createDownloadLink: function() {
+      this.recorder && this.recorder.exportWAV(function(blob) {
+        var url = URL.createObjectURL(blob);
+        var li = document.createElement('li');
+        var au = document.createElement('audio');
+        var hf = document.createElement('a');
+        
+        data[counter].url = url;
+        counter++;
+
+
+        au.controls = true;
+        au.src = url;
+        hf.href = url;
+        hf.download = new Date().toISOString() + '.wav';
+        hf.innerHTML = hf.download;
+        li.appendChild(au);
+        li.appendChild(hf);
+        recordingslist.appendChild(li);
+      });
+    },
+    preBuffer: function(){
+          // Initialize a new instance of the BufferLoader class,
+        // passing in our context and data object. BufferLoader
+        // will buffer all of the recordings and hold onto
+        // references for the buffers.
+        this.bufferLoader = new BufferLoader(
+          this.context,
+          data
+          );
+
+        // Invoking bufferLoader's .load method does the actual
+        // buffering and loading of the recordings, and stores
+        // the buffers on the bufferloader instance.
+        this.bufferLoader.load();
     },
     populateLoopNodes: function(){
       // initialize loopnodes
@@ -146,6 +270,12 @@ $(function() {
 
       this.tempoAdjustment = this.tempoAdjustment + t * (3/2) * (bpm - this.bpm);
       this.bpm = bpm;
+      data.forEach(function(value){
+        if(value.source){
+          value.source.playbackRate.value = parseInt(bpm) / value.recordedAtBpm
+        }    
+      })
+ 
 
 
 
@@ -233,12 +363,11 @@ $(function() {
 
       // Play the sound, delaying the sound by the delay necessary
       // to make the sound play at the start of a new measure.
-      soundData.source.start(currentTime + delay);
-
-      // Define what parts of the soundfile will be played.
-      // In this case, second 0 to second barTime will be played.
-      soundData.source.loopStart = 0;
-      soundData.source.loopEnd = barTime;
+      soundData.source.loopStart = soundData.source.buffer.duration - barTime;
+      soundData.source.loopEnd = soundData.source.buffer.duration;
+      var delayInMilliseconds = barTime * 1000 - parseInt(delay.toString().replace(/\./g,'').slice(0,4)) 
+      soundData.source.start(currentTime + delay, soundData.source.buffer.duration - barTime, soundData.source.buffer.duration);
+      
 
       source.onended = function() {
         console.log('Your audio has finished playing');
@@ -297,6 +426,30 @@ $(function() {
 
     addListeners: function(){
       // Events
+      $('.record-new').on("click", function(e){
+        this.recorderDelay.call(this);
+      }.bind(this));
+
+      $("#sound1").on("click", function(e) {
+        console.log('button clicked');
+        this.toggle(e.target);
+      }.bind(this));
+      $("#sound2").on("click", function(e) {
+        this.toggle(e.target);
+      }.bind(this));
+      $("#sound3").on("click", function(e) {
+        this.toggle(e.target);
+      }.bind(this));
+      $("#sound4").on("click", function(e) {
+        this.toggle(e.target);
+      }.bind(this));
+      $("#sound5").on("click", function(e) {
+        this.toggle(e.target);
+      }.bind(this));
+      $("#sound6").on("click", function(e) {
+        this.toggle(e.target);
+      }.bind(this));
+
       this.loopNodes.forEach(function(loopNodeObj){
         $(loopNodeObj.class).on('click', function(){
           this.recordLoopNodeAnimation(loopNodeObj);
@@ -343,26 +496,31 @@ $(function() {
         this.changeVolume(e.target);
       }.bind(this));
 
-      $('#sound1').on('click', function(e) {
-        this.toggle(e.target);
-      }.bind(this));
-
-      $('#sound2').on('click', function(e) {
-        this.toggle(e.target);
-      }.bind(this));
-
     }
   };
 });
 
-var TrackModel = Backbone.Model.extend({
-  initialize: function(){
 
-  },
-  setAudioContext: function(){ 
-    var AudioContext = window.AudioContext || window.webkitAudioContext;
-    var audioCtx = new AudioContext();
-    this.context = audioContext || audioCtx;
-  }
 
-});
+// var TrackModel = Backbone.Model.extend({
+//   initialize: function(){
+
+//   },
+//   setAudioContext: function(){ 
+//     var AudioContext = window.AudioContext || window.webkitAudioContext;
+//     var audioCtx = new AudioContext();
+//     this.context = audioContext || audioCtx;
+//   }
+
+// });
+
+
+
+//   var recorder;
+//   var counter = 1;
+
+
+// playbackControl.oninput = function() {
+//    playbackValue.innerHTML = playbackControl.value;
+// }
+
