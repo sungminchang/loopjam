@@ -34,7 +34,7 @@ $(function() {
           console.log('Audio context set up.');
           console.log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
 
-          window.URL = window.URL || window.webkitURL
+          window.URL = window.URL || window.webkitURL;
 
           // Initialize a new instance of the BufferLoader class,
           // passing in our context and data object. BufferLoader
@@ -43,7 +43,7 @@ $(function() {
           this.bufferLoader = new BufferLoader(
             this.context,
             data
-            );;
+            );
 
           // Invoking bufferLoader's .load method does the actual
           // buffering and loading of the recordings, and stores
@@ -55,7 +55,7 @@ $(function() {
           alert('Web Audio API is not available');
         }
 
-      this.tempoAdjustment = 0; //adjustment parameter when user changes tempo. initially set at 0.
+      this.tempoAdjustment = 0; //adjustment parameter when user changes tempo (in degree). initially set at 0.
       this.bpm  = bpm || 120;
 
 
@@ -68,7 +68,7 @@ $(function() {
 
     },
     startUserMedia: function(stream) {
-      console.log(this.context)
+      console.log(this.context);
       var input = this.context.createMediaStreamSource(stream);
       console.log('Media stream created.' );
       console.log("input sample rate " +input.context.sampleRate);
@@ -84,22 +84,25 @@ $(function() {
       console.log('Starting Record:');
 
       // Grab the amount of time a bar takes to complete.
-      var barTime = parseInt($('.multiplier').val());
+      var bar1x = calcBar(this.bpm);
+      console.log("bar1x", bar1x);
+      var barTime = bar1x * parseInt($('.multiplier').val());
       var currentTime = this.context.currentTime;
       
-      console.log("barTime", barTime)
+      console.log("barTime", barTime);
 
       //Set up blank object for loop node      
       if(!data[counter]) data[counter] = {};
 
       // Sets up variables for loop node
-      data[counter].speed = barTime
+      data[counter].speed = barTime;
       data[counter].port = 0;
       data[counter].recordedAtBpm = this.bpm;
 
       // The remainder tells us how much of the bartime we have 
       // completed thus far.
-      var remainder = currentTime % barTime;
+      // This has to also take into account tempoAdjustment
+      var remainder = (currentTime - this.tempoAdjustment / 360 * barTime)  % barTime;
 
       var delay = barTime - remainder;
       
@@ -109,7 +112,7 @@ $(function() {
       console.log("Record will start in:", delayInMilliseconds, "ms")
       console.log("Record will stop in:", delayInMilliseconds + barTime * 1000, "ms")
       
-      var barTimeInMS = barTime * 1000
+      var barTimeInMS = barTime * 1000;
 
       setTimeout(this.startRecording.bind(this), delayInMilliseconds - 100)
       setTimeout(this.stopRecording.bind(this), delayInMilliseconds + barTimeInMS + 50)
@@ -236,7 +239,6 @@ $(function() {
       d3.timer(function(){
         var currentTime = this.context.currentTime;        
         var currentDeg = (currentTime * speed - tempoAdjustment) / multiplier;
-        console.log(currentDeg);
         if(currentDeg >= startRecordDeg){
           disc.attr("class", "disc record");
           startPlayTimer.call(this);
@@ -250,7 +252,6 @@ $(function() {
         d3.timer(function(){
           var currentTime = this.context.currentTime;        
           var currentDeg = (currentTime * speed - tempoAdjustment) / multiplier;
-          console.log(currentDeg);
           if(currentDeg >= startPlayDeg){
             disc.attr("class", "disc unmute");
             if(callback){
@@ -270,9 +271,10 @@ $(function() {
 
       this.tempoAdjustment = this.tempoAdjustment + t * (3/2) * (bpm - this.bpm);
       this.bpm = bpm;
+
       data.forEach(function(value){
         if(value.source){
-          value.source.playbackRate.value = parseInt(bpm) / value.recordedAtBpm
+          value.source.playbackRate.value = parseInt(bpm) / value.recordedAtBpm;
         }    
       })
  
@@ -327,15 +329,21 @@ $(function() {
       var currentTime = this.context.currentTime;
 
       // The remainder tells us how much of the bartime we have 
-      // completed thus far.
-      var remainder = currentTime % barTime;
-      console.log('currentTime:', currentTime);
+      // completed thus far. 
+      // This has to also take into account tempoAdjustment
+      var recordedAtBpm = soundData.recordedAtBpm;
+      var multiplier = barTime * recordedAtBpm / 240;
+      console.log('tempoAdjustment', this.tempoAdjustment);
+      var remainder = (currentTime - this.tempoAdjustment / 360 * calcBar(this.bpm) * multiplier)  % (calcBar(this.bpm) * multiplier);
+
 
       // The delay calculates how much we'll have to delay
       // the playing of the sound so that we can perfectly
       // match the time of the next beat.
-      var delay = barTime - remainder;
-      console.log('delay: ', delay);
+      var delay = multiplier * calcBar(this.bpm) - remainder;
+      console.log("bar", calcBar(this.bpm),"multiplier", multiplier, "currentime",  currentTime, 'remainder', remainder , 'delay: ', delay);
+      // console.log('currentTime:', currentTime);
+      // console.log('delay: ', delay);
 
       console.log('expected time of play: ', delay + currentTime);
 
@@ -365,6 +373,9 @@ $(function() {
 
       // Play the sound, delaying the sound by the delay necessary
       // to make the sound play at the start of a new measure.
+      console.log('loopStart', soundData.source.buffer.duration - barTime)
+      console.log('loopEnd', soundData.source.buffer.duration)
+
       soundData.source.loopStart = soundData.source.buffer.duration - barTime;
       soundData.source.loopEnd = soundData.source.buffer.duration;
       var delayInMilliseconds = barTime * 1000 - parseInt(delay.toString().replace(/\./g,'').slice(0,4)) 
@@ -432,7 +443,7 @@ $(function() {
       // Events
       $('.record-new').on("click", function(e){
         counter = parseInt(e.target.value);
-        this.loopNodes[counter - 1].multiplier = parseInt($('.multiplier').val() / 2)
+        this.loopNodes[counter - 1].multiplier = parseInt($('.multiplier').val());
         this.recordLoopNodeAnimation(this.loopNodes[counter - 1]);
         this.recorderDelay.call(this);
       }.bind(this));
