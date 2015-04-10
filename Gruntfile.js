@@ -99,5 +99,6 @@ module.exports = function (grunt) {
   //Register Unit Tasks
 grunt.registerTask('serve', [ 'express:dev', 'watch' ])
 grunt.registerTask('unit-test', ['karma:unit']);
+//Initiated in scripts line in package.json
 grunt.registerTask('test', ['karma:travis']);
 }
