@@ -2,6 +2,7 @@
   "name": "loopjam",
   "version": "0.0.1",
   "private": true,
+  "description": "App loop man",
   "scripts": {
     "test": "grunt test"
   },

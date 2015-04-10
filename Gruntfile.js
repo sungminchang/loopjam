@@ -19,12 +19,12 @@ module.exports = function (grunt) {
       },
       dev : {
         options: {
-          script: 'app.js'
+          script: 'server/app.js'
         }
       },
       prod: {
         options: {
-          script: 'app.js',
+          script: 'server/app.js',
           node_env: 'production'
         }
       }
@@ -48,7 +48,7 @@ module.exports = function (grunt) {
     },
     nodemon: {
       dev: {
-        script: 'app.js'
+        script: 'server/app.js'
       }
     },
     open: {
@@ -63,7 +63,7 @@ module.exports = function (grunt) {
         tasks: ['karma:continuous:run']
       },
       express: {
-        files: ['app.js'],
+        files: ['server/app.js'],
         tasks: ['express:dev'],
         options: {
           spawn: false
@@ -97,7 +97,7 @@ module.exports = function (grunt) {
   });
 
   //Register Unit Tasks
-grunt.registerTask('serve', [ 'express:dev', 'watch' ])
+grunt.registerTask('default', [ 'express:dev', 'watch' ]);
 grunt.registerTask('unit-test', ['karma:unit']);
 //Initiated in scripts line in package.json
 grunt.registerTask('test', ['karma:travis']);

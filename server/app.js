@@ -18,5 +18,7 @@ server.listen(port, function () {
   console.log('Express server listening on %d, in %s mode', port, app.get('env'));
 });
 
+//Sockets Setup
+
 // Expose app
 exports = module.exports = app;
