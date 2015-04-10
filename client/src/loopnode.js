@@ -28,5 +28,8 @@ var createLoopNode = function(loopClass, xPos, yPos){
   d3Container.container = container;
 
   return d3Container;
+  // {
+  //  svg: svg,
+  //  container: container,}
 
 };
