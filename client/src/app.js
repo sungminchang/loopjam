@@ -396,7 +396,7 @@ $(function() {
       // var data = button.split(" ")
       // console.log('data: ', data);
       console.log(button.value);
-      if (button.innerHTML == "Play") {
+      if (button.innerHTML === "Play") {
         button.innerHTML = "Pause";
         this.play(button);
       } else {
