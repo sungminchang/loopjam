@@ -705,7 +705,36 @@ var TrackModel = Backbone.Model.extend({
         this.bufferLoader.load();
     },
 
+    setCueAnimation: function(){
+      d3.timer(function(){
+        var loopNodes = this.get('loopNodes');
+        var audioCtxTime = this.get('context').currentTime;
+        var bar = calcBar(this.get('tempo'));
+        var angularSpeed = calcSpeed(bar);
+        var tempoAdjustment = this.get('tempoAdjustment');
 
+        // do this for each loopnode
+        loopNodes.each(function(loopNode) {
+          var delta = audioCtxTime;
+          var svg = loopNode.get('d3Obj').svg;
+          var multiplier = loopNode.get('multiplier');
+
+          svg.selectAll(".cue").attr("transform", function(d) {
+            // amount to rotate from original (xPos:0, yPos:1) position
+            var rotateDeg = (delta * angularSpeed - tempoAdjustment) / multiplier;
+            // animation at 90, 180, 270, and 360 degree
+
+            if(rotateDeg % 90 < 20 || rotateDeg % 90 > 80){
+              svg.selectAll(".cue").attr("class", "cue darkplanet");
+            } else{
+              svg.selectAll(".cue").attr("class", "cue");
+            }
+            return "rotate(" + rotateDeg  +")";
+          });
+
+        });
+      }.bind(this));
+    },
 
     // populateLoopNodes: function(){
     //   // initialize loopnodes
@@ -770,7 +799,7 @@ var LoopNodeModel = Backbone.Model.extend({
     url: '',
     //refactor speed to barTime
     speed: 2,
-    multiplier: null,
+    multiplier: 1,
     source: null,
     gainNode: null,
     recordedAtBpm: null,
@@ -795,8 +824,7 @@ var LoopNodeEntryView = Backbone.View.extend({
     var planets = [
       { R: 150, r: 10}
     ];
-  debugger;
-    var svg = d3.select($(this.el)).insert("svg")
+    var svg = d3.select(this.el).insert("svg")
       .attr("width", w).attr("height", h);
       // append sun
     svg.append("circle").attr("r", 20).attr("cx", w/2)
@@ -817,10 +845,6 @@ var LoopNodeEntryView = Backbone.View.extend({
     d3Container.container = container;
 
     return d3Container;
-    // {
-    //  svg: svg,
-    //  container: container,}
-
   }, 
 
   render: function() {
@@ -831,10 +855,9 @@ var LoopNodeEntryView = Backbone.View.extend({
     var x = xPos(startAngle, radius);
     var y = yPos(startAngle, radius);
     var d3obj = this.createLoopNode(loopNodeClass, x, y)
-    console.log("d3obj", d3obj)
     this.model.set('d3Obj',d3obj);
-    console.log('Inside the LoopNodeEntryView class, logging out this.$el: ', this.$el);
-    console.log("html:",this.$el.html())
+
+    return this.$el.html();
   }
 });
 
@@ -848,10 +871,10 @@ var LoopNodesView = Backbone.View.extend({
     var that = this;
     this.$el.children().detach();
     this.collection.each(function(loopNode) {
-      new LoopNodeEntryView({model: loopNode}).render();
+      that.$el.append(new LoopNodeEntryView({model: loopNode}).render());
     });
 
-    // return this.$el.html();
+    return this.$el.html();
   },
 
   update: function() {
@@ -873,25 +896,43 @@ var LoopNodeCollection = Backbone.Collection.extend({
   },
 
   initialize: function() {
-    // debugger;
     // this.populateLoopNodes();
   },
 
-  // populateLoopNodes: function(){
-  //   var startAngle = 0; //starting angle should be 0
-  //   var radius = 150;
+  setCueAnimation: function(){
+    console.log('inside setCueAnimation, logging out AudioCtxTime: ', audioCtxTime);
 
-  //   var x = xPos(startAngle, radius);
-  //   var y = yPos(startAngle, radius);
+    d3.timer(function(){
+      var loopNodes = this.collection;
+      var audioCtxTime = this.context.currentTime;
+      console.log('inside setCueAnimation, logging out AudioCtxTime: ', audioCtxTime);
+      var bar = calcBar(this.bpm);
+      var speed = calcSpeed(bar);
+      var tempoAdjustment = this.tempoAdjustment;
 
-  //   this.each(function(loopNode) {
-  //     console.log('inside the PopulateLoopNodes function, logging loopNode: ', loopNode);
-  //     var loopNodeId = '.loopnode' + loopNode.get('port');
-  //     console.log('logging out loopNodeId :', loopNodeId);
-  //     var loopNodeObj = loopNode.createLoopNode(loopNodeId, x, y);
-  //     loopNode.set('d3Obj', loopNodeObj);
-  //   });
-  // },
+      // do this for each loopnode
+      loopNodes.each(function(loopNode) {
+        var delta = audioCtxTime;
+        var svg = loopNode.d3Obj.svg;
+        var multiplier = loopNode.multiplier;
+
+        svg.selectAll(".cue").attr("transform", function(d) {
+          // amount to rotate from original (xPos:0, yPos:1) position
+          var rotateDeg = (delta * speed - tempoAdjustment) / multiplier;
+
+          // animation at 90, 180, 270, and 360 degree
+
+          if(rotateDeg % 90 < 20 || rotateDeg % 90 > 80){
+            svg.selectAll(".cue").attr("class", "cue darkplanet");
+          } else{
+            svg.selectAll(".cue").attr("class", "cue");
+          }
+          return "rotate(" + rotateDeg  +")";
+        });
+
+      });
+    }.bind(this));
+  },
 
   updateAnimationPosition: function(tempo, tempoAdjustment, currentTime){
     // Each(updates position)
@@ -938,15 +979,15 @@ var LoopNodeCollection = Backbone.Collection.extend({
 
 var loopNode1 = new LoopNodeModel({url: "../client/audio/click.mp3", speed:2, port: 1, recordedAtBpm: 120});
 var loopNode2 = new LoopNodeModel({url: "../client/audio/metronome2.mp3", speed:2, port: 2, recordedAtBpm: 120});
-console.log('logging out loopNode1: ', loopNode1);
 var loopNodesForTrack = new LoopNodeCollection( [loopNode1, loopNode2] );
-console.log(loopNodesForTrack);
 // loopNodesForTrack.populateLoopNodes();
 // loopNodesForTrack.set('d3timer', d3timer(this shit we want to run))
 var track = new TrackModel({loopNodes: loopNodesForTrack});
 
 var loopNodesView = new LoopNodesView({collection: loopNodesForTrack});
-loopNodesView.initialRender();
+
+$('body').append(loopNodesView.initialRender());
+track.setCueAnimation();
 
 //   var recorder;
 //   var counter = 1;
