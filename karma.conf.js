@@ -7,7 +7,7 @@ module.exports = function (config){
   frameworks: ['jasmine'],
   //List of files to load
   files: [
-  // 'client/src/*.js',
+  'client/src/test.js',
   ],
   // List of files/patterns to exclude from loaded files.
   exclude: [],
@@ -22,13 +22,13 @@ module.exports = function (config){
     // PhantomJS
   browsers : ['Chrome', 'PhantomJS', 'Firefox'],
   //List of reporters to use
-  reporters: ['progress'],
-  plugins : [
-        'karma-junit-reporter',
-        'karma-chrome-launcher',
-        'karma-jasmine',
-        'karma-chai',
-        'karma-phantomjs-launcher'
-    ]
+  reporters: ['progress']
+  // plugins : [
+  //       'karma-junit-reporter',
+  //       'karma-chrome-launcher',
+  //       'karma-jasmine',
+  //       'karma-chai',
+  //       'karma-phantomjs-launcher'
+  //   ]
   });
 }
