@@ -34,7 +34,7 @@ module.exports = function (grunt) {
       options: {
         jshintrc :'.jshintrc'
       },
-      files: ['client/src/*.js']
+      files: ['client/src/test.js']
     },
 
     karma: {
