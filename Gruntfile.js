@@ -48,7 +48,6 @@ module.exports = function (grunt) {
         background:true
       },
       travis:{
-        //set up naow
         configFile: 'karma.conf.js',
         singleRun: true,
         browsers: ['PhantomJS']

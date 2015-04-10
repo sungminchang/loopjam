@@ -23,12 +23,12 @@ module.exports = function (config){
   browsers : ['Chrome', 'PhantomJS', 'Firefox'],
   //List of reporters to use
   reporters: ['progress'],
-  // plugins : [
-  //       'karma-junit-reporter',
-  //       'karma-chrome-launcher',
-  //       'karma-jasmine',
-  //       'karma-chai',
-  //       'karma-phantomjs-launcher'
-  //   ]
+  plugins : [
+        'karma-junit-reporter',
+        'karma-chrome-launcher',
+        'karma-jasmine',
+        'karma-chai',
+        'karma-phantomjs-launcher'
+    ]
   });
 }
