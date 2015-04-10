@@ -3,5 +3,6 @@ public
 bower_components
 .DS_Store
 /server/config/local.env.js
+/server/database/config.js
 
 
