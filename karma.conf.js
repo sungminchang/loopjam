@@ -7,7 +7,7 @@ module.exports = function (config){
   frameworks: ['jasmine'],
   //List of files to load
   files: [
-  'client/src/*.js',
+  // 'client/src/*.js',
   ],
   // List of files/patterns to exclude from loaded files.
   exclude: [],

@@ -107,5 +107,5 @@ module.exports = function (grunt) {
 grunt.registerTask('default', [ 'express:dev', 'watch' ]);
 grunt.registerTask('unit-test', ['karma:unit']);
 //Initiated in scripts line in package.json
-grunt.registerTask('test', ['karma:travis','jshint']);
+grunt.registerTask('test', ['jshint']);
 }
