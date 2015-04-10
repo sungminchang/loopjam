@@ -21,5 +21,8 @@
   "trailing": false,
   "loopfunc": true,
   "smarttabs": true,
-  "jquery": true
+  "globals": {
+    "jquery": true,
+    "$": true
+  }
 }
