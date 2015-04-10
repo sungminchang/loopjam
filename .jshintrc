@@ -22,7 +22,7 @@
   "loopfunc": true,
   "smarttabs": true,
   "globals": {
-    "jquery": true,
-    "$": true
+    "jquery": false,
+    "$": false
   }
 }
