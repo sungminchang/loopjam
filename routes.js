@@ -1,0 +1,23 @@
+'use strict'
+
+
+var errors = require('./server/components/errors');
+var express = require('express');
+module.exports = function (app){
+
+
+
+ //To-Do Insert routes here
+
+
+
+ // All other routes should redirect to the index.html
+  // app.route('/*')
+  //   .get(function(req, res) {
+  //     res.sendfile(app.get('appPath') + '/index.html');
+  //   });
+    app.use(express.static(__dirname + '/client'));
+    app.get('*', function(req, res){
+      res.sendfile(__dirname + '/client/index.html');
+    });
+}
