@@ -29,6 +29,14 @@ module.exports = function (grunt) {
         }
       }
     },
+
+    jshint: {
+      options: {
+        jshintrc :'.jshintrc'
+      },
+      files: ['client/src/*.js']
+    },
+
     karma: {
       options: {
         configFile: 'karma.conf.js',
@@ -100,5 +108,5 @@ module.exports = function (grunt) {
 grunt.registerTask('default', [ 'express:dev', 'watch' ]);
 grunt.registerTask('unit-test', ['karma:unit']);
 //Initiated in scripts line in package.json
-grunt.registerTask('test', ['karma:travis']);
+grunt.registerTask('test', ['karma:travis','jshint']);
 }
