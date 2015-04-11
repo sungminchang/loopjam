@@ -77,11 +77,6 @@ module.exports = function (grunt) {
         options: {
           spawn: false,
         }
-      },
-      server: {
-        options:{
-          livereload: true
-        }
       }
     }
   });

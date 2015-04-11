@@ -4,7 +4,7 @@ var BufferLoader = function(context, data, callback) {
   var urls = [];
   // Convert the data object into a list of url's as strings
   for (var i = 0; i < data.length; i++) {
-    urls.push(data[i].url);
+    urls.push(data[i]);
   }
   console.log('urls: ', urls);
 

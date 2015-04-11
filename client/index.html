@@ -2,30 +2,14 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-    <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.4/js/bootstrap-select.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
-    <!-- <script src="src/recorderMainExecution.js"></script> -->
-    <script src="src/recordmp3.js"></script>
-    <script src="src/utilities.js"></script>
-    <script src="src/loopnode.js"></script>
-    <script src="src/bufferLoader.js"></script>
-    <!-- <script src="src/audioUtility.js"></script> -->
-    <script src="src/app.js"></script>
 
     <link rel="stylesheet" type="text/css" href="style.css" />
 
   </head>
   <body>
-  <script>
-    $(function(){
+    <div id="loopNodeView">
+    </div>
 
-      trackOld.initialize();
-      $('.selectpicker').selectpicker();
-    });
-  </script>
 
   <nav class="navbar navbar-default inverse">
     <div class="container-fluid">
@@ -42,12 +26,12 @@
 
   <div class="navbar-text"><strong><i class="fa fa-times"></i> Multiplier:</strong></div>
   <select class="multiplier navbar-text ">
-    <option value="1">1x</option>
-    <option value="2">2x</option>
-    <option value="4">4x</option>
+    <option value="2">1x</option>
+    <option value="4">2x</option>
+    <option value="8">4x</option>
   </select>
  
- <p class="navbar-text"><strong><i class="fa fa-clock-o"></i> Metronome:</strong></p><button class="btn btn-default navbar-btn" id="sound0" value="0">Play</button> <span id="metronomeVolume" class="navbar-text">100</span><input soundIndex="0" id="metronomeVol" class="navbar-text" type="range" min="0.0" max="100.0" step="1" value="100" style="height: 20px; width: 200px" oninput="metronomeVol = event.target.value; document.getElementById('metronomeVolume').innerText=metronomeVol;">
+ <p class="navbar-text"><strong><i class="fa fa-clock-o"></i> Metronome:</strong></p><button class="btn btn-default navbar-btn" id="sound0" value="0">Play</button>
  </div>
   </nav>
 
@@ -145,7 +129,52 @@
 <!--     <h2>Log</h2>
     <pre id="log"></pre> -->
 
-    
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.4/js/bootstrap-select.min.js"></script>
+  <!-- <script src="src/recorderMainExecution.js"></script> -->
+  <script src="src/Models/LoopNodeModel.js"></script>
+  <script src="src/Collections/LoopNodeCollection.js"></script>
+  <script src="src/Models/TrackModel.js"></script>
+  <script src="src/Views/LoopNodesView.js"></script>
+  <script src="src/Views/LoopNodeEntryView.js"></script>
+  <script src="src/recordmp3.js"></script>
+  <script src="src/utilities.js"></script>
+  <script src="src/loopnode.js"></script>
+  <script src="src/bufferLoader.js"></script>
+  <!-- <script src="src/audioUtility.js"></script> -->
+  
+  <script>
+    $(function(){
+
+      // trackOld.initialize();
+      $('.selectpicker').selectpicker();
+
+      
+      var loopNode1 = new LoopNodeModel({url: "../client/audio/click.mp3", speed:2, port: 1, recordedAtBpm: 120});
+      var loopNode2 = new LoopNodeModel({url: "../client/audio/metronome2.mp3", multiplier:2, port: 2, recordedAtBpm: 120});
+      var loopNode3 = new LoopNodeModel({url: "../client/audio/metronome2.mp3", speed:2, port: 3, recordedAtBpm: 120});
+      var loopNode4 = new LoopNodeModel({url: "../client/audio/metronome2.mp3", speed:2, port: 4, recordedAtBpm: 120});
+      var loopNode5 = new LoopNodeModel({url: "../client/audio/metronome2.mp3", speed:2, port: 5, recordedAtBpm: 120});
+      var loopNode6 = new LoopNodeModel({url: "../client/audio/metronome2.mp3", speed:2, port: 6, recordedAtBpm: 120});
+      var loopNodesForTrack = new LoopNodeCollection( [loopNode1,
+                                                      loopNode2,
+                                                      loopNode3,
+                                                      loopNode4,
+                                                      loopNode5,
+                                                      loopNode6]);
+      // loopNodesForTrack.populateLoopNodes();
+      // loopNodesForTrack.set('d3timer', d3timer(this shit we want to run))
+      var track = new TrackModel({loopNodes: loopNodesForTrack});
+
+      var loopNodesView = new LoopNodesView({collection: loopNodesForTrack});
+
+      $('body').append(loopNodesView.initialRender());
+      track.setCueAnimation();
+    });
+  </script>
 
   </body>
 
