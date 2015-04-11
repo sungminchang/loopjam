@@ -45,7 +45,9 @@ module.exports = function (grunt) {
         singleRun: true
       },
       continuous:{
-        background:true
+        background:true,
+        configFile: 'karma.conf.js',
+        browsers: ['PhantomJS']
       },
       travis:{
         configFile: 'karma.conf.js',
@@ -73,7 +75,12 @@ module.exports = function (grunt) {
         files: ['server/app.js'],
         tasks: ['express:dev'],
         options: {
-          spawn: false
+          spawn: false,
+        }
+      },
+      server: {
+        options:{
+          livereload: true
         }
       }
     }
@@ -104,7 +111,7 @@ module.exports = function (grunt) {
   });
 
   //Register Unit Tasks
-grunt.registerTask('default', [ 'express:dev', 'watch' ]);
+grunt.registerTask('default', [ 'express:dev', 'watch']);
 grunt.registerTask('unit-test', ['karma:unit']);
 //Initiated in scripts line in package.json
 grunt.registerTask('test', ['jshint']);
