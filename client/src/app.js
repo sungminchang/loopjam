@@ -712,18 +712,18 @@ var TrackModel = Backbone.Model.extend({
         var bar = calcBar(this.get('tempo'));
         var angularSpeed = calcSpeed(bar);
         var tempoAdjustment = this.get('tempoAdjustment');
-
         // do this for each loopnode
         loopNodes.each(function(loopNode) {
           var delta = audioCtxTime;
           var svg = loopNode.get('d3Obj').svg;
+          var loopNodeClass = '.loopNode' + loopNode.get('port');
           var multiplier = loopNode.get('multiplier');
-
-          svg.selectAll(".cue").attr("transform", function(d) {
+          var rotateDeg = (delta * angularSpeed - tempoAdjustment) / multiplier;
+          console.log(rotateDeg);
+          d3.selectAll(loopNodeClass + "cue").attr("transform", function(d) {
             // amount to rotate from original (xPos:0, yPos:1) position
             var rotateDeg = (delta * angularSpeed - tempoAdjustment) / multiplier;
             // animation at 90, 180, 270, and 360 degree
-
             if(rotateDeg % 90 < 20 || rotateDeg % 90 > 80){
               svg.selectAll(".cue").attr("class", "cue darkplanet");
             } else{
@@ -807,9 +807,7 @@ var LoopNodeModel = Backbone.Model.extend({
     startPlayingTime: null,
     endPlayingTime: null,
     d3Obj: null
-  }
-
-
+  },
 
 });
 
@@ -817,7 +815,7 @@ var LoopNodeEntryView = Backbone.View.extend({
 
   template: _.template('<div class="loopNode<%= port %>"></div>'),
 
-  createLoopNode: function(selector, xPos, yPos){
+  createLoopNode: function(loopNodeClass, xPos, yPos){
     var d3Container = {};
     var w = 400, h = 400;
     
@@ -838,7 +836,7 @@ var LoopNodeEntryView = Backbone.View.extend({
         d3.select(this).append("circle").attr("class", "disc")
           .attr("r", d.R);
         d3.select(this).append("circle").attr("r", d.r).attr("cx",xPos)
-          .attr("cy", -yPos).attr("class", "cue");
+          .attr("cy", -yPos).attr("class", loopNodeClass + "cue" );
       });
 
     d3Container.svg = svg;
@@ -849,7 +847,7 @@ var LoopNodeEntryView = Backbone.View.extend({
 
   render: function() {
     this.$el.html(this.template(this.model.attributes));
-    var loopNodeClass = '.loopNode' + this.model.get('port');
+    var loopNodeClass = 'loopNode' + this.model.get('port');
     var startAngle = 0; //starting angle should be 0
     var radius = 150;
     var x = xPos(startAngle, radius);
@@ -859,6 +857,7 @@ var LoopNodeEntryView = Backbone.View.extend({
 
     return this.$el.html();
   }
+  
 });
 
 var LoopNodesView = Backbone.View.extend({
@@ -869,17 +868,14 @@ var LoopNodesView = Backbone.View.extend({
 
   initialRender: function() {
     var that = this;
-    this.$el.children().detach();
+    // this.$el.children().detach();
     this.collection.each(function(loopNode) {
       that.$el.append(new LoopNodeEntryView({model: loopNode}).render());
     });
 
     return this.$el.html();
-  },
-
-  update: function() {
-
   }
+
 });
 
 var LoopNodeCollection = Backbone.Collection.extend({
@@ -899,40 +895,38 @@ var LoopNodeCollection = Backbone.Collection.extend({
     // this.populateLoopNodes();
   },
 
-  setCueAnimation: function(){
-    console.log('inside setCueAnimation, logging out AudioCtxTime: ', audioCtxTime);
+  // setCueAnimation: function(){
 
-    d3.timer(function(){
-      var loopNodes = this.collection;
-      var audioCtxTime = this.context.currentTime;
-      console.log('inside setCueAnimation, logging out AudioCtxTime: ', audioCtxTime);
-      var bar = calcBar(this.bpm);
-      var speed = calcSpeed(bar);
-      var tempoAdjustment = this.tempoAdjustment;
+  //   d3.timer(function(){
+  //     var loopNodes = this.collection;
+  //     var audioCtxTime = this.context.currentTime;
+  //     var bar = calcBar(this.bpm);
+  //     var speed = calcSpeed(bar);
+  //     var tempoAdjustment = this.tempoAdjustment;
 
-      // do this for each loopnode
-      loopNodes.each(function(loopNode) {
-        var delta = audioCtxTime;
-        var svg = loopNode.d3Obj.svg;
-        var multiplier = loopNode.multiplier;
+  //     // do this for each loopnode
+  //     loopNodes.each(function(loopNode) {
+  //       var delta = audioCtxTime;
+  //       var svg = loopNode.d3Obj.svg;
+  //       var multiplier = loopNode.multiplier;
 
-        svg.selectAll(".cue").attr("transform", function(d) {
-          // amount to rotate from original (xPos:0, yPos:1) position
-          var rotateDeg = (delta * speed - tempoAdjustment) / multiplier;
+  //       svg.selectAll(".cue").attr("transform", function(d) {
+  //         // amount to rotate from original (xPos:0, yPos:1) position
+  //         var rotateDeg = (delta * speed - tempoAdjustment) / multiplier;
 
-          // animation at 90, 180, 270, and 360 degree
+  //         // animation at 90, 180, 270, and 360 degree
 
-          if(rotateDeg % 90 < 20 || rotateDeg % 90 > 80){
-            svg.selectAll(".cue").attr("class", "cue darkplanet");
-          } else{
-            svg.selectAll(".cue").attr("class", "cue");
-          }
-          return "rotate(" + rotateDeg  +")";
-        });
+  //         if(rotateDeg % 90 < 20 || rotateDeg % 90 > 80){
+  //           svg.selectAll(".cue").attr("class", "cue darkplanet");
+  //         } else{
+  //           svg.selectAll(".cue").attr("class", "cue");
+  //         }
+  //         return "rotate(" + rotateDeg  +")";
+  //       });
 
-      });
-    }.bind(this));
-  },
+  //     });
+  //   }.bind(this));
+  // },
 
   updateAnimationPosition: function(tempo, tempoAdjustment, currentTime){
     // Each(updates position)
@@ -978,8 +972,17 @@ var LoopNodeCollection = Backbone.Collection.extend({
 // Asyncronous callback most likely.
 
 var loopNode1 = new LoopNodeModel({url: "../client/audio/click.mp3", speed:2, port: 1, recordedAtBpm: 120});
-var loopNode2 = new LoopNodeModel({url: "../client/audio/metronome2.mp3", speed:2, port: 2, recordedAtBpm: 120});
-var loopNodesForTrack = new LoopNodeCollection( [loopNode1, loopNode2] );
+var loopNode2 = new LoopNodeModel({url: "../client/audio/metronome2.mp3", multiplier:2, port: 2, recordedAtBpm: 120});
+var loopNode3 = new LoopNodeModel({url: "../client/audio/metronome2.mp3", speed:2, port: 3, recordedAtBpm: 120});
+var loopNode4 = new LoopNodeModel({url: "../client/audio/metronome2.mp3", speed:2, port: 4, recordedAtBpm: 120});
+var loopNode5 = new LoopNodeModel({url: "../client/audio/metronome2.mp3", speed:2, port: 5, recordedAtBpm: 120});
+var loopNode6 = new LoopNodeModel({url: "../client/audio/metronome2.mp3", speed:2, port: 6, recordedAtBpm: 120});
+var loopNodesForTrack = new LoopNodeCollection( [loopNode1,
+                                                loopNode2,
+                                                loopNode3,
+                                                loopNode4,
+                                                loopNode5,
+                                                loopNode6]);
 // loopNodesForTrack.populateLoopNodes();
 // loopNodesForTrack.set('d3timer', d3timer(this shit we want to run))
 var track = new TrackModel({loopNodes: loopNodesForTrack});
