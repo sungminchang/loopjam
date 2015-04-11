@@ -5,6 +5,7 @@ var LoopNodeModel = Backbone.Model.extend({
     speed: 2,
     multiplier: 1,
     source: null,
+    volume: 100,
     gainNode: null,
     recordedAtBpm: null,
     // port: loopNodeForTrack.nextPort(),
@@ -12,5 +13,12 @@ var LoopNodeModel = Backbone.Model.extend({
     endPlayingTime: null,
     d3Obj: null
   },
+
+  initialize: function(){
+     this.on('change:volume', function(){
+       var gainNode = this.get('gainNode')
+       gainNode.gain.value = this.get('volume') / 100
+     })
+   }
 
 });

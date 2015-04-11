@@ -4,7 +4,7 @@ var LoopNodesView = Backbone.View.extend({
 
   },
 
-  initialRender: function() {
+  render: function() {
     var that = this;
     // this.$el.children().detach();
     this.collection.each(function(loopNode) {
