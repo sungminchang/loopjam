@@ -5,10 +5,23 @@
 
     <link rel="stylesheet" type="text/css" href="style.css" />
 
+    <script id="loopnode-template" type="text/template">
+      <div class="col-sm-6 col-md-4">
+        <div class="loopNode{{port}}"></div>
+
+        <button class="btn btn-success" id="loopNode{{port}}" value="1">Play</button>
+        <button class="btn btn-danger record-new" value="1"><i class="fa fa-circle"></i> Record</button>
+
+
+        <div id="volumeBox"> Volume: <span id="showvolume{{port}}">100</span>
+           <input type="range" min="0.0" max="100.0" step="1" value="100" style="height: 20px; width: 200px" oninput="volume{{port}} = event.target.value; document.getElementById('showvolume{{port}}').innerText=volume{{port}};"></div>
+        </div>
+      </div>
+    </script>
+
+
   </head>
   <body>
-    <div id="loopNodeView">
-    </div>
 
 
   <nav class="navbar navbar-default inverse">
@@ -33,99 +46,9 @@
  
  <p class="navbar-text"><strong><i class="fa fa-clock-o"></i> Metronome:</strong></p><button class="btn btn-default navbar-btn" id="sound0" value="0">Play</button>
  </div>
-  </nav>
+ </nav>
 
 
-
-    <!-- <h2>Recordings</h2> -->
-      <!-- <ul id="recordingslist"></ul> -->
-
-
-  <!-- <div class="col-md-2">
-  <button class="btn btn-default">Add Sound</button>
-  </div>
-  <div class="col-md-10"> -->
-  
-      <div class="col-sm-6 col-md-4">
-         <div class="loopnode1">
-         </div>
-
-         <button class="btn btn-success" id="sound1" value="1">Play</button>
-         <button class="btn btn-danger record-new" value="1"><i class="fa fa-circle"></i> Record</button>
-
-
-         <div id="volumeBox"> Volume: <span id="showvolume1">100</span>
-           <input soundIndex="1" id="volume1" type="range" min="0.0" max="100.0" step="1" value="100" style="height: 20px; width: 200px" oninput="volume1 = event.target.value; document.getElementById('showvolume1').innerText=volume1;">
-         </div>
-      </div>
-
-
-      <div class="col-sm-6 col-md-4">
-        <div class="loopnode2">
-        </div>
-
-        <button class="btn btn-success" id="sound2" value="2">Play</button>
-        <button class="btn btn-danger record-new" value="2"><i class="fa fa-circle"></i> Record</button>
-
-        <div id="volumeBox"> Volume: <span id="showvolume2">100</span>
-          <input soundIndex="2" id="volume2" type="range" min="0.0" max="100.0" step="1" value="100" style="height: 20px; width: 200px" oninput="volume2 = event.target.value; document.getElementById('showvolume2').innerText=volume2;">
-        </div>
-      </div>
-
-      <div class="col-sm-6 col-md-4">
-        <div class="loopnode3">
-        </div>
-
-        <button class="btn btn-success" id="sound3" value="3">Play</button>
-        <button class="btn btn-danger record-new" value="3"><i class="fa fa-circle"></i> Record</button>
-
-        <div id="volumeBox"> Volume: <span id="showvolume3">100</span>
-          <input soundIndex="3" id="volume3" type="range" min="0.0" max="100.0" step="1" value="100" style="height: 20px; width: 200px" oninput="volume3 = event.target.value; document.getElementById('showvolume3').innerText=volume3;">
-        </div>
-      </div>
-
-      <div class="col-sm-6 col-md-4">
-        <div class="loopnode4">
-        </div>
-
-        <button class="btn btn-success" id="sound4" value="4">Play</button>
-        <button class="btn btn-danger record-new" value="4"><i class="fa fa-circle"></i> Record</button>
-
-         <div id="volumeBox"> Volume: <span id="showvolume4">100</span>
-           <input soundIndex="4" id="volume4" type="range" min="0.0" max="100.0" step="1" value="100" style="height: 20px; width: 200px" oninput="volume4 = event.target.value; document.getElementById('showvolume4').innerText=volume4;">
-         </div>
-       </div>
-
-      <div class="col-sm-6 col-md-4">
-        <div class="loopnode5">
-        </div>
-
-        <button class="btn btn-success" id="sound5" value="5">Play</button>
-        <button class="btn btn-danger record-new" value="5"><i class="fa fa-circle"></i> Record</button>
-
-        <div id="volumeBox"> Volume: <span id="showvolume5">100</span>
-          <input soundIndex="5" id="volume5" type="range" min="0.0" max="100.0" step="1" value="100" style="height: 20px; width: 200px" oninput="volume5 = event.target.value; document.getElementById('showvolume5').innerText=volume5;">
-        </div>
-      </div>
-
-      <div class="col-sm-6 col-md-4">
-        <div class="loopnode6">
-        </div>
-
-        <button class="btn btn-success" id="sound6" value="6">Play</button>
-        <button class="btn btn-danger record-new" value="6"><i class="fa fa-circle"></i> Record</button>
-
-        <div id="volumeBox"> Volume: <span id="showvolume6">100</span>
-          <input soundIndex="6" id="volume6" type="range" min="0.0" max="100.0" step="1" value="100" style="height: 20px; width: 200px" oninput="volume6 = event.target.value; document.getElementById('showvolume6').innerText=volume6;">
-        </div>
-      </div>
-
-<!--     </div> -->
-  </div>
-  
-
-  
-    <div id = "track"></div>
 <!--     <h2>Log</h2>
     <pre id="log"></pre> -->
 
@@ -134,6 +57,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
   <script src="http://d3js.org/d3.v3.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.4/js/bootstrap-select.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.min.js"></script>
   <!-- <script src="src/recorderMainExecution.js"></script> -->
   <script src="src/Models/LoopNodeModel.js"></script>
   <script src="src/Collections/LoopNodeCollection.js"></script>
@@ -146,6 +70,9 @@
   <script src="src/bufferLoader.js"></script>
   <!-- <script src="src/audioUtility.js"></script> -->
   
+
+
+
   <script>
     $(function(){
 
@@ -153,12 +80,12 @@
       $('.selectpicker').selectpicker();
 
       
-      var loopNode1 = new LoopNodeModel({url: "/audio/click.mp3", speed:2, port: 1, recordedAtBpm: 120});
-      var loopNode2 = new LoopNodeModel({url: "/audio/metronome2.mp3", multiplier:2, port: 2, recordedAtBpm: 120});
-      var loopNode3 = new LoopNodeModel({url: "/audio/metronome2.mp3", speed:2, port: 3, recordedAtBpm: 120});
-      var loopNode4 = new LoopNodeModel({url: "/audio/metronome2.mp3", speed:2, port: 4, recordedAtBpm: 120});
-      var loopNode5 = new LoopNodeModel({url: "/audio/metronome2.mp3", speed:2, port: 5, recordedAtBpm: 120});
-      var loopNode6 = new LoopNodeModel({url: "/audio/metronome2.mp3", speed:2, port: 6, recordedAtBpm: 120});
+      var loopNode1 = new LoopNodeModel({url: "../client/audio/click.mp3", speed:2, port: 1, recordedAtBpm: 120});
+      var loopNode2 = new LoopNodeModel({url: "../client/audio/metronome2.mp3", multiplier:2, port: 2, recordedAtBpm: 120});
+      var loopNode3 = new LoopNodeModel({url: "../client/audio/metronome2.mp3", speed:2, port: 3, recordedAtBpm: 120});
+      var loopNode4 = new LoopNodeModel({url: "../client/audio/metronome2.mp3", speed:2, port: 4, recordedAtBpm: 120});
+      var loopNode5 = new LoopNodeModel({url: "../client/audio/metronome2.mp3", speed:2, port: 5, recordedAtBpm: 120});
+      var loopNode6 = new LoopNodeModel({url: "../client/audio/metronome2.mp3", speed:2, port: 6, recordedAtBpm: 120});
       var loopNodesForTrack = new LoopNodeCollection( [loopNode1,
                                                       loopNode2,
                                                       loopNode3,
@@ -171,11 +98,14 @@
 
       var loopNodesView = new LoopNodesView({collection: loopNodesForTrack});
 
-      $('body').append(loopNodesView.initialRender());
+      $('body').append(loopNodesView.render());
       track.setCueAnimation();
     });
+
   </script>
 
   </body>
 
 </html>
+
+

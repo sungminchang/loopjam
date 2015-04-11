@@ -1,6 +1,11 @@
 var LoopNodeEntryView = Backbone.View.extend({
 
-  template: _.template('<div class="loopNode<%= port %>"></div>'),
+  initialize: function(){
+    
+  },
+
+
+  template: Handlebars.compile( $("#loopnode-template").html() ),
 
   createLoopNode: function(loopNodeClass, xPos, yPos){
     var d3Container = {};
@@ -9,7 +14,8 @@ var LoopNodeEntryView = Backbone.View.extend({
     var planets = [
       { R: 150, r: 10}
     ];
-    var svg = d3.select(this.el).insert("svg")
+   var x = $(this.el).find('.' + loopNodeClass)[0]
+    var svg = d3.select(x).insert("svg")
       .attr("width", w).attr("height", h);
       // append sun
     svg.append("circle").attr("r", 20).attr("cx", w/2)
@@ -31,6 +37,8 @@ var LoopNodeEntryView = Backbone.View.extend({
 
     return d3Container;
   }, 
+
+  
 
   render: function() {
     this.$el.html(this.template(this.model.attributes));
