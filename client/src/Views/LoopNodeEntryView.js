@@ -4,6 +4,12 @@ var LoopNodeEntryView = Backbone.View.extend({
     
   },
 
+  events:{
+    'click .record-new': function() {
+      this.model.record();
+      // console.log("record")
+    }
+  },
 
   template: Handlebars.compile( $("#loopnode-template").html() ),
 
@@ -50,7 +56,7 @@ var LoopNodeEntryView = Backbone.View.extend({
     var d3obj = this.createLoopNode(loopNodeClass, x, y)
     this.model.set('d3Obj',d3obj);
 
-    return this.$el.html();
+    return this;
   }
   
 });

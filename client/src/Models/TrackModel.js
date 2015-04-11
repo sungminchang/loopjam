@@ -11,6 +11,14 @@ var TrackModel = Backbone.Model.extend({
 
   initialize: function(params){
     this.setAudioContext(params);
+
+    // debugger;
+
+    // this.loopNodes.on("hello", function(currentLoop){
+    //   this.recorderDelay(currentLoop);     
+    // })
+
+
     // this.set('animationTimer', d3.timer(params.loopNodes.updateAnimationPosition(this.get('tempo'), this.get('tempoAdjustment'), this.get('context').currentTime)));
   },
 
