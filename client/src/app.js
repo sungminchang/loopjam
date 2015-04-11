@@ -719,7 +719,7 @@ var TrackModel = Backbone.Model.extend({
           var loopNodeClass = '.loopNode' + loopNode.get('port');
           var multiplier = loopNode.get('multiplier');
           var rotateDeg = (delta * angularSpeed - tempoAdjustment) / multiplier;
-          console.log(rotateDeg);
+
           d3.selectAll(loopNodeClass + "cue").attr("transform", function(d) {
             // amount to rotate from original (xPos:0, yPos:1) position
             var rotateDeg = (delta * angularSpeed - tempoAdjustment) / multiplier;
@@ -971,26 +971,26 @@ var LoopNodeCollection = Backbone.Collection.extend({
 //Get data from server...
 // Asyncronous callback most likely.
 
-var loopNode1 = new LoopNodeModel({url: "../client/audio/click.mp3", speed:2, port: 1, recordedAtBpm: 120});
-var loopNode2 = new LoopNodeModel({url: "../client/audio/metronome2.mp3", multiplier:2, port: 2, recordedAtBpm: 120});
-var loopNode3 = new LoopNodeModel({url: "../client/audio/metronome2.mp3", speed:2, port: 3, recordedAtBpm: 120});
-var loopNode4 = new LoopNodeModel({url: "../client/audio/metronome2.mp3", speed:2, port: 4, recordedAtBpm: 120});
-var loopNode5 = new LoopNodeModel({url: "../client/audio/metronome2.mp3", speed:2, port: 5, recordedAtBpm: 120});
-var loopNode6 = new LoopNodeModel({url: "../client/audio/metronome2.mp3", speed:2, port: 6, recordedAtBpm: 120});
-var loopNodesForTrack = new LoopNodeCollection( [loopNode1,
-                                                loopNode2,
-                                                loopNode3,
-                                                loopNode4,
-                                                loopNode5,
-                                                loopNode6]);
-// loopNodesForTrack.populateLoopNodes();
-// loopNodesForTrack.set('d3timer', d3timer(this shit we want to run))
-var track = new TrackModel({loopNodes: loopNodesForTrack});
+// var loopNode1 = new LoopNodeModel({url: "../client/audio/click.mp3", speed:2, port: 1, recordedAtBpm: 120});
+// var loopNode2 = new LoopNodeModel({url: "../client/audio/metronome2.mp3", multiplier:2, port: 2, recordedAtBpm: 120});
+// var loopNode3 = new LoopNodeModel({url: "../client/audio/metronome2.mp3", speed:2, port: 3, recordedAtBpm: 120});
+// var loopNode4 = new LoopNodeModel({url: "../client/audio/metronome2.mp3", speed:2, port: 4, recordedAtBpm: 120});
+// var loopNode5 = new LoopNodeModel({url: "../client/audio/metronome2.mp3", speed:2, port: 5, recordedAtBpm: 120});
+// var loopNode6 = new LoopNodeModel({url: "../client/audio/metronome2.mp3", speed:2, port: 6, recordedAtBpm: 120});
+// var loopNodesForTrack = new LoopNodeCollection( [loopNode1,
+//                                                 loopNode2,
+//                                                 loopNode3,
+//                                                 loopNode4,
+//                                                 loopNode5,
+//                                                 loopNode6]);
+// // loopNodesForTrack.populateLoopNodes();
+// // loopNodesForTrack.set('d3timer', d3timer(this shit we want to run))
+// var track = new TrackModel({loopNodes: loopNodesForTrack});
 
-var loopNodesView = new LoopNodesView({collection: loopNodesForTrack});
+// var loopNodesView = new LoopNodesView({collection: loopNodesForTrack});
 
-$('body').append(loopNodesView.initialRender());
-track.setCueAnimation();
+// $('body').append(loopNodesView.initialRender());
+// track.setCueAnimation();
 
 //   var recorder;
 //   var counter = 1;
