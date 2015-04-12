@@ -1,9 +1,26 @@
 var LoopNodeEntryView = Backbone.View.extend({
 
   initialize: function(){
-    
   },
 
+  events:{
+    'click .record-new': function() {
+      this.model.record();
+      // console.log("record")
+    },
+    'click .play': function() {
+      this.model.play();
+      // console.log("record")
+    },
+    'click .pause': function() {
+      this.model.pause();
+      // console.log("record")
+    },
+    'change .volumeControl': function(){
+      console.log("volume Changed")
+    }
+    
+  },
 
   template: Handlebars.compile( $("#loopnode-template").html() ),
 
@@ -41,8 +58,10 @@ var LoopNodeEntryView = Backbone.View.extend({
   
 
   render: function() {
+
     this.$el.html(this.template(this.model.attributes));
-    var loopNodeClass = 'loopNode' + this.model.get('port');
+    var port = this.model.get('port')
+    var loopNodeClass = 'loopNode' + port;
     var startAngle = 0; //starting angle should be 0
     var radius = 150;
     var x = xPos(startAngle, radius);
@@ -50,7 +69,23 @@ var LoopNodeEntryView = Backbone.View.extend({
     var d3obj = this.createLoopNode(loopNodeClass, x, y)
     this.model.set('d3Obj',d3obj);
 
-    return this.$el.html();
+
+    // var x = this.model.get('port')
+    $(this.el).find('#slider-vertical' + port).slider({
+      orientation: "horizontal",
+      range: "min",
+      min: 0,
+      max: 100,
+      value: 100,
+      slide: function( event, ui ) {
+        $( "#amount" + port ).val( ui.value );
+        this.model.set('volume', ui.value)
+      }.bind(this)
+    });
+    
+    $( "#amount" + port ).val( $( "#slider-vertical" + port ).slider( "value" ) );
+
+    return this;
   }
   
 });

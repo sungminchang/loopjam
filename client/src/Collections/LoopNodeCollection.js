@@ -14,7 +14,16 @@ var LoopNodeCollection = Backbone.Collection.extend({
 
   initialize: function() {
     // this.populateLoopNodes();
+    // this.on("hello", function(){
+    //   console.log("Listened to Hello")      
+    // })
+
   },
+
+  // events:{
+  //   "hello": function(){
+  //   }
+  // },
 
   // setCueAnimation: function(){
 

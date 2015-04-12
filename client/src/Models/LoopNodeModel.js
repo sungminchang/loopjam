@@ -14,6 +14,25 @@ var LoopNodeModel = Backbone.Model.extend({
     d3Obj: null
   },
 
+  record: function(){
+    console.log("inLoopNodeModel")
+    this.trigger("record", this);
+  },
+
+  play: function(){
+    this.trigger("play", this);
+  },
+
+  pause: function(){
+    this.trigger("pause", this);
+  },
+
+  events:{
+    "hello": function(){
+      console.log("Listened to Hello")
+    }
+  },
+
   initialize: function(){
      this.on('change:volume', function(){
        var gainNode = this.get('gainNode')

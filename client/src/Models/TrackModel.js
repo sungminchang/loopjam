@@ -10,11 +10,30 @@ var TrackModel = Backbone.Model.extend({
   },
 
   initialize: function(params){
-    this.setAudioContext(params);
+
+    var loopNodesForTrack = new LoopNodeCollection(params.audioData);
+    this.set('loopNodes', loopNodesForTrack)
+
+    this.setAudioContext();
+
+
+    this.get('loopNodes').on("record", function(currentLoop){
+      this.recorderDelay(currentLoop);     
+    }.bind(this))
+
+    this.get('loopNodes').on("play", function(currentLoop){
+      this.play(currentLoop);     
+    }.bind(this))
+
+    this.get('loopNodes').on("pause", function(currentLoop){
+      this.pause(currentLoop);     
+    }.bind(this))
+
+
     // this.set('animationTimer', d3.timer(params.loopNodes.updateAnimationPosition(this.get('tempo'), this.get('tempoAdjustment'), this.get('context').currentTime)));
   },
 
-  setAudioContext: function(params) { 
+  setAudioContext: function() { 
     var contextClass = (window.AudioContext || 
     window.webkitAudioContext || 
     window.mozAudioContext || 
@@ -47,7 +66,6 @@ var TrackModel = Backbone.Model.extend({
       // references for the buffers.
       
       
-      this.set('loopNodes', params.loopNodes);
       
       this.set('bufferLoader', new BufferLoader(
         this.get('context'),
@@ -70,6 +88,7 @@ var TrackModel = Backbone.Model.extend({
   },
 
     startUserMedia: function(stream) {
+      console.log("Inside StartUserMedia")
       console.log(this.get('context'))
       var input = this.get('context').createMediaStreamSource(stream);
       console.log('Media stream created.' );
@@ -132,7 +151,7 @@ var TrackModel = Backbone.Model.extend({
 
     stopRecording: function(currentLoop) {
           
-      console.log("time stopped recording:", this.context.currentTime)
+      console.log("time stopped recording:", this.get('context').currentTime)
       this.get('recorder') && this.get('recorder').stop();
       console.timeEnd("recording1")
       // button.disabled = true;
@@ -140,18 +159,19 @@ var TrackModel = Backbone.Model.extend({
       console.log('Stopped recording.');
       // create WAV download link using audio data blob
       this.createDownloadLink(currentLoop);
+      
       this.get('recorder').clear();
     },
 
     createDownloadLink: function(currentLoop) {
-      this.recorder && this.recorder.exportWAV(function(blob) {
+      this.get('recorder') && this.get('recorder').exportWAV(function(blob) {
         var url = URL.createObjectURL(blob);
-        
         var li = document.createElement('li');
         var au = document.createElement('audio');
         var hf = document.createElement('a');
         
         currentLoop.set('url', url);
+        console.log("where is URL",currentLoop.get('url'))
         // counter++;
 
 
@@ -172,7 +192,7 @@ var TrackModel = Backbone.Model.extend({
         // will buffer all of the recordings and hold onto
         // references for the buffers.
         this.set('bufferLoader', new BufferLoader(
-          this.context,
+          this.get('context'),
           this.get('loopNodes').giveUrls() // NEED TO DEVELOP THIS OUT NEED TO DEVELOP THIS OUT
           )
         );
@@ -180,7 +200,7 @@ var TrackModel = Backbone.Model.extend({
         // Invoking bufferLoader's .load method does the actual
         // buffering and loading of the recordings, and stores
         // the buffers on the bufferloader instance.
-        this.bufferLoader.load();
+        this.get('bufferLoader').load();
     },
 
     setCueAnimation: function(){
@@ -258,6 +278,85 @@ var TrackModel = Backbone.Model.extend({
             }    
           });
     },
+
+    play: function(loopNode) {
+      // Grab the value associated with the button,
+      // will be used to identify the sound associated with the button.
+      var soundIndex = loopNode.get('port') - 1;
+      console.log('soundIndex from play: ', soundIndex);
+
+      // Grab the data object associated with the button.
+
+      // console.log('playing a sound: ', soundData);
+      // Grab the amount of time a bar takes to complete.
+      var barTime = loopNode.get('speed');
+      var currentTime = this.get('context').currentTime;
+
+      // The remainder tells us how much of the bartime we have 
+      // completed thus far.
+      var remainder = currentTime % barTime;
+      console.log('currentTime:', currentTime);
+
+      // The delay calculates how much we'll have to delay
+      // the playing of the sound so that we can perfectly
+      // match the time of the next beat.
+      var delay = barTime - remainder;
+      console.log('delay: ', delay);
+
+      console.log('expected time of play: ', delay + currentTime);
+
+      // Reassign the source associated with the soundData object
+      // to a new buffer source. This way, we can reference the same
+      // source to stop playing the loop. However, once stopped,
+      // the source is basically discarded and you must create
+      // a new one. One play per source.
+      loopNode.set('source',this.get('context').createBufferSource());
+      var source = loopNode.get('source');
+      console.log('source', source);
+
+      // Associate the new source instance with the loaded buffer.
+      source.buffer = this.get('bufferLoader').bufferList[soundIndex];
+      source.loop = true;
+      // source.playbackRate.value = playbackControl.value;
+
+      // Create a gainNode, through which we will pass the soundData.
+      loopNode.set('gainNode', this.get('context').createGain());
+      var gainNode = loopNode.get('gainNode');
+      // Connect the source to the gainNode.
+      source.connect(gainNode);
+
+      // Connect the gainNode to the destination.
+      gainNode.connect(this.get('context').destination);
+
+      // Sets the playback rate to the value of bpm / rate of the bpm being recorded
+      source.playbackRate.value = parseInt(this.get('bpm')) / loopNode.get('recordedAtBpm');
+
+      // Play the sound, delaying the sound by the delay necessary
+      // to make the sound play at the start of a new measure.
+      source.loopStart = source.buffer.duration - barTime;
+      source.loopEnd = source.buffer.duration;
+      var delayInMilliseconds = barTime * 1000 - parseInt(delay.toString().replace(/\./g,'').slice(0,4)) 
+      source.start(currentTime + delay, source.buffer.duration - barTime, source.buffer.duration);
+          
+
+      source.onended = function() {
+        console.log('Your audio has finished playing');
+      };
+
+      console.log('source', source);
+    },
+
+    pause: function(loopNode) {
+      var soundIndex = loopNode.get('port') - 1;
+      var source = loopNode.get('source');
+
+      // Instead of creating a new bufferSource as per usual,
+      // we retrieve the source that we have stored on our 
+      // data objects.
+      source.buffer = this.get('bufferLoader').bufferList[soundIndex];
+      console.log('About to pause, logging source: ', source);
+      source.stop();
+    }
 
   // this.tempoAdjustment = 0; //adjustment parameter when user changes tempo. initially set at 0.
   // this.bpm  = bpm || 120;
