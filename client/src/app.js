@@ -379,18 +379,18 @@
     //   console.log('source', source);
     // },
 
-//     pause: function(button) {
-//       var soundIndex = button.value;
-//       var soundData = data[soundIndex];
+    // pause: function(button) {
+    //   var soundIndex = button.value;
+    //   var soundData = data[soundIndex];
 
-//       // Instead of creating a new bufferSource as per usual,
-//       // we retrieve the source that we have stored on our 
-//       // data objects.
-//       var source = soundData.source;
-//       source.buffer = this.bufferLoader.bufferList[soundIndex];
-//       console.log('About to pause, logging source: ', source);
-//       source.stop();
-//     },
+    //   // Instead of creating a new bufferSource as per usual,
+    //   // we retrieve the source that we have stored on our 
+    //   // data objects.
+    //   var source = soundData.source;
+    //   source.buffer = this.bufferLoader.bufferList[soundIndex];
+    //   console.log('About to pause, logging source: ', source);
+    //   source.stop();
+    // },
 
 //     toggle: function(button) {
 //       console.log('button: ', button);

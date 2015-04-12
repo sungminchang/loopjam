@@ -16,7 +16,15 @@ var LoopNodeModel = Backbone.Model.extend({
 
   record: function(){
     console.log("inLoopNodeModel")
-    this.trigger("hello");
+    this.trigger("record", this);
+  },
+
+  play: function(){
+    this.trigger("play", this);
+  },
+
+  pause: function(){
+    this.trigger("pause", this);
   },
 
   events:{
