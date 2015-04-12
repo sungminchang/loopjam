@@ -18,7 +18,7 @@ module.exports = function (app){
   //     res.sendfile(app.get('appPath') + '/index.html');
   //   });
     app.use(express.static(__dirname + '/../client'));
-    app.get('*', function(req, res){
-      res.sendFile(__dirname + '/../client/index.html');
-    });
+    // app.get('*', function(req, res){
+    //   res.sendFile(__dirname + '/../client/index.html');
+    // });
 }

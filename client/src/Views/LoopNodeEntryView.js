@@ -1,4 +1,4 @@
-var LoopNodeEntryView = Backbone.View.extend({
+var LoopNodeEntryView = Marionette.View.extend({
 
   initialize: function(){
     
@@ -54,3 +54,4 @@ var LoopNodeEntryView = Backbone.View.extend({
   }
   
 });
+

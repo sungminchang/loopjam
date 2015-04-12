@@ -1,4 +1,4 @@
-var LoopNodesView = Backbone.View.extend({
+var LoopNodesView = Marionette.CollectionView.extend({
 
   initialize: function() {
 
@@ -15,3 +15,4 @@ var LoopNodesView = Backbone.View.extend({
   }
 
 });
+

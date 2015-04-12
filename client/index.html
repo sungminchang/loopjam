@@ -58,6 +58,8 @@
   <script src="http://d3js.org/d3.v3.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.4/js/bootstrap-select.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.marionette/2.4.1/backbone.marionette.js"></script>
+  <script src="marionetteLoopjam.js"></script>
   <!-- <script src="src/recorderMainExecution.js"></script> -->
   <script src="src/Models/LoopNodeModel.js"></script>
   <script src="src/Collections/LoopNodeCollection.js"></script>
@@ -68,10 +70,11 @@
   <script src="src/utilities.js"></script>
   <script src="src/loopnode.js"></script>
   <script src="src/bufferLoader.js"></script>
+
   <!-- <script src="src/audioUtility.js"></script> -->
   
 
-
+ 
 
   <script>
     $(function(){
@@ -80,29 +83,39 @@
       $('.selectpicker').selectpicker();
 
       
-      var loopNode1 = new LoopNodeModel({url: "../client/audio/click.mp3", speed:2, port: 1, recordedAtBpm: 120});
-      var loopNode2 = new LoopNodeModel({url: "../client/audio/metronome2.mp3", multiplier:2, port: 2, recordedAtBpm: 120});
-      var loopNode3 = new LoopNodeModel({url: "../client/audio/metronome2.mp3", speed:2, port: 3, recordedAtBpm: 120});
-      var loopNode4 = new LoopNodeModel({url: "../client/audio/metronome2.mp3", speed:2, port: 4, recordedAtBpm: 120});
-      var loopNode5 = new LoopNodeModel({url: "../client/audio/metronome2.mp3", speed:2, port: 5, recordedAtBpm: 120});
-      var loopNode6 = new LoopNodeModel({url: "../client/audio/metronome2.mp3", speed:2, port: 6, recordedAtBpm: 120});
-      var loopNodesForTrack = new LoopNodeCollection( [loopNode1,
-                                                      loopNode2,
-                                                      loopNode3,
-                                                      loopNode4,
-                                                      loopNode5,
-                                                      loopNode6]);
-      // loopNodesForTrack.populateLoopNodes();
-      // loopNodesForTrack.set('d3timer', d3timer(this shit we want to run))
-      var track = new TrackModel({loopNodes: loopNodesForTrack});
+      // var loopNode1 = new LoopNodeModel({url: "/audio/click.mp3", speed:2, port: 1, recordedAtBpm: 120});
+      // var loopNode2 = new LoopNodeModel({url: "/audio/metronome2.mp3", multiplier:2, port: 2, recordedAtBpm: 120});
+      // var loopNode3 = new LoopNodeModel({url: "/audio/metronome2.mp3", speed:2, port: 3, recordedAtBpm: 120});
+      // var loopNode4 = new LoopNodeModel({url: "/audio/metronome2.mp3", speed:2, port: 4, recordedAtBpm: 120});
+      // var loopNode5 = new LoopNodeModel({url: "/audio/metronome2.mp3", speed:2, port: 5, recordedAtBpm: 120});
+      // var loopNode6 = new LoopNodeModel({url: "/audio/metronome2.mp3", speed:2, port: 6, recordedAtBpm: 120});
+      // var loopNodesForTrack = new LoopNodeCollection( [loopNode1,
+      //                                                  loopNode2,
+      //                                                  loopNode3,
+      //                                                  loopNode4,
+      //                                                  loopNode5,
+      //                                                  loopNode6] );
+      // // loopNodesForTrack.populateLoopNodes();
+      // // loopNodesForTrack.set('d3timer', d3timer(this shit we want to run))
+      // var track = new TrackModel({loopNodes: loopNodesForTrack});
 
-      var loopNodesView = new LoopNodesView({collection: loopNodesForTrack});
+      // var loopNodesView = new LoopNodesView({collection: loopNodesForTrack});
 
-      $('body').append(loopNodesView.render());
-      track.setCueAnimation();
+      // $('body').append(loopNodesView.render());
+      // track.setCueAnimation();
     });
 
   </script>
+
+  <script id="track-layout-template" type="text/template">
+    <div id="loopNodes"></div>
+    <div id="loopNodeInfo"></div>
+    <div id="TrackInfo"></div>
+    <div id="TrackVisualization"></div>
+  </script>
+  <div id="track"></div>
+
+  <script src="src/Views/TrackView.js"></script>
 
   </body>
 
