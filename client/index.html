@@ -23,6 +23,19 @@
            </div>
       </div>
     </script>
+<!-- **************** Track Info Template **************** -->
+<!-- ***************************************************** -->
+    <script id="track-info-template" type="text/template">
+      <p>
+        <label for="amount{{port}}">Tempo:</label>
+        <input type="text" id="amount{{port}}" readonly style="border:0; color:#f6931f; font-weight:bold;">
+      </p>
+      <div id="slider-vertical{{port}}" style="height:10px;"></div>
+      </div>
+
+
+      <p class="navbar-text"><strong><i class="fa fa-clock-o"></i> Metronome:</strong></p><button class="btn btn-default navbar-btn" id="sound0" value="0">Play</button>
+    </script>
 
 
   </head>
@@ -40,7 +53,7 @@
   
     </div>
   <div class="pull-right">
-  <p class="navbar-text"><strong><i class="fa fa-music"></i> Tempo:</strong> </p> <span id="showTempo" class="navbar-text">120</span><p class="navbar-text">BPM</p> <input id="tempo" class="navbar-text" type="range" min="30.0" max="180.0" step="1" value="120" style="height: 20px; width: 200px" oninput="tempo = event.target.value; document.getElementById('showTempo').innerText=tempo;">
+  <!-- <p class="navbar-text"><strong><i class="fa fa-music"></i> Tempo:</strong> </p> <span id="showTempo" class="navbar-text">120</span><p class="navbar-text">BPM</p> <input id="tempo" class="navbar-text" type="range" min="30.0" max="180.0" step="1" value="120" style="height: 20px; width: 200px" oninput="tempo = event.target.value; document.getElementById('showTempo').innerText=tempo;"> -->
 
   <div class="navbar-text"><strong><i class="fa fa-times"></i> Multiplier:</strong></div>
   <select class="multiplier navbar-text ">
@@ -49,7 +62,7 @@
     <option value="8">4x</option>
   </select>
  
- <p class="navbar-text"><strong><i class="fa fa-clock-o"></i> Metronome:</strong></p><button class="btn btn-default navbar-btn" id="sound0" value="0">Play</button>
+ <!-- <p class="navbar-text"><strong><i class="fa fa-clock-o"></i> Metronome:</strong></p><button class="btn btn-default navbar-btn" id="sound0" value="0">Play</button> -->
  </div>
  </nav>
 
@@ -69,6 +82,7 @@
   <script src="src/Models/LoopNodeModel.js"></script>
   <script src="src/Collections/LoopNodeCollection.js"></script>
   <script src="src/Models/TrackModel.js"></script>
+  <script src="src/Views/TrackInfoView.js"></script>
   <script src="src/Views/LoopNodesView.js"></script>
   <script src="src/Views/LoopNodeEntryView.js"></script>
   <script src="src/recordmp3.js"></script>
@@ -99,7 +113,12 @@
 
       var loopNodesView = new LoopNodesView({collection: track.get('loopNodes')});
 
+      var trackInfoView = new TrackInfoView({model: track});
+
+
+      $('body').append(trackInfoView.render());
       $('body').append(loopNodesView.render().el);
+
       track.setCueAnimation();
     });
 

@@ -36,7 +36,9 @@ var LoopNodeModel = Backbone.Model.extend({
   initialize: function(){
      this.on('change:volume', function(){
        var gainNode = this.get('gainNode')
-       gainNode.gain.value = this.get('volume') / 100
+       gainNode.gain.value = this.get('volume') / 100;
+       
+       this.trigger('volumeChange', this);
      })
    }
 

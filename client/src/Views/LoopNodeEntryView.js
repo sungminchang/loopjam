@@ -82,7 +82,8 @@ var LoopNodeEntryView = Backbone.View.extend({
         this.model.set('volume', ui.value)
       }.bind(this)
     });
-    
+    debugger;
+
     $( "#amount" + port ).val( $( "#slider-vertical" + port ).slider( "value" ) );
 
     return this;

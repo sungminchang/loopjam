@@ -3,6 +3,7 @@ var TrackModel = Backbone.Model.extend({
     context: null,
     bufferLoader: null,
     tempo: 120,
+    port: 0,
     tempoAdjustment: 0,
     recorder: null,
     loopNodes: null,  //soundData
@@ -28,6 +29,11 @@ var TrackModel = Backbone.Model.extend({
     this.get('loopNodes').on("pause", function(currentLoop){
       this.pause(currentLoop);     
     }.bind(this))
+
+    this.on('change:volume', function(){
+      var gainNode = this.get('gainNode');
+      gainNode.gain.value = this.get('volume') / 100
+    })
 
 
     // this.set('animationTimer', d3.timer(params.loopNodes.updateAnimationPosition(this.get('tempo'), this.get('tempoAdjustment'), this.get('context').currentTime)));
