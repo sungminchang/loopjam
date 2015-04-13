@@ -1,21 +1,22 @@
 define([
 ], function(){
-
-  var LoopNodeModel = Backbone.Model.extend({
-    defaults: {
-      url: '',
-      //refactor speed to barTime
-      speed: 2,
-      multiplier: 1,
-      source: null,
-      volume: 100,
-      gainNode: null,
-      recordedAtBpm: null,
-      // port: loopNodeForTrack.nextPort(),
-      startPlayingTime: null,
-      endPlayingTime: null,
-      d3Obj: null
-    },
+var LoopNodeModel = Backbone.Model.extend({
+  defaults: {
+    url: '',
+    //refactor speed to barTime
+    speed: 2,
+    multiplier: 1,
+    source: null,
+    volume: 100,
+    gainNode: null,
+    recordedAtBpm: null,
+    // port: loopNodeForTrack.nextPort(),
+    startPlayingTime: null,
+    endPlayingTime: null,
+    d3Obj: null,
+    play: false,
+    record: false
+  },
 
     record: function(){
       console.log("inLoopNodeModel")
