@@ -1,45 +1,47 @@
-var LoopNodeModel = Backbone.Model.extend({
-  defaults: {
-    url: '',
-    //refactor speed to barTime
-    speed: 2,
-    multiplier: 1,
-    source: null,
-    volume: 100,
-    gainNode: null,
-    recordedAtBpm: null,
-    // port: loopNodeForTrack.nextPort(),
-    startPlayingTime: null,
-    endPlayingTime: null,
-    d3Obj: null
-  },
+define([
+], function(){
 
-  record: function(){
-    console.log("inLoopNodeModel")
-    this.trigger("record", this);
-  },
+  var LoopNodeModel = Backbone.Model.extend({
+    defaults: {
+      url: '',
+      //refactor speed to barTime
+      speed: 2,
+      multiplier: 1,
+      source: null,
+      volume: 100,
+      gainNode: null,
+      recordedAtBpm: null,
+      // port: loopNodeForTrack.nextPort(),
+      startPlayingTime: null,
+      endPlayingTime: null,
+      d3Obj: null
+    },
 
-  play: function(){
-    this.trigger("play", this);
-  },
+    record: function(){
+      console.log("inLoopNodeModel")
+      this.trigger("record", this);
+    },
 
-  pause: function(){
-    this.trigger("pause", this);
-  },
+    play: function(){
+      this.trigger("play", this);
+    },
 
-  events:{
-    "hello": function(){
-      console.log("Listened to Hello")
-    }
-  },
+    pause: function(){
+      this.trigger("pause", this);
+    },
 
-  initialize: function(){
-     this.on('change:volume', function(){
-       var gainNode = this.get('gainNode')
-       gainNode.gain.value = this.get('volume') / 100;
-       
-       this.trigger('volumeChange', this);
-     })
-   }
+    events:{
+      "hello": function(){
+        console.log("Listened to Hello")
+      }
+    },
 
+    initialize: function(){
+       this.on('change:volume', function(){
+         var gainNode = this.get('gainNode')
+         gainNode.gain.value = this.get('volume') / 100
+       })
+     }
+  });
+  return LoopNodeModel;
 });

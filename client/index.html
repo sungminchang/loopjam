@@ -5,39 +5,7 @@
 
     <link rel="stylesheet" type="text/css" href="style.css" />
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css">
-    <script id="loopnode-template" type="text/template">
-      <div class="col-sm-6 col-md-4">
-        <div class="loopNode{{port}}"></div>
-
-        <button class="btn btn-success play" id="loopNode{{port}}" value="1">Play</button>
-        <button class="btn btn-success pause" id="loopNode{{port}}" value="1">Pause</button>
-        <button class="btn btn-danger record-new" value="1"><i class="fa fa-circle"></i> Record</button>
-
-
-           <p>
-             <label for="amount{{port}}">Volume:</label>
-             <input type="text" id="amount{{port}}" readonly style="border:0; color:#f6931f; font-weight:bold;">
-           </p>
-            
-           <div id="slider-vertical{{port}}" style="height:10px;"></div>
-           </div>
-      </div>
-    </script>
-<!-- **************** Track Info Template **************** -->
-<!-- ***************************************************** -->
-    <script id="track-info-template" type="text/template">
-      <p>
-        <label for="amount{{port}}">Tempo:</label>
-        <input type="text" id="amount{{port}}" readonly style="border:0; color:#f6931f; font-weight:bold;">
-      </p>
-      <div id="slider-vertical{{port}}" style="height:10px;"></div>
-      </div>
-
-
-      <p class="navbar-text"><strong><i class="fa fa-clock-o"></i> Metronome:</strong></p><button class="btn btn-default navbar-btn" id="sound0" value="0">Play</button>
-    </script>
-
-
+    
   </head>
   <body>
 
@@ -70,6 +38,7 @@
 <!--     <h2>Log</h2>
     <pre id="log"></pre> -->
 
+    
   <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
@@ -78,52 +47,19 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
 
-  <!-- <script src="src/recorderMainExecution.js"></script> -->
-  <script src="src/Models/LoopNodeModel.js"></script>
-  <script src="src/Collections/LoopNodeCollection.js"></script>
-  <script src="src/Models/TrackModel.js"></script>
-  <script src="src/Views/TrackInfoView.js"></script>
-  <script src="src/Views/LoopNodesView.js"></script>
-  <script src="src/Views/LoopNodeEntryView.js"></script>
+  <script data-main="src/main" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.17/require.min.js"></script>
   <script src="src/recordmp3.js"></script>
   <script src="src/utilities.js"></script>
   <script src="src/loopnode.js"></script>
   <script src="src/bufferLoader.js"></script>
+  <!-- <script src="src/recorderMainExecution.js"></script> -->
+  <!-- <script src="src/Models/LoopNodeModel.js"></script>
+  <script src="src/Collections/LoopNodeCollection.js"></script>
+  <script src="src/Models/TrackModel.js"></script>
+  <script src="src/Views/LoopNodesView.js"></script>
+  <script src="src/Views/LoopNodeEntryView.js"></script> -->
   <!-- <script src="src/audioUtility.js"></script> -->
   
-
-
-
-  <script>
-    $(function(){
-
-      // trackOld.initialize();
-      $('.selectpicker').selectpicker();
-
-      
-      var audioData = [{url: "/audio/click.mp3", speed:2, port: 1, recordedAtBpm: 120},
-      {url: "/audio/metronome2.mp3", speed:2, port: 2, recordedAtBpm: 120},
-      {url: "/audio/metronome2.mp3", speed:2, port: 3, recordedAtBpm: 120},
-      {url: "/audio/metronome2.mp3", speed:2, port: 4, recordedAtBpm: 120},
-      {url: "/audio/metronome2.mp3", speed:2, port: 5, recordedAtBpm: 120},
-      {url: "/audio/metronome2.mp3", speed:2, port: 6, recordedAtBpm: 120}]
-      // loopNodesForTrack.populateLoopNodes();
-      // loopNodesForTrack.set('d3timer', d3timer(this shit we want to run))
-      var track = new TrackModel({audioData: audioData});
-
-      var loopNodesView = new LoopNodesView({collection: track.get('loopNodes')});
-
-      var trackInfoView = new TrackInfoView({model: track});
-
-
-      $('body').append(trackInfoView.render());
-      $('body').append(loopNodesView.render().el);
-
-      track.setCueAnimation();
-    });
-
-  </script>
-
   </body>
 
 </html>
