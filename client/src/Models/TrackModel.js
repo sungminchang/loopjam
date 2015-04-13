@@ -59,8 +59,23 @@ function(LoopNodeCollection){
           console.log('No live audio input: ' + e);
         });
 
+<<<<<<< HEAD
         console.log('Audio context set up.');
         console.log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
+=======
+    stopRecording: function(currentLoop) {
+          
+      console.log("time stopped recording:", this.get('context').currentTime)
+      this.get('recorder') && this.get('recorder').stop();
+      console.timeEnd("recording1")
+      // button.disabled = true;
+      // button.previousElementSibling.disabled = false;
+      console.log('Stopped recording.');
+      // create WAV download link using audio data blob
+      this.createDownloadLink(currentLoop);
+      this.get('recorder').clear();
+    },
+>>>>>>> Play, Pause, Record working
 
         window.URL = window.URL || window.webkitURL
 

@@ -3,6 +3,7 @@ define([
 ], function(template){
   var LoopNodeEntryView = Backbone.View.extend({
 
+<<<<<<< HEAD
     initialize: function(){
     },
 
@@ -24,6 +25,11 @@ define([
       }
       
     },
+=======
+  initialize: function(){
+  },
+
+>>>>>>> Play, Pause, Record working
 
     template: Handlebars.compile(template),
 
@@ -86,6 +92,7 @@ define([
     var d3obj = this.createLoopNode(loopNodeClass, x, y)
     this.model.set('d3Obj',d3obj);
 
+<<<<<<< HEAD
       // var x = this.model.get('port')
       $(this.el).find('#slider-vertical' + port).slider({
         orientation: "horizontal",
@@ -107,4 +114,25 @@ define([
   });
 
   return LoopNodeEntryView;
+=======
+
+
+    //JqueryUI volume controls
+    $(this.el).find('#slider-vertical' + port).slider({
+      orientation: "horizontal",
+      range: "min",
+      min: 0,
+      max: 100,
+      value: 100,
+      slide: function( event, ui ) {
+        $( "#amount" + port ).val( ui.value );
+        this.model.set('volume', ui.value)
+      }.bind(this)
+    });
+    $( "#amount" + port ).val( $( "#slider-vertical" + port ).slider( "value" ) );
+
+    return this;
+  }
+  
+>>>>>>> Play, Pause, Record working
 });

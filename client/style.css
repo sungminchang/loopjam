@@ -59,3 +59,11 @@ ul {
   50%  {data-fgColor : blue;}
   100%   {data-fgColor : purple;}
 }
+
+.play{
+  display:none;
+}
+
+.pause{
+  display:none;
+}

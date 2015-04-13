@@ -6,6 +6,7 @@ var LoopNodeEntryPlayPauseView = Backbone.View.extend({
   events:{
     'click .record-new': function() {
       this.model.record();
+      this.model.set('record', !this.model.get('record'));
     },
 
     'click .play': function() {
@@ -15,7 +16,6 @@ var LoopNodeEntryPlayPauseView = Backbone.View.extend({
     'click .pause': function() {
       this.model.pause();
     }
-    
   },
 
   template: Handlebars.compile( $("#loopnode-pauseplayrec-template").html() ),
