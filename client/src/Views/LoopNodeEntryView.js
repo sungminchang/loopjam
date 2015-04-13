@@ -77,6 +77,7 @@ define([
       $( "#amount" + port ).val( $( "#slider-vertical" + port ).slider( "value" ) );
 
       return this;
+
     }
 
   });

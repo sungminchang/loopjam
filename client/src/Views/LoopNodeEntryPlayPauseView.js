@@ -3,23 +3,29 @@ define([
   function(template){
     var LoopNodeEntryPlayPauseView = Backbone.View.extend({
 
-      initialize: function(){
+    initialize: function(){
+    },
+
+
+  events:{
+    'click .record-new': function() {
+      this.model.record();
+      this.model.set('record', !this.model.get('record'));
       },
 
-      events:{
-        'click .record-new': function() {
-          this.model.record();
-        },
-
-        'click .play': function() {
-          this.model.play();
-        },
-
-        'click .pause': function() {
-          this.model.pause();
-        }
-        
+      'click .play': function() {
+        this.model.play();
       },
+
+      'click .pause': function() {
+        this.model.pause();
+      },
+
+      'click .pause': function() {
+        this.model.pause();
+      }
+  
+  },
 
       template: Handlebars.compile(template),
 
@@ -32,4 +38,4 @@ define([
     });
 
     return LoopNodeEntryPlayPauseView;
-})
+});
