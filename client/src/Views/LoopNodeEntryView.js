@@ -1,8 +1,11 @@
 define([
-], function(){
+  'text!templates/LoopNodesEntryViewTemplate.html'
+], function(template){
   var LoopNodeEntryView = Backbone.View.extend({
 
     initialize: function(){
+      console.log('template', template);
+      console.log('compiled', Handlebars.compile(template));
     },
 
     events:{
@@ -24,7 +27,7 @@ define([
       
     },
 
-    template: Handlebars.compile( $("#loopnode-template").html() ),
+    template: Handlebars.compile(template),
 
     createLoopNode: function(loopNodeClass, xPos, yPos){
       var d3Container = {};

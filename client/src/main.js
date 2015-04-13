@@ -1,13 +1,16 @@
 require.config({
   baseUrl: './src', 
   paths: {
+    text: '//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.12/text.min',
+    templates: '../templates'
   }
 });
 
 define([
+  'text',
   'Models/TrackModel',
   'Views/LoopNodesView'
-], function(TrackModel, LoopNodesView){
+], function(text, TrackModel, LoopNodesView){
   $(function(){
 
     // trackOld.initialize();
