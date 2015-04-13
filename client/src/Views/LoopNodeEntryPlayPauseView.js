@@ -1,29 +1,35 @@
-var LoopNodeEntryPlayPauseView = Backbone.View.extend({
+define([
+  'text!templates/LoopNodeEntryRecPausePlayViewTemplate.html'],
+  function(template){
+    var LoopNodeEntryPlayPauseView = Backbone.View.extend({
 
-  initialize: function(){
-  },
+      initialize: function(){
+      },
 
-  events:{
-    'click .record-new': function() {
-      this.model.record();
-      this.model.set('record', !this.model.get('record'));
-    },
+      events:{
+        'click .record-new': function() {
+          this.model.record();
+        },
 
-    'click .play': function() {
-      this.model.play();
-    },
+        'click .play': function() {
+          this.model.play();
+        },
 
-    'click .pause': function() {
-      this.model.pause();
-    }
-  },
+        'click .pause': function() {
+          this.model.pause();
+        }
+        
+      },
 
-  template: Handlebars.compile( $("#loopnode-pauseplayrec-template").html() ),
+      template: Handlebars.compile(template),
 
-  render: function() {
+      render: function() {
 
-    this.$el.html(this.template(this.model.attributes));
-    return this;
-  }
-  
-});
+        this.$el.html(this.template(this.model.attributes));
+        return this;
+      }
+      
+    });
+
+    return LoopNodeEntryPlayPauseView;
+})

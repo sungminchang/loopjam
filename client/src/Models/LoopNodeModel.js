@@ -18,6 +18,7 @@ var LoopNodeModel = Backbone.Model.extend({
     recorded: false
   },
 
+
     record: function(){
       console.log("inLoopNodeModel")
       this.trigger("record", this);

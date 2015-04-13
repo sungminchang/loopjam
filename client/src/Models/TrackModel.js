@@ -59,23 +59,8 @@ function(LoopNodeCollection){
           console.log('No live audio input: ' + e);
         });
 
-<<<<<<< HEAD
         console.log('Audio context set up.');
         console.log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
-=======
-    stopRecording: function(currentLoop) {
-          
-      console.log("time stopped recording:", this.get('context').currentTime)
-      this.get('recorder') && this.get('recorder').stop();
-      console.timeEnd("recording1")
-      // button.disabled = true;
-      // button.previousElementSibling.disabled = false;
-      console.log('Stopped recording.');
-      // create WAV download link using audio data blob
-      this.createDownloadLink(currentLoop);
-      this.get('recorder').clear();
-    },
->>>>>>> Play, Pause, Record working
 
         window.URL = window.URL || window.webkitURL
 
@@ -83,9 +68,7 @@ function(LoopNodeCollection){
         // passing in our context and data object. BufferLoader
         // will buffer all of the recordings and hold onto
         // references for the buffers.
-        
-        
-        
+                
         this.set('bufferLoader', new BufferLoader(
           this.get('context'),
           this.get('loopNodes').giveUrls() // DEVELOP THIS METHOD OUTDEVELOP THIS METHOD OUTDEVELOP THIS METHOD OUT
@@ -96,6 +79,7 @@ function(LoopNodeCollection){
         // buffering and loading of the recordings, and stores
         // the buffers on the bufferloader instance.
         this.get('bufferLoader').load();
+
       } else {
         // Web Audio API is not available. Ask the user to use a supported browser.
         alert('Web Audio API is not available');
@@ -233,11 +217,10 @@ function(LoopNodeCollection){
           var multiplier = loopNode.get('multiplier');
           var rotateDeg = (delta * angularSpeed - tempoAdjustment) / multiplier;
           var degree = Math.floor(rotateDeg % 360)
-          // console.log(degree)
+          // console.log(degree)            
+            
+            $(loopNodeClass).val(degree).trigger('change');
 
-          
-          
-          $(loopNodeClass).val(degree).trigger('change');
           });
         }.bind(this));
       },
