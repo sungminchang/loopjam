@@ -7,7 +7,6 @@ function(LoopNodeCollection){
       context: null,
       bufferLoader: null,
       tempo: 120,
-      timeOffset: null,
       port: 0,
       tempoAdjustment: 0,
       recorder: null,
@@ -251,8 +250,6 @@ function(LoopNodeCollection){
         this.set('tempo', bpm);
 
 
-        // Tells us the new basis for finding the top of the cue.
-        this.set('tempoOffset', t);
         // this.set('bpm', bpm);
 
         var loopNodes = this.get('loopNodes');
@@ -281,6 +278,8 @@ function(LoopNodeCollection){
 
         // The remainder tells us how much of the bartime we have 
         // completed thus far.
+
+        debugger; 
 
         var remainder = (currentTime - this.get('tempoAdjustment') / 360 * barTime * multiplier)  % (barTime * multiplier);
         console.log('currentTime:', currentTime);
