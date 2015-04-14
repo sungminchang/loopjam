@@ -6,12 +6,11 @@ define([
 
   var LoopNodeEntryView = Backbone.View.extend({
 
-    events:{      
+    events:{
+      'click': function(){
+        this.model.trigger('selected', this.model);
+      }
     },
-
-    initialize: function(){
-    },
-
 
     template: Handlebars.compile(template),
 
@@ -78,7 +77,8 @@ define([
 
       return this;
 
-    }
+    },
+
 
   });
 

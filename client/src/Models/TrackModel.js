@@ -11,6 +11,7 @@ function(LoopNodeCollection){
       tempoAdjustment: 0,
       recorder: null,
       loopNodes: null,  //soundData
+      selectedLoopNode: null,
       animationTimer: null
     },
 
@@ -18,6 +19,13 @@ function(LoopNodeCollection){
 
       var loopNodesForTrack = new LoopNodeCollection(params.audioData);
       this.set('loopNodes', loopNodesForTrack)
+
+      // By default, select the first loopnode.
+      this.set('selectedLoopNode', this.get('loopNodes').models[0]);      
+      // event listener for loopNode selection
+      this.get('loopNodes').on('selected', function(selectedLoopNode){
+        this.set('selectedLoopNode', selectedLoopNode);
+      }, this);
 
       this.setAudioContext();
 
