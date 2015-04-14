@@ -38,6 +38,7 @@ define([
     },
 
     playMetronome: function() {
+      
       console.log('tempo changed: ', this.model.get('tempo'));
     } 
 
