@@ -34,8 +34,8 @@ function(LoopNodeCollection){
         this.recorderDelay(currentLoop);     
       }.bind(this))
 
-      this.get('loopNodes').on("play", function(currentLoop){
-        this.play(currentLoop);     
+      this.get('loopNodes').on("queue", function(currentLoop){
+        this.queue(currentLoop);     
       }.bind(this))
 
       this.get('loopNodes').on("pause", function(currentLoop){
@@ -148,19 +148,25 @@ function(LoopNodeCollection){
         
         var barTimeInMS = barTime * 1000
 
-        setTimeout(this.startRecording.bind(this), delayInMilliseconds - 100)
+        setTimeout(this.startRecording.bind(this, currentLoop), delayInMilliseconds - 100)
         setTimeout(this.stopRecording.bind(this, currentLoop), delayInMilliseconds + barTimeInMS + 50)
         setTimeout(this.preBuffer.bind(this), delayInMilliseconds + barTimeInMS + 500)
       },
       
-      startRecording: function() {
+      startRecording: function(currentLoop) {
         console.log("time started recording:", this.get('context').currentTime)
+        currentLoop.set('queue', !currentLoop.get('queue'));
+        currentLoop.set('recording', !currentLoop.get('recording'));
+        currentLoop.set('rerender', !currentLoop.get('rerender'));
+
 
         this.get('recorder') && this.get('recorder').record();
         // button.disabled = true;
         // button.nextElementSibling.disabled = false;
         console.log('Recording...');
         console.time("recording1")
+      
+
       },
 
       stopRecording: function(currentLoop) {
@@ -173,7 +179,11 @@ function(LoopNodeCollection){
         console.log('Stopped recording.');
         // create WAV download link using audio data blob
         this.createDownloadLink(currentLoop);
-        
+
+        currentLoop.set('recording', !currentLoop.get('recording'));
+        currentLoop.set('recorded', !currentLoop.get('recorded'));
+        currentLoop.set('rerender', !currentLoop.get('rerender'));
+
         this.get('recorder').clear();
       },
 
@@ -190,8 +200,6 @@ function(LoopNodeCollection){
           console.log("where is URL",currentLoop.get('url'))
           // counter++;
 
-
-          currentLoop.set('recorded', !currentLoop.get('recorded'));
           
 
           // au.controls = true;
@@ -262,7 +270,7 @@ function(LoopNodeCollection){
         });
       },
 
-      play: function(loopNode) {
+      queue: function(loopNode) {
         // Grab the value associated with the button,
         // will be used to identify the sound associated with the button.
         var soundIndex = loopNode.get('port') - 1;
@@ -319,8 +327,17 @@ function(LoopNodeCollection){
         source.loopStart = source.buffer.duration - barTime;
         source.loopEnd = source.buffer.duration;
         var delayInMilliseconds = barTime * 1000 - parseInt(delay.toString().replace(/\./g,'').slice(0,4)) 
+        var delayToChangeViews = parseInt(delay.toString().replace(/\./g,'').slice(0,4)) 
+        
         source.start(currentTime + delay, source.buffer.duration - barTime, source.buffer.duration);
-            
+        var letViewsKnowQueueIsComplete = function(){
+          loopNode.set('playing', !loopNode.get('playing'))
+          loopNode.set('queue', !loopNode.get('queue'));    
+          loopNode.set('rerender', !loopNode.get('rerender'))
+        }
+
+        console.log("activated: ", delayInMilliseconds)
+        setTimeout(letViewsKnowQueueIsComplete, delayToChangeViews)
 
         source.onended = function() {
           console.log('Your audio has finished playing');
