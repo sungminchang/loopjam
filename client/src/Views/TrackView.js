@@ -9,7 +9,7 @@ define([
   var TrackView = Backbone.View.extend({
 
     initialize: function(){
-      this.model.on("change: selectedNode", this.updateLoopNodeInfoView, this);
+      this.model.on("change:selectedLoopNode", this.updateLoopNodeInfoView, this);
     },
 
     events:{

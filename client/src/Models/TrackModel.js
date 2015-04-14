@@ -24,7 +24,7 @@ function(LoopNodeCollection){
       this.set('selectedLoopNode', this.get('loopNodes').models[0]);      
       // event listener for loopNode selection
       this.get('loopNodes').on('selected', function(selectedLoopNode){
-        this.set('selectedLoopNode', this.get('loopNodes').models[0]);
+        this.set('selectedLoopNode', selectedLoopNode);
       }, this);
 
       this.setAudioContext();
