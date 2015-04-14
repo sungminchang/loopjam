@@ -3,10 +3,10 @@
 @import '//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.4/css/bootstrap-select.min.css';
 @import '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css';
 
-
 ul { 
   list-style: none; 
 }
+
 
 #recordingslist audio {
  display: block; margin-bottom: 10px; 
@@ -15,32 +15,12 @@ ul {
   stroke : #000000;
   fill : none;
 }
-.cue {
-  stroke : #000000;
-  fill : #FFFFFF;
-}
-.darkplanet {
-  stroke : #000000;
-  fill : #000000;
+
+.btn-record{
+  fill: red;
 }
 
-.sun {
-  fill : #000000;
-}
-
-.mute {
-  fill : #A9A9A9;
-}
-
-.unmute {
-  fill : green;
-}
-
-.record {
-  fill : #FF6347;
-
-}
-.wait {
+.record-wait {
   animation:wait 1s;
   -moz-animation:wait 1s infinite; /* Firefox */
   -webkit-animation:wait 1s infinite; /* Safari and Chrome */
@@ -48,28 +28,59 @@ ul {
 
 @-moz-keyframes wait /* Firefox */
 {
-  0%   {data-fgColor : purple;}
-  50%  {data-fgColor : blue;}
-  100%   {data-fgColor : purple;}
+  0%   {fill : purple;}
+  50%  {fill : blue;}
+  100%   {fill : purple;}
 }
 
   @-webkit-keyframes wait /* Safari and Chrome */
 {
-  0%   {data-fgColor : purple;}
-  50%  {data-fgColor : blue;}
-  100%   {data-fgColor : purple;}
+  0%   {fill : purple;}
+  50%  {fill : blue;}
+  100%   {fill : purple;}
 }
 
-/*
-=======
 
->>>>>>> Play, Pause, Record working
-.play{
-  display:none;
-}
 
 .pause{
+  opacity: 0.5;
   display:none;
-<<<<<<< HEAD
-}*/
+}
+.pause:hover{
+  opacity:0.7;
+}
+
+.record-new{
+  opacity: 0.5;
+}
+.record-new:hover{
+  opacity:0.7;
+}
+
+.play{
+  opacity: 0.5;
+  display:none;
+}
+.play:hover{
+  opacity:0.7;
+}
+
+
+.btn-play{
+  position: absolute; left: 108px; top: 87px; font-size: 24px;  opacity:0.5;
+
+}
+
+.btn-pause{
+  position: absolute; left: 105px; top: 87px; font-size: 24px;   opacity:0.5;
+}
+
+.btn-svg{
+  position: absolute; 
+  left: 55px; 
+  top: 40px; 
+}
+
+
+
 
