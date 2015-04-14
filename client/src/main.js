@@ -9,10 +9,16 @@ require.config({
 define([
   'text',
   'Models/TrackModel',
+<<<<<<< HEAD
   'Views/TrackView',
   'Views/LoopNodesView',
   'Views/TrackInfoView'
 ], function(text, TrackModel, TrackView, LoopNodesView, TrackInfoView){
+=======
+  'Views/LoopNodesView',
+  'Views/TrackInfoView'
+], function(text, TrackModel, LoopNodesView, TrackInfoView){
+>>>>>>> 1f9fb581b97fe95d1e92bbd29fba8597c289d286
   $(function(){
 
     // trackOld.initialize();
@@ -31,7 +37,13 @@ define([
 
     $('body').append(trackView.render().el);
     var loopNodesView = new LoopNodesView({collection: track.get('loopNodes')});
+    var trackInfoView = new TrackInfoView({model: track});
 
+<<<<<<< HEAD
+=======
+    $('body').append(trackInfoView.render().el);
+    $('body').append(loopNodesView.render().el);
+>>>>>>> 1f9fb581b97fe95d1e92bbd29fba8597c289d286
     track.setCueAnimation();
 
     $(function() {
