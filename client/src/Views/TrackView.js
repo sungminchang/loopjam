@@ -9,6 +9,7 @@ define([
   var TrackView = Backbone.View.extend({
 
     initialize: function(){
+      this.model.on("change: selectedNode", this.updateLoopNodeInfoView, this);
     },
 
     events:{
@@ -23,8 +24,7 @@ define([
       // Append child views to corresponding class div
       // this.$el.find('.trackInfoView').append(new TrackInfoView().render().el);
 
-      var defaultLoopNode = this.model.get('loopNodes').models[0]; //setting default to first
-      this.updateLoopNodeInfoView(defaultLoopNode);
+      this.updateLoopNodeInfoView();
 
       // this.$el.find('.visualizerView').append(new VisualizerView().render().el);
       this.$el.find('.trackInfoView').append(new TrackInfoView({model: this.model}).render().el);
@@ -34,8 +34,9 @@ define([
       return this;
     },
 
-    updateLoopNodeInfoView: function(loopNode){
-      this.$el.find('.loopNodeInfoView').html(new LoopNodeInfoView({ model: loopNode}).render().el);
+    updateLoopNodeInfoView: function(){
+      var selectedNode = this.model.get('selectedLoopNode');
+      this.$el.find('.loopNodeInfoView').html(new LoopNodeInfoView({ model: selectedNode}).render().el);
       return this;
     }
     
