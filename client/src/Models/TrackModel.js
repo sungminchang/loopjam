@@ -179,6 +179,8 @@ function(LoopNodeCollection){
 
       createDownloadLink: function(currentLoop) {
         this.get('recorder') && this.get('recorder').exportWAV(function(blob) {
+
+
           var url = URL.createObjectURL(blob);
           var li = document.createElement('li');
           var au = document.createElement('audio');
@@ -188,6 +190,9 @@ function(LoopNodeCollection){
           console.log("where is URL",currentLoop.get('url'))
           // counter++;
 
+
+          currentLoop.set('recorded', !currentLoop.get('recorded'));
+          
 
           // au.controls = true;
           // au.src = url;
