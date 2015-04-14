@@ -15,7 +15,8 @@ var LoopNodeModel = Backbone.Model.extend({
     endPlayingTime: null,
     d3Obj: null,
     play: false,
-    recorded: false
+    recording: false,
+    recorded: true
   },
 
 
@@ -32,17 +33,24 @@ var LoopNodeModel = Backbone.Model.extend({
       this.trigger("pause", this);
     },
 
-    events:{
-      "hello": function(){
-        console.log("Listened to Hello")
-      }
-    },
 
     initialize: function(){
        this.on('change:volume', function(){
          var gainNode = this.get('gainNode')
          gainNode.gain.value = this.get('volume') / 100
-       })
+       });
+
+       this.on('change:recording', function(){
+        debugger
+        if(this.get('recording') === false){
+          this.trigger("recording", this)
+          console.log("Start Recording!")
+        } else if (this.get('recording') === true && this.get('recorded')) {
+          this.trigger("playLoop", this)
+          console.log("finished Recording!")
+        }
+      })
+
      }
   });
   return LoopNodeModel;
