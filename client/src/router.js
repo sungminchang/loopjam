@@ -18,13 +18,14 @@ define([
       // Landing Page
       var appModel = new AppModel();
       var appView = new AppView({model: appModel});
-      $(document.body).append(appView.render().el);
+      $(document.body).html(appView.render().el);
     },
     showTracks: function(){
       // Show All Tracks page
     },
     showTrackView: function(id){
       // Track View page
+      // Note: we need to set up ids.
 
       var audioData = [{url: "/audio/click.mp3", speed:2, port: 1, recordedAtBpm: 120},
       {url: "/audio/metronome2.mp3", speed:2, port: 2, recordedAtBpm: 120},
@@ -36,7 +37,7 @@ define([
       var track = new TrackModel({audioData: audioData});
       var trackView = new TrackView({model: track});
 
-      $(document.body).append(trackView.render().el);
+      $(document.body).html(trackView.render().el);
       track.setCueAnimation();
 
       $(function() {
@@ -47,7 +48,7 @@ define([
     },
     default: function(badUrl){
       // Route all bad url's to here.
-      $(document.body).append("404: the page doesn't exist. You tried to access: " + badUrl);
+      $(document.body).html("404: the page doesn't exist. You tried to access: " + badUrl);
     }
 
 
