@@ -7,11 +7,15 @@ function(LoopNodeCollection){
       context: null,
       bufferLoader: null,
       tempo: 120,
+      port: 0,
       tempoAdjustment: 0,
       recorder: null,
       loopNodes: null,  //soundData
       animationTimer: null
     },
+
+    initialize: function(params) {
+
       var loopNodesForTrack = new LoopNodeCollection(params.audioData);
       this.set('loopNodes', loopNodesForTrack)
 
@@ -28,6 +32,11 @@ function(LoopNodeCollection){
 
       this.get('loopNodes').on("pause", function(currentLoop){
         this.pause(currentLoop);     
+      }.bind(this))
+
+      this.on("change:tempo", function(currentLoop){
+        console.log('changing the tempo');
+        this.changeTempo(this.get('tempo'));
       }.bind(this))
 
 
@@ -218,7 +227,6 @@ function(LoopNodeCollection){
           // console.log(degree)            
             
             $(loopNodeClass).val(degree).trigger('change');
-
           });
         }.bind(this));
       },
