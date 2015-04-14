@@ -7,7 +7,7 @@ function(LoopNodeCollection){
       context: null,
       bufferLoader: null,
       tempo: 120,
-      lastTempo: 120,
+      timeOffset: null,
       port: 0,
       tempoAdjustment: 0,
       recorder: null,
@@ -124,6 +124,7 @@ function(LoopNodeCollection){
         var barTime = currentLoop.get('multiplier') * calcBar(this.get('tempo'));
         var tempo = this.get('tempo');
         var currentTime = this.get('context').currentTime;
+        var tempoAdjustment = this.get('tempoAdjustment');
         currentLoop.set('recordedAtBpm', this.get('tempo'));
 
 
@@ -135,13 +136,16 @@ function(LoopNodeCollection){
 
         // Sets up variables for loop node
         
-        // The remainder tells us how much of the bartime we have 
+        // The barTimePlayed tells us how much of the bartime we have 
         // completed thus far.
-        var remainder = currentTime % barTime;
 
-        var delay = barTime - remainder;
+        var barTimePlayed = (currentTime - tempoAdjustment / 360 * barTime)  % barTime;
+
+        // var barTimePlayed = currentTime % barTime;
+
+        var delay = barTime - barTimePlayed;
+        console.log('Will delay by ', delay, 'seconds');
         var delayInMilliseconds = parseInt(delay.toString().replace(/\./g,'').slice(0,4))  // FUNCTION TO CHANGE!!!
-        
         console.log("Context Current-time", this.get('context').currentTime)
         console.log("Record will start in:", delayInMilliseconds, "ms")
         console.log("Expected time of recording:", currentTime*1000 + delayInMilliseconds, "ms")
@@ -225,14 +229,13 @@ function(LoopNodeCollection){
         var bar = calcBar(this.get('tempo'));
         var angularSpeed = calcSpeed(bar);
         var tempoAdjustment = this.get('tempoAdjustment');
-
         loopNodes.each(function(loopNode) {
           var delta = audioCtxTime;
           var svg = loopNode.get('d3Obj').svg;
           var loopNodeClass = '.loopNode' + loopNode.get('port');
           var multiplier = loopNode.get('multiplier');
           var rotateDeg = (delta * angularSpeed - tempoAdjustment) / multiplier;
-          var degree = Math.floor(rotateDeg % 360)
+          var degree = (rotateDeg % 360)
           // console.log(degree)        
             
         $(loopNodeClass).val(degree).trigger('change');
@@ -246,11 +249,15 @@ function(LoopNodeCollection){
         t = t || this.get('context').currentTime;
         this.set('tempoAdjustment', this.get('tempoAdjustment') + t * (3/2) * (bpm - this.get('tempo')));
         this.set('tempo', bpm);
+
+
+        // Tells us the new basis for finding the top of the cue.
+        this.set('tempoOffset', t);
         // this.set('bpm', bpm);
 
         var loopNodes = this.get('loopNodes');
 
-        loopNodes.each(function(loopNode){
+        loopNodes.each(function(loopNode, i){
           var currentSource = loopNode.get('source');
           if(currentSource){
             currentSource.playbackRate.value = parseInt(bpm) / loopNode.get('recordedAtBpm');
@@ -268,12 +275,14 @@ function(LoopNodeCollection){
 
         // console.log('playing a sound: ', soundData);
         // Grab the amount of time a bar takes to complete.
-        var barTime = currentLoop.get('multiplier') * calcBar(this.get('tempo'));
+        var multiplier = currentLoop.get('multiplier');
+        var barTime = multiplier * calcBar(this.get('tempo'));
         var currentTime = this.get('context').currentTime;
 
         // The remainder tells us how much of the bartime we have 
         // completed thus far.
-        var remainder = currentTime % barTime;
+
+        var remainder = (currentTime - this.get('tempoAdjustment') / 360 * barTime * multiplier)  % (barTime * multiplier);
         console.log('currentTime:', currentTime);
 
         // The delay calculates how much we'll have to delay
