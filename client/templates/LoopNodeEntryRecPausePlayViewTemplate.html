@@ -1,3 +1,20 @@
-<button class="btn btn-success play" id="loopNode{{port}}" value="1">Play</button>
-<button class="btn btn-success pause" id="loopNode{{port}}" value="1">Pause</button>
-<button class="btn btn-danger record-new" value="1"><i class="fa fa-circle"></i> Record</button>
+<div class="pause" id="loopNodePause{{port}}">
+<svg class="btn-svg" height="120" width="120">
+  <circle cx="60" cy="60" r="30" stroke="black" stroke-width="5" fill="orange" />
+<i class="fa fa-pause btn-pause"></i>
+</svg>
+</div>
+
+<div class="record-new" id="loopNodeRecord{{port}}" >
+<svg class="btn-svg" height="120" width="120">
+  <circle class="btn-record" cx="60" cy="60" r="30" stroke="black" stroke-width="5" class="record-wait" />
+</svg> <!-- <i style ="position: absolute; left: 107px; top: 87px; opacity: 0.5;font-size: 24px;" class="fa fa-circle"></i> -->
+</div>
+
+<div class="play" id="loopNodePlay{{port}}">
+<svg class="btn-svg" height="120" width="120">
+  <circle cx="60" cy="60" r="30" stroke="black" stroke-width="5" fill="#339900" />
+</svg>
+<i class="fa fa-play btn-play"></i>
+
+</div>
