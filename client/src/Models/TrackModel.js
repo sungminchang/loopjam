@@ -6,11 +6,15 @@ define([
       context: null,
       bufferLoader: null,
       tempo: 120,
+      port: 0,
       tempoAdjustment: 0,
       recorder: null,
       loopNodes: null,  //soundData
       animationTimer: null
     },
+
+    initialize: function(params) {
+
       var loopNodesForTrack = new LoopNodeCollection(params.audioData);
       this.set('loopNodes', loopNodesForTrack)
 
@@ -27,6 +31,11 @@ define([
 
       this.get('loopNodes').on("pause", function(currentLoop){
         this.pause(currentLoop);     
+      }.bind(this))
+
+      this.on("change:tempo", function(currentLoop){
+        console.log('changing the tempo');
+        this.changeTempo(this.get('tempo'));
       }.bind(this))
 
 
@@ -217,9 +226,9 @@ define([
             var loopNodeClass = '.loopNode' + loopNode.get('port');
             var multiplier = loopNode.get('multiplier');
             var rotateDeg = (delta * angularSpeed - tempoAdjustment) / multiplier;
-
             d3.selectAll(loopNodeClass + "cue").attr("transform", function(d) {
               // amount to rotate from original (xPos:0, yPos:1) position
+              
               var rotateDeg = (delta * angularSpeed - tempoAdjustment) / multiplier;
               // animation at 90, 180, 270, and 360 degree
               if(rotateDeg % 90 < 20 || rotateDeg % 90 > 80){

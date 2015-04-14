@@ -9,8 +9,9 @@ require.config({
 define([
   'text',
   'Models/TrackModel',
-  'Views/LoopNodesView'
-], function(text, TrackModel, LoopNodesView){
+  'Views/LoopNodesView',
+  'Views/TrackInfoView'
+], function(text, TrackModel, LoopNodesView, TrackInfoView){
   $(function(){
 
     // trackOld.initialize();
@@ -28,7 +29,9 @@ define([
     var track = new TrackModel({audioData: audioData});
 
     var loopNodesView = new LoopNodesView({collection: track.get('loopNodes')});
+    var trackInfoView = new TrackInfoView({model: track});
 
+    $('body').append(trackInfoView.render().el);
     $('body').append(loopNodesView.render().el);
     track.setCueAnimation();
   });

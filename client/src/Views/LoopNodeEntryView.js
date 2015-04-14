@@ -4,8 +4,6 @@ define([
   var LoopNodeEntryView = Backbone.View.extend({
 
     initialize: function(){
-      console.log('template', template);
-      console.log('compiled', Handlebars.compile(template));
     },
 
     events:{
