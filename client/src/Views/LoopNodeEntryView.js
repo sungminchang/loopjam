@@ -6,10 +6,13 @@ define([
 
   var LoopNodeEntryView = Backbone.View.extend({
 
-    events:{      
+    events:{
+
     },
 
     initialize: function(){
+      var clickEvent = 'click: .loopNode' + this.model.get('port');
+      this.on(clickEvent, this.triggerSelected, this);
     },
 
 
@@ -78,6 +81,11 @@ define([
 
       return this;
 
+    },
+
+    triggerSelected: function(){
+      console.log('TEsttttt');
+      this.model.trigger('selected', this.model);
     }
 
   });

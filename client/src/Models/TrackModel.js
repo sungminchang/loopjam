@@ -22,6 +22,10 @@ function(LoopNodeCollection){
 
       // By default, select the first loopnode.
       this.set('selectedLoopNode', this.get('loopNodes').models[0]);      
+      // event listener for loopNode selection
+      this.get('loopNodes').on('selected', function(selectedLoopNode){
+        this.set('selectedLoopNode', this.get('loopNodes').models[0]);
+      }, this);
 
       this.setAudioContext();
 
