@@ -275,7 +275,6 @@ function(LoopNodeCollection){
         });
       },
 
-
       queue: function(currentLoop) {
         // Grab the value associated with the button,
         // will be used to identify the sound associated with the button.
