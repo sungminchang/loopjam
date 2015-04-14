@@ -8,6 +8,10 @@ define([
     initialize: function() {
     },
 
+    events: {
+      'click button': 'playMetronome'
+    },
+
     render: function() {
       this.$el.html(this.template(this.model.attributes));
 
@@ -28,11 +32,12 @@ define([
 
       $( "#amount" + port ).val( $( "#slider-vertical" + port ).slider( "value" ) );
 
+      // this.delegateEvents();
 
       return this;
     },
 
-    logTempo: function() {
+    playMetronome: function() {
       console.log('tempo changed: ', this.model.get('tempo'));
     } 
 
