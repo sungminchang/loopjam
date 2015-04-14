@@ -1,10 +1,11 @@
 <div class="col-sm-6 col-md-4">
+
+  <input type="text" class="dial loopNode{{port}} wait" data-min="0" data-max="360" data-displayInput="false" data-skin="tron" data-displayPrevious="true">
   <div class="loopNode{{port}}"></div>
 
-  <button class="btn btn-success play" id="loopNode{{port}}" value="1">Play</button>
-  <button class="btn btn-success pause" id="loopNode{{port}}" value="1">Pause</button>
-  <button class="btn btn-danger record-new" value="1"><i class="fa fa-circle"></i> Record</button>
-
+  
+  <div id="recplaypause">
+  </div>
 
      <p>
        <label for="amount{{port}}">Volume:</label>

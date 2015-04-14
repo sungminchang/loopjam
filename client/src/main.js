@@ -29,6 +29,13 @@ define([
 
     $('body').append(trackView.render().el);
     track.setCueAnimation();
+
+    $(function() {
+        $(".dial").knob({
+        });
+    });
+
+
   });
 });
 

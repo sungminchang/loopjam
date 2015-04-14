@@ -1,45 +1,34 @@
 define([
-  'text!templates/LoopNodesEntryViewTemplate.html'
-], function(template){
+  'text!templates/LoopNodesEntryViewTemplate.html', 
+  'Views/LoopNodeEntryPlayPauseView'
+], function(template, LoopNodeEntryPlayPauseView){
+  
+
   var LoopNodeEntryView = Backbone.View.extend({
+
+    events:{      
+    },
 
     initialize: function(){
     },
 
-    events:{
-      'click .record-new': function() {
-        this.model.record();
-        // console.log("record")
-      },
-      'click .play': function() {
-        this.model.play();
-        // console.log("record")
-      },
-      'click .pause': function() {
-        this.model.pause();
-        // console.log("record")
-      },
-      'change .volumeControl': function(){
-        console.log("volume Changed")
-      }
-      
-    },
 
     template: Handlebars.compile(template),
 
-    createLoopNode: function(loopNodeClass, xPos, yPos){
-      var d3Container = {};
-      var w = 400, h = 400;
-      
-      var planets = [
-        { R: 150, r: 10}
-      ];
-     var x = $(this.el).find('.' + loopNodeClass)[0]
-      var svg = d3.select(x).insert("svg")
-        .attr("width", w).attr("height", h);
-        // append sun
-      svg.append("circle").attr("r", 20).attr("cx", w/2)
-        .attr("cy", h/2).attr("class", "sun");
+  createLoopNode: function(loopNodeClass, xPos, yPos){
+    var d3Container = {};
+    var w = 400, h = 400;
+    
+    var planets = [
+      { R: 150, r: 10}
+    ];
+
+   var x = $(this.el).find('.' + loopNodeClass)[0]
+    var svg = d3.select(x).insert("svg")
+      .attr("width", w).attr("height", h);
+      // append sun
+    svg.append("circle").attr("r", 20).attr("cx", w/2)
+      .attr("cy", h/2).attr("class", "sun");
 
       var container = svg.append("g")
         .attr("transform", "translate(" + w/2 + "," + h/2 + ")");
@@ -56,13 +45,13 @@ define([
       d3Container.container = container;
 
       return d3Container;
-    }, 
-
-    
+    },     
 
     render: function() {
+    
 
       this.$el.html(this.template(this.model.attributes));
+      this.$el.find('#recplaypause').append(new LoopNodeEntryPlayPauseView({model: this.model}).render().el)
       var port = this.model.get('port')
       var loopNodeClass = 'loopNode' + port;
       var startAngle = 0; //starting angle should be 0
@@ -71,7 +60,6 @@ define([
       var y = yPos(startAngle, radius);
       var d3obj = this.createLoopNode(loopNodeClass, x, y)
       this.model.set('d3Obj',d3obj);
-
 
       // var x = this.model.get('port')
       $(this.el).find('#slider-vertical' + port).slider({
@@ -89,9 +77,11 @@ define([
       $( "#amount" + port ).val( $( "#slider-vertical" + port ).slider( "value" ) );
 
       return this;
+
     }
-    
+
   });
 
   return LoopNodeEntryView;
+
 });
