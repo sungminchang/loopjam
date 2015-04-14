@@ -25,7 +25,7 @@ define([
         value: 120,
         slide: function( event, ui ) {
           $( "#amount" + port ).val( ui.value );
-          this.model.set('tempo', ui.value)
+          this.model.changeTempo(ui.value);
         }.bind(this)
       });
 
