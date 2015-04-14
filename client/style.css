@@ -44,19 +44,32 @@ ul {
   animation:wait 1s;
   -moz-animation:wait 1s infinite; /* Firefox */
   -webkit-animation:wait 1s infinite; /* Safari and Chrome */
-
 }
 
 @-moz-keyframes wait /* Firefox */
 {
-  0%   {fill : purple;}
-  50%  {fill : blue;}
-  100%   {stroke : purple; fill : purple;}
+  0%   {data-fgColor : purple;}
+  50%  {data-fgColor : blue;}
+  100%   {data-fgColor : purple;}
 }
 
   @-webkit-keyframes wait /* Safari and Chrome */
 {
-  0%   {stroke : purple; fill : purple;}
-  50%  {fill : blue;}
-  100%   {stroke : purple; fill : purple;}
+  0%   {data-fgColor : purple;}
+  50%  {data-fgColor : blue;}
+  100%   {data-fgColor : purple;}
 }
+
+/*
+=======
+
+>>>>>>> Play, Pause, Record working
+.play{
+  display:none;
+}
+
+.pause{
+  display:none;
+<<<<<<< HEAD
+}*/
+
