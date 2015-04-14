@@ -7,13 +7,14 @@ function(LoopNodeCollection){
       context: null,
       bufferLoader: null,
       tempo: 120,
+      port: 0,
       tempoAdjustment: 0,
       recorder: null,
       loopNodes: null,  //soundData
       animationTimer: null
     },
 
-    initialize: function(params){
+    initialize: function(params) {
 
       var loopNodesForTrack = new LoopNodeCollection(params.audioData);
       this.set('loopNodes', loopNodesForTrack)
@@ -31,6 +32,11 @@ function(LoopNodeCollection){
 
       this.get('loopNodes').on("pause", function(currentLoop){
         this.pause(currentLoop);     
+      }.bind(this))
+
+      this.on("change:tempo", function(currentLoop){
+        console.log('changing the tempo');
+        this.changeTempo(this.get('tempo'));
       }.bind(this))
 
 
@@ -218,57 +224,29 @@ function(LoopNodeCollection){
           var multiplier = loopNode.get('multiplier');
           var rotateDeg = (delta * angularSpeed - tempoAdjustment) / multiplier;
           var degree = Math.floor(rotateDeg % 360)
-          // console.log(degree)            
+          // console.log(degree)        
             
-            $(loopNodeClass).val(degree).trigger('change');
-
+        $(loopNodeClass).val(degree).trigger('change');
           });
         }.bind(this));
       },
 
-      // populateLoopNodes: function(){
-      //   // initialize loopnodes
-      //   var startAngle = 0; //starting angle should be 0
-      //   var radius = 150;
-
-      //   var loopnode1 = createLoopNode('.loopnode1', xPos(startAngle , radius), yPos(startAngle , radius));
-      //   var loopnode1Obj = {d3Obj: loopnode1, class: '.loopnode1', multiplier: 1};
-      //   var loopnode2 = createLoopNode('.loopnode2', xPos(startAngle , radius), yPos(startAngle , radius));
-      //   var loopnode2Obj = {d3Obj: loopnode2, class: '.loopnode2', multiplier: 1};
-      //   var loopnode3 = createLoopNode('.loopnode3', xPos(startAngle , radius), yPos(startAngle , radius));
-      //   var loopnode3Obj = {d3Obj: loopnode3, class: '.loopnode3', multiplier: 1};
-      //   var loopnode4 = createLoopNode('.loopnode4', xPos(startAngle , radius), yPos(startAngle , radius));
-      //   var loopnode4Obj = {d3Obj: loopnode4, class: '.loopnode4', multiplier: 1};
-      //   var loopnode5 = createLoopNode('.loopnode5', xPos(startAngle , radius), yPos(startAngle , radius));
-      //   var loopnode5Obj = {d3Obj: loopnode5, class: '.loopnode5', multiplier: 1};
-      //   var loopnode6 = createLoopNode('.loopnode6', xPos(startAngle , radius), yPos(startAngle , radius));
-      //   var loopnode6Obj = {d3Obj: loopnode6, class: '.loopnode6', multiplier: 1};
-      //   this.loopNodes.push(loopnode1Obj);
-      //   this.loopNodes.push(loopnode2Obj);
-      //   this.loopNodes.push(loopnode3Obj);
-      //   this.loopNodes.push(loopnode4Obj);
-      //   this.loopNodes.push(loopnode5Obj);
-      //   this.loopNodes.push(loopnode6Obj);
-
-
-      // },
-
       changeTempo: function(bpm, t){
-            // bpm : the new tempo
-            // t : the audioCtx time when tempo changed
-            t = t || this.get('context').currentTime;
+        // bpm : the new tempo
+        // t : the audioCtx time when tempo changed
+        t = t || this.get('context').currentTime;
 
-            this.set('tempoAdjustment', this.get('tempoAdjustment') + t * (3/2) * (bpm - this.get('bpm')));
-            this.set('bpm', bpm);
+        this.set('tempoAdjustment', this.get('tempoAdjustment') + t * (3/2) * (bpm - this.get('tempo')));
+        // this.set('bpm', bpm);
 
-            var loopNodes = this.get('loopNodes');
+        var loopNodes = this.get('loopNodes');
 
-            loopNodes.each(function(loopNode){
-              var currentSource = loopNode.get('source');
-              if(currentSource){
-                currentSource.playbackRate.value = parseInt(bpm) / loopNode.get('recordedAtBpm');
-              }    
-            });
+        loopNodes.each(function(loopNode){
+          var currentSource = loopNode.get('source');
+          if(currentSource){
+            currentSource.playbackRate.value = parseInt(bpm) / loopNode.get('recordedAtBpm');
+          }    
+        });
       },
 
       play: function(loopNode) {

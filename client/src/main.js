@@ -9,8 +9,10 @@ require.config({
 define([
   'text',
   'Models/TrackModel',
-  'Views/TrackView'
-], function(text, TrackModel, TrackView){
+  'Views/TrackView',
+  'Views/LoopNodesView',
+  'Views/TrackInfoView'
+], function(text, TrackModel, TrackView, LoopNodesView, TrackInfoView){
   $(function(){
 
     // trackOld.initialize();
@@ -28,6 +30,9 @@ define([
     var trackView = new TrackView({model: track});
 
     $('body').append(trackView.render().el);
+    var loopNodesView = new LoopNodesView({collection: track.get('loopNodes')});
+    var trackInfoView = new TrackInfoView({model: track});
+
     track.setCueAnimation();
 
     $(function() {
