@@ -96,8 +96,17 @@ define([
     // Assigns placeholder for where the track should be placed on the screen.
     nextPort: function(){
       if (!this.length) return 1;
-      return this.last().get('order') + 1
+      console.log('port', this.last());
+      return this.last().get('port') + 1;
+    },
+    addNewLoopNode: function(multiplier){
+      multiplier = multiplier || 2;
+      var port = this.nextPort();
+      var newLoopNode = new LoopNodeModel({multiplier: multiplier, port: port});
+      this.add(newLoopNode);
     }
+
+
   });
 
   return LoopNodeCollection; 
