@@ -27,6 +27,7 @@ var Users = sequelize.define('Users', {
 		type: Sequelize.STRING,
 		unique: true
 	},
+	token: Sequelize.STRING,
 	user_id: {
 		type: Sequelize.INTEGER,
 		primaryKey: true,

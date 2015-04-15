@@ -1,6 +1,7 @@
 'use strict'
 //Module dependencies
 var express = require('express');
+var cors = require('cors');
 //Create express server
 var app = express();
 
