@@ -124,6 +124,8 @@ function(LoopNodeCollection){
         var tempo = this.get('tempo');
         var currentTime = this.get('context').currentTime;
         var tempoAdjustment = this.get('tempoAdjustment');
+        
+        currentLoop.set('speed', barTime);
         currentLoop.set('recordedAtBpm', this.get('tempo'));
 
 
@@ -348,6 +350,7 @@ function(LoopNodeCollection){
 
         console.log('source', source);
       },
+
 
       pause: function(currentLoop) {
         var soundIndex = currentLoop.get('port') - 1;
