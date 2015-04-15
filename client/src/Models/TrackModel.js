@@ -331,7 +331,6 @@ function(LoopNodeCollection){
         var delayInMilliseconds = barTime * 1000 - parseInt(delay.toString().replace(/\./g,'').slice(0,4)) 
         var delayToChangeViews = parseInt(delay.toString().replace(/\./g,'').slice(0,4)) 
         
-        source.start(currentTime + delay, source.buffer.duration - barTime, source.buffer.duration);
         var letViewsKnowQueueIsComplete = function(){
           currentLoop.set('playing', !currentLoop.get('playing'))
           currentLoop.set('queue', !currentLoop.get('queue'));    
