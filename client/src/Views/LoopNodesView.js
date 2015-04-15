@@ -10,9 +10,10 @@ define([
     },
 
     events:{
-      'click .addNewButton': function() {
-        var mult = this.$el.find('.multiplier').val();
+      'click .addNewButton': function(ev) {
+        var mult = $(ev.currentTarget).data('multiplier');
         this.collection.addNewLoopNode(mult);
+        this.$el.find('.menu-open-button').click()
       }      
     },
 
@@ -25,6 +26,7 @@ define([
       var $addButton = this.$el.find('.addNewLoop');
       $addButton.detach();
 
+
       var that = this;
       // this.$el.children().detach();
       this.collection.each(function(loopNode) {
@@ -32,8 +34,6 @@ define([
       });
 
       this.$el.append($addButton);
-
-
       return this;
     },
 
