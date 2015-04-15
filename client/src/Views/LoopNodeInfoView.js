@@ -32,13 +32,15 @@ define([
 
       this.$el.html(this.template(this.model.attributes));
 
-      var port = this.model.get('port')
+      var port = this.model.get('port');
+      var volume = this.model.get('volume');
+
       this.$el.find('.slider-vertical' + port).slider({
         orientation: "horizontal",
         range: "min",
         min: 0,
         max: 100,
-        value: 100,
+        value: volume,
         slide: function( event, ui ) {
           $( ".amount" + port ).val( ui.value );
           this.model.set('volume', ui.value)
@@ -52,7 +54,9 @@ define([
 
     changeVolume: function(){
       var port = this.model.get('port');
-      this.$el.find('.slider-vertical' + port).slider( "option", "value" , this.model.get('volume'));
+      var volume = this.model.get('volume');
+
+      this.$el.find('.slider-vertical' + port).slider( "option", "value" , volume);
       $( ".amount" + port ).val( $( ".slider-vertical" + port ).slider( "value" ) );
     }
 
