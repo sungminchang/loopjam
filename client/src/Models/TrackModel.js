@@ -143,7 +143,6 @@ function(LoopNodeCollection){
         var frequencyData = this.get('visualFreqData');
 
         analyser.getByteFrequencyData(frequencyData)
-        console.log('frequencyData', frequencyData);
       },
 
 
