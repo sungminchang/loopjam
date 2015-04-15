@@ -1,24 +1,27 @@
 'use strict'
-
-
 var errors = require('./components/errors');
 var express = require('express');
 var session = require('express-session');
+var morgan = require('morgan');
+var bodyParser = require('body-parser');
+
 module.exports = function (app){
 
+//Logger for Development
+ app.use(morgan('dev'));
+ //Parse JSON
+ app.use(bodyParser.json());
+ app.use(bodyParser.urlencoded({ extended: true }));
 
+//Create Router
+var trackRouter = express.Router();
 
- //To-Do Insert routes here
+//Require needed routes
+require('./tracks/tracks')(trackRouter);
 
+//Register our routes
+app.use('/tracks', trackRouter);
 
-
- // All other routes should redirect to the index.html
-  // app.route('/*')
-  //   .get(function(req, res) {
-  //     res.sendfile(app.get('appPath') + '/index.html');
-  //   });
-    app.use(express.static(__dirname + '/../client'));
-    // app.get('*', function(req, res){
-    //   res.sendFile(__dirname + '/../client/index.html');
-    // });
+//Serve index files
+ app.use(express.static(__dirname + '/../client'));
 }
