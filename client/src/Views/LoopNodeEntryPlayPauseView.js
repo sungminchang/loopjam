@@ -76,6 +76,7 @@ define([
 
       }
 
+      // Queued to play
       if(queue && !recording && !playing && recorded){
         console.log("play Queue Activated")
         $("#" + "loopNodeRecord" + this.model.get('port')).css("display", "none")

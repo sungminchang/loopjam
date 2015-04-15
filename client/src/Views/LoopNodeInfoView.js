@@ -9,7 +9,32 @@ define([
 
     events:{
       'click .record-new': function() {
+        this.model.pause();
         this.model.record();
+
+        // if(!queue && recording && !playing && !recorded){
+        //   $("#" + "loopNodeRecord" + this.model.get('port')).css("display", "none")
+        //   console.log("Recording View Activated") 
+        // }
+
+        // is: 
+        // queue false
+        // recording false
+        // playing can be true or false
+        // recorded true
+
+        // set to:
+        // queue true
+        // recording false
+        // playing false or true
+        // recorded: true
+
+        this.model.set('queue', true));
+        // this.model.set('recording', !this.model.get('recording'));
+        this.model.set('playing', false);
+        this.model.set('recorded', false);
+        this.model.set('rerender', !this.model.get('rerender'));
+        // this.model.render();
         // console.log("record")
       },
       'click .play': function() {
