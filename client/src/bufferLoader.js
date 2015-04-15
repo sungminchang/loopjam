@@ -48,8 +48,8 @@ BufferLoader.prototype.loadBuffer = function(url, index) {
     );
   };
 
-  request.onerror = function() {
-    alert('BufferLoader: XHR error');
+  request.onerror = function(data) {
+    console.log('BufferLoader: XHR error', data);
   };
 
   request.send();
