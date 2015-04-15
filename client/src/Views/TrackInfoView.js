@@ -38,7 +38,17 @@ define([
     },
 
     playMetronome: function() {
-      
+      var metronomePlaying = this.model.get('metronomePlaying');
+      var metronomeNode = this.model.get('loopNodes').models[1];
+
+      if (!metronomePlaying) {
+        this.model.set('metronomePlaying', !metronomePlaying);
+        this.model.queue(metronomeNode);
+      } else {
+        this.model.set('metronomePlaying', !metronomePlaying);
+        this.model.pause(metronomeNode);
+      }
+
       console.log('tempo changed: ', this.model.get('tempo'));
     } 
 
