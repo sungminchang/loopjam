@@ -18,7 +18,7 @@ define([
       // Landing Page
       var appModel = new AppModel();
       var appView = new AppView({model: appModel});
-      $(document.body).html(appView.render().el);
+      $(".main").html(appView.render().el);
     },
     showTracks: function(){
       // Show All Tracks page
@@ -27,8 +27,8 @@ define([
       // Track View page
       // Note: we need to set up ids.
 
-      var audioData = [{url: "/audio/click.mp3", speed:2, port: 1, recordedAtBpm: 120},
-      {url: "/audio/metronome2.mp3", speed:2, port: 2, recordedAtBpm: 120},
+      var audioData = [{url: "/audio/metronome2.mp3", speed:2, port: 1, recordedAtBpm: 120},
+      {url: "http://marcbalaban.com/wp-content/uploads/Everybody-dance-now-lyrics-P.mp3", speed:2, port: 2, recordedAtBpm: 120},
       {url: "/audio/metronome2.mp3", speed:2, port: 3, recordedAtBpm: 120},
       {url: "/audio/metronome2.mp3", speed:2, port: 4, recordedAtBpm: 120},
       {url: "/audio/metronome2.mp3", speed:2, port: 5, recordedAtBpm: 120},
@@ -37,7 +37,7 @@ define([
       var track = new TrackModel({audioData: audioData});
       var trackView = new TrackView({model: track});
 
-      $(document.body).html(trackView.render().el);
+      $(".main").html(trackView.render().el);
       track.setCueAnimation();
 
       $(function() {
@@ -48,7 +48,7 @@ define([
     },
     default: function(badUrl){
       // Route all bad url's to here.
-      $(document.body).html("404: the page doesn't exist. You tried to access: " + badUrl);
+      $(".main").html("404: the page doesn't exist. You tried to access: " + badUrl);
     }
 
 

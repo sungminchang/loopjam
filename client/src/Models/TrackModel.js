@@ -12,7 +12,8 @@ function(LoopNodeCollection){
       recorder: null,
       loopNodes: null,  //soundData
       selectedLoopNode: null,
-      animationTimer: null
+      animationTimer: null,
+      metronomePlaying: false
     },
 
     initialize: function(params) {
