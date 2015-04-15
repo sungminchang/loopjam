@@ -13,7 +13,9 @@ function(LoopNodeCollection){
       loopNodes: null,  //soundData
       selectedLoopNode: null,
       animationTimer: null,
-      metronomePlaying: false
+      metronomePlaying: false,
+      analyser: null,
+      visualFreqData: null
     },
 
     initialize: function(params) {
@@ -29,6 +31,8 @@ function(LoopNodeCollection){
       }, this);
 
       this.setAudioContext();
+      this.setAnalyser();
+      this.freqAnimationUpdate();
 
 
       this.get('loopNodes').on("record", function(currentLoop){
@@ -114,6 +118,32 @@ function(LoopNodeCollection){
         
         this.set('recorder', new Recorder(input));
         console.log('Recorder initialised.');
+      },
+
+      setAnalyser: function(){
+        // Set the analyser
+        var context = this.get('context');
+        var analyser = context.createAnalyser();
+        console.log('Analyser set up for Audio context', analyser);
+        analyser.connect(context.destination);
+        analyser.fftSize = 64;
+        var frequencyData = new Uint8Array(analyser.frequencyBinCount);
+
+        this.set('analyser', analyser);
+        this.set('visualFreqData', frequencyData);
+
+      },
+
+      freqAnimationUpdate: function(){
+        requestAnimationFrame(function(){
+          this.freqAnimationUpdate();
+        }.bind(this));
+
+        var analyser = this.get('analyser');
+        var frequencyData = this.get('visualFreqData');
+
+        analyser.getByteFrequencyData(frequencyData)
+        console.log('frequencyData', frequencyData);
       },
 
 
@@ -340,6 +370,11 @@ function(LoopNodeCollection){
 
         // Connect the gainNode to the destination.
         gainNode.connect(context.destination);
+
+        // Connect the source to the analyser, and then the analyser to the context destination
+        var analyser = this.get('analyser');
+        source.connect(analyser);
+      
 
         // Sets the playback rate to the value of bpm / rate of the bpm being recorded
         source.playbackRate.value = parseInt(tempo) / recordedAtBpm;
