@@ -15,16 +15,16 @@ module.exports = function (grunt) {
     //Set up tasks
     express: {
       options: {
-        port: process.env.PORT || 9000
+        port: process.env.PORT || 3000
       },
       dev : {
         options: {
-          script: 'server/app.js'
+          script: 'server/server.js'
         }
       },
       prod: {
         options: {
-          script: 'server/app.js',
+          script: 'server/server.js',
           node_env: 'production'
         }
       }
@@ -34,7 +34,7 @@ module.exports = function (grunt) {
       options: {
         jshintrc :'.jshintrc'
       },
-      files: ['client/src/app.js']
+      files: ['client/src/server.js']
     },
 
     karma: {
@@ -57,22 +57,18 @@ module.exports = function (grunt) {
     },
     nodemon: {
       dev: {
-        script: 'server/app.js'
+        script: 'server/server.js'
       }
     },
     open: {
       dev: {
-        path: 'http://localhost:9000/',
-        app: 'Google Chrome'
+        path: 'http://localhost:3000/',
+        server: 'Google Chrome'
       }
     },
     watch: {
-      karma: {
-        files: ['client/src/*.js'],
-        tasks: ['karma:continuous:run']
-      },
       express: {
-        files: ['server/app.js'],
+        files: ['server/server.js'],
         tasks: ['express:dev'],
         options: {
           spawn: false,
@@ -106,7 +102,7 @@ module.exports = function (grunt) {
   });
 
   //Register Unit Tasks
-grunt.registerTask('default', [ 'express:dev', 'watch']);
+grunt.registerTask('default', [ 'express:dev', 'watch','nodemon','karma:unit']);
 grunt.registerTask('unit-test', ['karma:unit']);
 //Initiated in scripts line in package.json
 grunt.registerTask('test', ['jshint']);
