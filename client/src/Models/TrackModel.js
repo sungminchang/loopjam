@@ -129,28 +129,19 @@ function(LoopNodeCollection){
 
         console.log("barTime", barTime)
 
-        //Set up blank object for loop node      
-    
-        // var currentLoop = new LoopNodeModel({speed: barTime, reco})
-
-        // Sets up variables for loop node
-        
-        // The barTimePlayed tells us how much of the bartime we have 
-        // completed thus far.
-
         var barTimePlayed = (currentTime - tempoAdjustment / 360 * barTime)  % barTime;
 
-        // var barTimePlayed = currentTime % barTime;
-
         var delay = barTime - barTimePlayed;
+
         console.log('Will delay by ', delay, 'seconds');
         var delayInMilliseconds = parseInt(delay.toString().replace(/\./g,'').slice(0,4))  // FUNCTION TO CHANGE!!!
+        
         console.log("Context Current-time", this.get('context').currentTime)
         console.log("Record will start in:", delayInMilliseconds, "ms")
         console.log("Expected time of recording:", currentTime*1000 + delayInMilliseconds, "ms")
         console.log("Record will stop in:", delayInMilliseconds + barTime * 1000, "ms")
         
-        var barTimeInMS = barTime * 1000
+        var barTimeInMS = barTime * 1000;
 
         setTimeout(this.startRecording.bind(this, currentLoop), delayInMilliseconds - 100)
         setTimeout(this.stopRecording.bind(this, currentLoop), delayInMilliseconds + barTimeInMS + 50)
@@ -285,20 +276,24 @@ function(LoopNodeCollection){
 
         // console.log('playing a sound: ', soundData);
         // Grab the amount of time a bar takes to complete.
-        var multiplier = currentLoop.get('multiplier');
-        var barTime = multiplier * calcBar(this.get('tempo'));
+        // var multiplier = currentLoop.get('multiplier');
+        var barTime = currentLoop.get('speed');
         var currentTime = this.get('context').currentTime;
 
         // The remainder tells us how much of the bartime we have 
         // completed thus far.
 
         var remainder = (currentTime - this.get('tempoAdjustment') / 360 * barTime * multiplier)  % (barTime * multiplier);
+        var recordedAtBpm = currentLoop.get('recordedAtBpm');
+        var multiplier = barTime * recordedAtBpm / 240;
+
+        var remainder = (currentTime - this.get('tempoAdjustment') / 360 * calcBar(this.get('tempo')) * multiplier)  % (calcBar(this.get('tempo')) * multiplier);
         console.log('currentTime:', currentTime);
 
         // The delay calculates how much we'll have to delay
         // the playing of the sound so that we can perfectly
         // match the time of the next beat.
-        var delay = barTime - remainder;
+        var delay = multiplier * calcBar(this.get('tempo')) - remainder;
         console.log('delay: ', delay);
 
         console.log('expected time of play: ', delay + currentTime);
@@ -327,7 +322,7 @@ function(LoopNodeCollection){
         gainNode.connect(this.get('context').destination);
 
         // Sets the playback rate to the value of bpm / rate of the bpm being recorded
-        source.playbackRate.value = parseInt(this.get('bpm')) / currentLoop.get('recordedAtBpm');
+        source.playbackRate.value = parseInt(this.get('tempo')) / currentLoop.get('recordedAtBpm');
 
         // Play the sound, delaying the sound by the delay necessary
         // to make the sound play at the start of a new measure.
@@ -345,6 +340,8 @@ function(LoopNodeCollection){
 
         console.log("activated: ", delayInMilliseconds)
         setTimeout(letViewsKnowQueueIsComplete, delayToChangeViews)
+        source.start(currentTime + delay, source.loopStart, source.buffer.duration);
+            
 
         source.onended = function() {
           console.log('Your audio has finished playing');
