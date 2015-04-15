@@ -1,6 +1,5 @@
 @import '//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css';
-@import '//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap-theme.min.css';
-@import '//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.4/css/bootstrap-select.min.css';
+@import 'src/flat-ui.min.css';
 @import '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css';
 /*a{
   color:inherit;
