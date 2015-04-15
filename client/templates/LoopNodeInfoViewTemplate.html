@@ -1,14 +1,22 @@
-<h3 class="loopNode{{port}}"> loopNode port: {{port}}</h3>
 
-<button class="btn btn-success play" value="1">Play</button>
-<button class="btn btn-success pause" value="1">Pause</button>
-<button class="btn btn-danger record-new" value="1"><i class="fa fa-circle"></i> Record</button>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title"> Loop #{{port}} Info</h3>
+</h3>
+  </div>
+  <div class="panel-body">
+  <button class="btn btn-danger record-new" value="1"><i class="fa fa-circle"></i> Re-record</button>
 
 
-<p>
- <label for="amount{{port}}">Volume:</label>
- <input type="text" class="amount{{port}}" readonly style="border:0; color:#f6931f; font-weight:bold;">
-</p>
+  <p>
+   <label for="amount{{port}}">Volume:</label>
+   <input type="text" class="amount{{port}}" readonly style="border:0; color:#f6931f; font-weight:bold;">
+  </p>
 
-<div class="slider-vertical{{port}}" style="height:10px;"></div>
+  <div class="slider-vertical{{port}}" style="height:10px;"></div>
+  </div>
+
+  </div>
 </div>
+
+

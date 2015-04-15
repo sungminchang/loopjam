@@ -153,10 +153,14 @@ function(LoopNodeCollection){
       
       startRecording: function(currentLoop) {
         console.log("time started recording:", this.get('context').currentTime)
-        currentLoop.set('queue', !currentLoop.get('queue'));
-        currentLoop.set('recording', !currentLoop.get('recording'));
-        currentLoop.set('rerender', !currentLoop.get('rerender'));
+        
+        var rerenderRecording = function(){
+          currentLoop.set('queue', !currentLoop.get('queue'));
+          currentLoop.set('recording', !currentLoop.get('recording'));
+          currentLoop.set('rerender', !currentLoop.get('rerender'))
+        }
 
+        setTimeout(rerenderRecording,100)
 
         this.get('recorder') && this.get('recorder').record();
         // button.disabled = true;
@@ -236,15 +240,27 @@ function(LoopNodeCollection){
         var angularSpeed = calcSpeed(bar);
         var tempoAdjustment = this.get('tempoAdjustment');
         loopNodes.each(function(loopNode) {
+
           var delta = audioCtxTime;
           var svg = loopNode.get('d3Obj').svg;
           var loopNodeClass = '.loopNode' + loopNode.get('port');
           var multiplier = loopNode.get('multiplier');
           var rotateDeg = (delta * angularSpeed - tempoAdjustment) / multiplier;
           var degree = (rotateDeg % 360)
+
+
+          
+            // Recording && play flags for cursor
+            if((!loopNode.get('queue') && loopNode.get('recording') && !loopNode.get('playing') && !loopNode.get('recorded')) 
+              || (!loopNode.get('queue') && !loopNode.get('recording') && loopNode.get('playing') && loopNode.get('recorded'))){
+              $(loopNodeClass).trigger('configure', {cursor: false});
+            } else {
+              $(loopNodeClass).trigger('configure', {cursor: true});
+            }
+
           // console.log(degree)        
+              $(loopNodeClass).val(degree).trigger('change');
             
-        $(loopNodeClass).val(degree).trigger('change');
           });
         }.bind(this));
       },
@@ -337,7 +353,7 @@ function(LoopNodeCollection){
         
         var letViewsKnowQueueIsComplete = function(){
           currentLoop.set('playing', !currentLoop.get('playing'))
-          currentLoop.set('queue', !currentLoop.get('queue'));    
+          currentLoop.set('queue', !currentLoop.get('queue'));
           currentLoop.set('rerender', !currentLoop.get('rerender'))
         }
 

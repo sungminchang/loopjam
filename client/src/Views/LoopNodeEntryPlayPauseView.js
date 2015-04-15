@@ -7,10 +7,7 @@ define([
 
       this.model.on('playLoop', this.render, this)
       this.model.on('change:rerender', this.render, this)
-
-
     },
-
 
     events:{
       'click .record-new': function() {
@@ -22,8 +19,6 @@ define([
         this.model.playQueue();
         this.model.set('queue', !this.model.get('queue'));
         this.model.set('rerender', !this.model.get('rerender'));  
-        // this.model.set('paused', !this.model.get('paused'))
-        // this.model.set('playing', !this.model.get('playing'))
         
       },
       'click .pause': function() {
@@ -48,12 +43,12 @@ define([
       // Pre-recording
       if(queue && !recording && !playing && !recorded){
         console.log("Queue View Activated")
-        $("#" + "loopNodeRecord" + this.model.get('port')).children().children().addClass('wait')
+        $("#" + "loopNodeRecord" + this.model.get('port')).children().children().attr('class', 'record-wait');
       }
 
       // Recording
       if(!queue && recording && !playing && !recorded){
-        $("#" + "loopNodeRecord" + this.model.get('port')).css("display", "none")
+        $("#" + "loopNodeRecord" + this.model.get('port')).children().children().css('fill', 'red')
         console.log("Recording View Activated") 
       }
 
@@ -64,7 +59,6 @@ define([
         console.log("Playing View Activated")
         $("#" + "loopNodePause" + this.model.get('port')).css("display", "inline")
         $("#" + "loopNodeRecord" + this.model.get('port')).css("display", "none")
-
         // setTimeout(function(){$("#" + "loopNodePlay" + this.model.get('port')).click()}.bind(this),400);
       }
 
@@ -78,10 +72,10 @@ define([
 
       if(queue && !recording && !playing && recorded){
         console.log("play Queue Activated")
+
+        $("#" + "loopNodePlay" + this.model.get('port')).css("display", "inline").children().children().attr('class', 'play-wait')
         $("#" + "loopNodeRecord" + this.model.get('port')).css("display", "none")
       }
-
-    
 
       return this;
     }

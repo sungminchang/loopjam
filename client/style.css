@@ -2,8 +2,16 @@
 @import '//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap-theme.min.css';
 @import '//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.4/css/bootstrap-select.min.css';
 @import '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css';
+/*a{
+  color:inherit;
+}
+h1, h2, h3, h4{
+  margin:0;
+  margin-bottom:10px;
+  margin-top:10px;
+}*/
 
-ul { 
+/*ul { 
   list-style: none; 
 }
 
@@ -11,76 +19,105 @@ ul {
 #recordingslist audio {
  display: block; margin-bottom: 10px; 
 } 
-.disc {
-  stroke : #000000;
-  fill : none;
-}
+*/
+.btn-record {
+  transition: fill 0.5s ease;
+   fill: black;}
 
-.btn-record{
-  fill: red;
-}
+.btn-record:hover {
+  fill: red; }
 
 .record-wait {
-  animation:wait 1s;
-  -moz-animation:wait 1s infinite; /* Firefox */
-  -webkit-animation:wait 1s infinite; /* Safari and Chrome */
-}
+  animation: wait 1s;
+  -moz-animation: wait 1s infinite;
+  /* Firefox */
+  -webkit-animation: wait 1s infinite;
+  /* Safari and Chrome */ }
 
-@-moz-keyframes wait /* Firefox */
-{
-  0%   {fill : purple;}
-  50%  {fill : blue;}
-  100%   {fill : purple;}
-}
+.play-wait {
+  animation: playwait 1s;
+  -moz-animation: playwait 1s infinite;
+  /* Firefox */
+  -webkit-animation: playwait 1s infinite;
+  /* Safari and Chrome */ }
 
-  @-webkit-keyframes wait /* Safari and Chrome */
-{
-  0%   {fill : purple;}
-  50%  {fill : blue;}
-  100%   {fill : purple;}
-}
+@-moz-keyframes wait {
+  0% {
+    fill: red; }
 
+  50% {
+    fill: black; }
 
+  100% {
+    fill: red; } }
 
-.pause{
+@-webkit-keyframes wait {
+  0% {
+    fill: red; }
+
+  50% {
+    fill: black;}
+
+  100% {
+    fill: red; } }
+
+@-moz-keyframes playwait {
+  0% {
+    fill: #339900; }
+
+  50% {
+    fill: orange; }
+
+  100% {
+    fill: #339900; } }
+
+@-webkit-keyframes playwait {
+  0% {
+    fill: #339900; }
+
+  50% {
+    fill: orange; }
+
+  100% {
+    fill: #339900; } }
+
+.pause {
   opacity: 0.5;
-  display:none;
-}
-.pause:hover{
-  opacity:0.7;
-}
+  transition: opacity 0.5s ease;
+  display: none; }
 
-.record-new{
+.pause:hover {
+  opacity: 0.7; }
+
+.record-new {
+  transition: opacity 0.5s ease;
+  opacity: 0.5; }
+
+.record-new:hover {
+  opacity: 0.7; }
+
+.play {
   opacity: 0.5;
-}
-.record-new:hover{
-  opacity:0.7;
-}
+  display: none; }
 
-.play{
-  opacity: 0.5;
-  display:none;
-}
-.play:hover{
-  opacity:0.7;
-}
+.play:hover {
+  opacity: 0.7; }
 
+.btn-play {
+  position: absolute;
+  left: 108px;
+  top: 87px;
+  font-size: 24px;
+  opacity: 0.5; }
 
-.btn-play{
-  position: absolute; left: 108px; top: 87px; font-size: 24px;  opacity:0.5;
+.btn-pause {
+  position: absolute;
+  left: 105px;
+  top: 87px;
+  font-size: 24px;
+  opacity: 0.5; }
 
-}
-
-.btn-pause{
-  position: absolute; left: 105px; top: 87px; font-size: 24px;   opacity:0.5;
-}
-
-.btn-svg{
-  position: absolute; 
-  left: 55px; 
-  top: 40px; 
-}
-
-
-
-
+.btn-svg {
+  position: absolute;
+  left: 55px;
+  top: 40px; }
