@@ -10,19 +10,21 @@ define([
     },
 
     events:{
-      'click .record-new': function() {
+      'click .record-new': function(el) {
+        $(el.currentTarget).click(false);
         this.model.record();
         this.model.set('queue', !this.model.get('queue'));
         this.model.set('rerender', !this.model.get('rerender'));
       },
       'click .play': function() {
+        $(el.currentTarget).click(false);
         this.model.playQueue();
         this.model.set('queue', !this.model.get('queue'));
         this.model.set('rerender', !this.model.get('rerender'));  
         
       },
       'click .pause': function() {
-        console.log("test")
+        $(el.currentTarget).click(false);        
         this.model.pause();
         this.model.set('playing', !this.model.get('playing'))
         this.model.set('rerender', !this.model.get('rerender'));
