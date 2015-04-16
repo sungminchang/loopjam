@@ -21,17 +21,15 @@ module.exports.createUser = function(req,res){
 	.find({where:{username:username}})
 	.then(function(user){
 		if (!user){
-
-			console.log("doesn't exist");
 			models.Users
-			.create({where:{email:email, username:username}})
+			.create({email:email, username:username})
 			.then(function(newUser){
 				res.json({
 					response:"User Created!",
 				});
 			});
 		}
-		if (!username || !email){
+		if (!username || !email || !password){
 			res.json({
 				response:"Please fill out all forms."
 			});
@@ -50,7 +48,7 @@ module.exports.checkUser = function(req,res){
 	models.Users
 	.find({where: {username:username}})
 	.then(function(results){
-		if (!username){
+		if (!username || !password){
 			res.json({
 				response:"Please fill out all forms"
 			});
@@ -59,7 +57,6 @@ module.exports.checkUser = function(req,res){
 				response:"username doesn't exist"
 			});
 		}else{
-			console.log("SUCCESS man!");
 			res.json(results);
 		}
 	});
