@@ -402,9 +402,6 @@ function(LoopNodeCollection, LoopNodeModel){
 
         console.log("activated: ", delayInMilliseconds)
         setTimeout(letViewsKnowQueueIsComplete, delayToChangeViews)
-
-        // source.start(currentTime + delay, source.loopStart, source.buffer.duration);
-        // Addressed issue with Chrome 42 update;
         source.start(currentTime + delay);
 
         source.onended = function() {
