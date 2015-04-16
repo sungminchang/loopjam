@@ -324,7 +324,7 @@ function(LoopNodeCollection, LoopNodeModel){
       queue: function(currentLoop, buffer) {
         // Grab the value associated with the button,
         // will be used to identify the sound associated with the button.
-        var soundIndex = currentLoop.get('port') - 2;
+        var soundIndex = currentLoop.get('port') - 1;
         console.log('soundIndex from play: ', soundIndex);
 
         var context = this.get('context');
