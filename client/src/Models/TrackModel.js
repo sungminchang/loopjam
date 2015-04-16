@@ -1,7 +1,8 @@
 define([
- 'Collections/LoopNodeCollection'
+ 'Collections/LoopNodeCollection',
+ 'Models/LoopNodeModel'
 ], 
-function(LoopNodeCollection){ 
+function(LoopNodeCollection, LoopNodeModel){ 
   var TrackModel = Backbone.Model.extend({
       defaults: {
       context: null,
@@ -13,15 +14,20 @@ function(LoopNodeCollection){
       loopNodes: null,  //soundData
       selectedLoopNode: null,
       animationTimer: null,
-      metronomePlaying: false,
       analyser: null,
       visualFreqData: null
+      metronomeNode: null,
+      metronomeBuffer: null,
+      metronomePlaying: false
     },
 
     initialize: function(params) {
 
-      var loopNodesForTrack = new LoopNodeCollection(params.audioData);
+      var loopNodesForTrack = new LoopNodeCollection(params.audioData.slice(1));
       this.set('loopNodes', loopNodesForTrack)
+
+      var metronome = new LoopNodeModel(params.audioData.splice(0,1));
+      this.set('metronomeNode', metronome);
 
       // By default, select the first loopnode.
       this.set('selectedLoopNode', this.get('loopNodes').models[0]);      
@@ -98,7 +104,8 @@ function(LoopNodeCollection){
         // Invoking bufferLoader's .load method does the actual
         // buffering and loading of the recordings, and stores
         // the buffers on the bufferloader instance.
-        this.get('bufferLoader').load();
+        this.get('bufferLoader').load(this);
+        // this.set('metronomeBuffer', this.get('bufferLoader').bufferList.splice(0,1));
 
       } else {
         // Web Audio API is not available. Ask the user to use a supported browser.
@@ -312,10 +319,10 @@ function(LoopNodeCollection){
         });
       },
 
-      queue: function(currentLoop) {
+      queue: function(currentLoop, buffer) {
         // Grab the value associated with the button,
         // will be used to identify the sound associated with the button.
-        var soundIndex = currentLoop.get('port') - 1;
+        var soundIndex = currentLoop.get('port') - 2;
         console.log('soundIndex from play: ', soundIndex);
 
         var context = this.get('context');
@@ -357,7 +364,7 @@ function(LoopNodeCollection){
         console.log('source', source);
 
         // Associate the new source instance with the loaded buffer.
-        source.buffer = this.get('bufferLoader').bufferList[soundIndex];
+        source.buffer = buffer || this.get('bufferLoader').bufferList[soundIndex];
         source.loop = true;
         // source.playbackRate.value = playbackControl.value;
 
@@ -404,14 +411,14 @@ function(LoopNodeCollection){
       },
 
 
-      pause: function(currentLoop) {
-        var soundIndex = currentLoop.get('port') - 1;
+      pause: function(currentLoop, buffer) {
+        var soundIndex = currentLoop.get('port') - 2;
         var source = currentLoop.get('source');
 
         // Instead of creating a new bufferSource as per usual,
         // we retrieve the source that we have stored on our 
         // data objects.
-        source.buffer = this.get('bufferLoader').bufferList[soundIndex];
+        source.buffer = buffer || this.get('bufferLoader').bufferList[soundIndex];
         console.log('About to pause, logging source: ', source);
         source.stop();
       }

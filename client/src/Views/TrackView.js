@@ -30,7 +30,6 @@ define([
       this.$el.find('.trackInfoView').append(new TrackInfoView({model: this.model}).render().el);
       this.$el.find('.loopNodesView').append(new LoopNodesView({collection: this.model.get('loopNodes')}).render().el);
 
-
       return this;
     },
 
