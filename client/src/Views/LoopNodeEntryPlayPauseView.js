@@ -10,7 +10,7 @@ define([
     },
 
     events:{
-      'click .record-new': function(el) {
+      'click .record-new': function() {
         console.log("record click")
         this.model.record();
         this.model.set('queue', !this.model.get('queue'));
