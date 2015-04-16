@@ -15,7 +15,7 @@ function(LoopNodeCollection, LoopNodeModel){
       selectedLoopNode: null,
       animationTimer: null,
       analyser: null,
-      visualFreqData: null
+      visualFreqData: null,
       metronomeNode: null,
       metronomeBuffer: null,
       metronomePlaying: false
@@ -23,11 +23,11 @@ function(LoopNodeCollection, LoopNodeModel){
 
     initialize: function(params) {
 
-      var loopNodesForTrack = new LoopNodeCollection(params.audioData.slice(1));
-      this.set('loopNodes', loopNodesForTrack)
-
-      var metronome = new LoopNodeModel(params.audioData.splice(0,1));
+      var metronome = new LoopNodeModel(params.audioData.slice(0,1));
       this.set('metronomeNode', metronome);
+
+      var loopNodesForTrack = new LoopNodeCollection(params.audioData);
+      this.set('loopNodes', loopNodesForTrack)
 
       // By default, select the first loopnode.
       this.set('selectedLoopNode', this.get('loopNodes').models[0]);      
@@ -94,7 +94,7 @@ function(LoopNodeCollection, LoopNodeModel){
         // passing in our context and data object. BufferLoader
         // will buffer all of the recordings and hold onto
         // references for the buffers.
-                
+                debugger;
         this.set('bufferLoader', new BufferLoader(
           this.get('context'),
           this.get('loopNodes').giveUrls() // DEVELOP THIS METHOD OUTDEVELOP THIS METHOD OUTDEVELOP THIS METHOD OUT
@@ -309,6 +309,8 @@ function(LoopNodeCollection, LoopNodeModel){
         this.set('tempo', bpm);
 
         var loopNodes = this.get('loopNodes');
+        var metronomeNode = this.get('metronomeNode');
+        metronomeNode.get('source').playbackRate.value = parseInt(bpm) / 120;
 
         loopNodes.each(function(loopNode, i){
           // if (i === 0) { return true;}
@@ -338,7 +340,7 @@ function(LoopNodeCollection, LoopNodeModel){
         // The remainder tells us how much of the bartime we have 
         // completed thus far.
 
-        var recordedAtBpm = currentLoop.get('recordedAtBpm');
+        var recordedAtBpm = currentLoop.get('recordedAtBpm') || 120;
         var multiplier = currentLoop.get('multiplier');
         var barTime = currentLoop.get('speed');
         var tempoAdjustment = this.get('tempoAdjustment');
