@@ -5,12 +5,15 @@ define([
 
     initialize: function(){
       this.model.on('change:volume', this.changeVolume, this);
+      this.model.on('change:playing', this.rerecordButtonDisable, this);
     },
 
     events:{
-      'click .record-new': function() {
+      'click .re-record': function() {
         this.model.record();
-        // console.log("record")
+        this.model.set('recorded', !this.model.get('recorded'));
+        this.model.set('queue', !this.model.get('queue'));
+        this.model.set('rerender', !this.model.get('rerender')); 
       },
       'click .play': function() {
         this.model.play();
@@ -58,6 +61,17 @@ define([
 
       this.$el.find('.slider-vertical' + port).slider( "option", "value" , volume);
       $( ".amount" + port ).val( $( ".slider-vertical" + port ).slider( "value" ) );
+    },
+
+    rerecordButtonDisable: function(){
+      var playing = this.model.get('playing');
+
+      if(playing){
+        $('.re-record').prop('disabled', true);
+      } else {
+        $('.re-record').prop('disabled', false);
+      }
+
     }
 
     
