@@ -301,9 +301,6 @@ function(LoopNodeCollection){
         this.set('tempoAdjustment', this.get('tempoAdjustment') + t * (3/2) * (bpm - this.get('tempo')));
         this.set('tempo', bpm);
 
-        console.log('ChangeTempo called, tempoAdjustment: ', this.get('tempoAdjustment'),' bpm:', bpm, ' time:', t);
-        // this.set('bpm', bpm);
-
         var loopNodes = this.get('loopNodes');
 
         loopNodes.each(function(loopNode, i){
