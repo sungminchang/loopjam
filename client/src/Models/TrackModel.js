@@ -181,7 +181,7 @@ function(LoopNodeCollection, LoopNodeModel){
 
         setTimeout(this.startRecording.bind(this, currentLoop), delayInMilliseconds - 100)
         setTimeout(this.stopRecording.bind(this, currentLoop), delayInMilliseconds + barTimeInMS + 50)
-        setTimeout(this.preBuffer.bind(this), delayInMilliseconds + barTimeInMS + 500)
+        setTimeout(this.preBuffer.bind(this), delayInMilliseconds + barTimeInMS + 300)
       },
       
       startRecording: function(currentLoop) {
@@ -322,10 +322,30 @@ function(LoopNodeCollection, LoopNodeModel){
       },
 
       queue: function(currentLoop, buffer) {
-        // Grab the value associated with the button,
-        // will be used to identify the sound associated with the button.
         var soundIndex = currentLoop.get('port') - 1;
         console.log('soundIndex from play: ', soundIndex);
+
+        // Bug fix for Chrome 42
+        var createRotatedAudioBuffer = function(audioContext, audioBuffer, offset) {
+            if (!audioBuffer || audioBuffer.length <= 1) {
+                return audioBuffer;
+            }
+            var rotatedAudioBuffer = audioContext.createBuffer(audioBuffer.numberOfChannels, audioBuffer.length, audioBuffer.sampleRate);
+            var sampleOffset = Math.floor(offset * audioBuffer.sampleRate);
+            sampleOffset = Math.max(0, Math.min(audioBuffer.length - 1, sampleOffset));
+            for (var i = 0, n = audioBuffer.numberOfChannels; i < n; i++) {
+                rotateChannelData(audioBuffer.getChannelData(i), rotatedAudioBuffer.getChannelData(i), sampleOffset);
+            }
+            return rotatedAudioBuffer;
+            function rotateChannelData(inputChannel, outputChannel, sampleOffset) {
+                var partA = inputChannel.subarray(0, sampleOffset);
+                var partB = inputChannel.subarray(sampleOffset);
+                // Swap the ordering of partA and partB in the outputChannel
+                outputChannel.set(partB, 0);
+                outputChannel.set(partA, outputChannel.length - sampleOffset);
+            }
+        }
+
 
         var context = this.get('context');
 
@@ -339,6 +359,8 @@ function(LoopNodeCollection, LoopNodeModel){
 
         // The remainder tells us how much of the bartime we have 
         // completed thus far.
+
+
 
         var recordedAtBpm = currentLoop.get('recordedAtBpm') || 120;
         var multiplier = currentLoop.get('multiplier');
@@ -365,8 +387,12 @@ function(LoopNodeCollection, LoopNodeModel){
         var source = currentLoop.get('source');
         console.log('source', source);
 
+        var tempBuffer = buffer || this.get('bufferLoader').bufferList[soundIndex];
+
+        source.buffer = createRotatedAudioBuffer(this.get('context'), tempBuffer, tempBuffer.duration - barTime);
+        
         // Associate the new source instance with the loaded buffer.
-        source.buffer = buffer || this.get('bufferLoader').bufferList[soundIndex];
+
         source.loop = true;
         // source.playbackRate.value = playbackControl.value;
 
@@ -389,8 +415,7 @@ function(LoopNodeCollection, LoopNodeModel){
 
         // Play the sound, delaying the sound by the delay necessary
         // to make the sound play at the start of a new measure.
-        source.loopStart = source.buffer.duration - barTime;
-        source.loopEnd = source.buffer.duration;
+        debugger;
         var delayInMilliseconds = barTime * 1000 - parseInt(delay.toString().replace(/\./g,'').slice(0,4)) 
         var delayToChangeViews = parseInt(delay.toString().replace(/\./g,'').slice(0,4)) 
 
@@ -402,6 +427,9 @@ function(LoopNodeCollection, LoopNodeModel){
 
         console.log("activated: ", delayInMilliseconds)
         setTimeout(letViewsKnowQueueIsComplete, delayToChangeViews)
+        
+        source.loopStart = 0;
+        source.loopEnd = barTime;
         source.start(currentTime + delay);
 
         source.onended = function() {
