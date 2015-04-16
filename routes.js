@@ -1,5 +1,5 @@
 'use strict'
-var errors = require('./components/errors');
+var errors = require('./server/components/errors');
 var express = require('express');
 var session = require('express-session');
 var morgan = require('morgan');
@@ -17,11 +17,11 @@ module.exports = function (app){
 var trackRouter = express.Router();
 
 //Require needed routes
-require('./tracks/tracks')(trackRouter);
+require('./server/tracks/tracks')(trackRouter);
 
 //Register our routes
 app.use('/tracks', trackRouter);
 
 //Serve index files
- app.use(express.static(__dirname + '/../client'));
+ app.use(express.static(__dirname + '/client'));
 }

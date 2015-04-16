@@ -6,7 +6,7 @@ var cors = require('cors');
 var app = express();
 
 //Database configuration
-var db = require('./database/db');
+var db = require('./server/database/db');
 
 //Express configuration
 require('./routes')(app);
