@@ -304,6 +304,7 @@ function(LoopNodeCollection){
         var loopNodes = this.get('loopNodes');
 
         loopNodes.each(function(loopNode, i){
+          // if (i === 0) { return true;}
           var currentSource = loopNode.get('source');
           if(currentSource){
             currentSource.playbackRate.value = parseInt(bpm) / loopNode.get('recordedAtBpm');

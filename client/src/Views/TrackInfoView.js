@@ -39,7 +39,7 @@ define([
 
     playMetronome: function() {
       var metronomePlaying = this.model.get('metronomePlaying');
-      var metronomeNode = this.model.get('loopNodes').models[1];
+      var metronomeNode = this.model.get('loopNodes').models[0];
 
       if (!metronomePlaying) {
         this.model.set('metronomePlaying', !metronomePlaying);
