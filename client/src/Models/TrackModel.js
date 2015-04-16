@@ -135,14 +135,12 @@ function(LoopNodeCollection){
       },
 
       freqAnimationUpdate: function(){
-        requestAnimationFrame(function(){
-          this.freqAnimationUpdate();
-        }.bind(this));
-
         var analyser = this.get('analyser');
         var frequencyData = this.get('visualFreqData');
 
         analyser.getByteFrequencyData(frequencyData)
+
+        
       },
 
 
@@ -291,6 +289,9 @@ function(LoopNodeCollection){
               $(loopNodeClass).val(degree).trigger('change');
             
           });
+        // frequency analyzer
+        this.freqAnimationUpdate();
+
         }.bind(this));
       },
 
@@ -392,8 +393,10 @@ function(LoopNodeCollection){
 
         console.log("activated: ", delayInMilliseconds)
         setTimeout(letViewsKnowQueueIsComplete, delayToChangeViews)
-        source.start(currentTime + delay, source.loopStart, source.buffer.duration);
-            
+
+        // source.start(currentTime + delay, source.loopStart, source.buffer.duration);
+        // Addressed issue with Chrome 42 update;
+        source.start(currentTime + delay);
 
         source.onended = function() {
           console.log('Your audio has finished playing');
