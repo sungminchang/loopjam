@@ -135,10 +135,6 @@ function(LoopNodeCollection){
       },
 
       freqAnimationUpdate: function(){
-        requestAnimationFrame(function(){
-          this.freqAnimationUpdate();
-        }.bind(this));
-
         var analyser = this.get('analyser');
         var frequencyData = this.get('visualFreqData');
 
@@ -291,6 +287,9 @@ function(LoopNodeCollection){
               $(loopNodeClass).val(degree).trigger('change');
             
           });
+        // frequency analyzer
+        this.freqAnimationUpdate();
+
         }.bind(this));
       },
 
