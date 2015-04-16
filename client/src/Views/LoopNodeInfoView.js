@@ -46,6 +46,7 @@ define([
         value: volume,
         slide: function( event, ui ) {
           $( ".amount" + port ).val( ui.value );
+          console.log('volume will be set to ', ui.value);
           this.model.set('volume', ui.value)
         }.bind(this)
       });

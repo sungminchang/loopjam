@@ -1,7 +1,8 @@
 define([
- 'Collections/LoopNodeCollection'
+ 'Collections/LoopNodeCollection',
+ 'Models/LoopNodeModel'
 ], 
-function(LoopNodeCollection){ 
+function(LoopNodeCollection, LoopNodeModel){ 
   var TrackModel = Backbone.Model.extend({
       defaults: {
       context: null,
@@ -13,12 +14,17 @@ function(LoopNodeCollection){
       loopNodes: null,  //soundData
       selectedLoopNode: null,
       animationTimer: null,
-      metronomePlaying: false,
       analyser: null,
-      visualFreqData: null
+      visualFreqData: null,
+      metronomeNode: null,
+      metronomeBuffer: null,
+      metronomePlaying: false
     },
 
     initialize: function(params) {
+
+      var metronome = new LoopNodeModel(params.audioData.slice(0,1));
+      this.set('metronomeNode', metronome);
 
       var loopNodesForTrack = new LoopNodeCollection(params.audioData);
       this.set('loopNodes', loopNodesForTrack)
@@ -88,7 +94,6 @@ function(LoopNodeCollection){
         // passing in our context and data object. BufferLoader
         // will buffer all of the recordings and hold onto
         // references for the buffers.
-                
         this.set('bufferLoader', new BufferLoader(
           this.get('context'),
           this.get('loopNodes').giveUrls() // DEVELOP THIS METHOD OUTDEVELOP THIS METHOD OUTDEVELOP THIS METHOD OUT
@@ -98,7 +103,8 @@ function(LoopNodeCollection){
         // Invoking bufferLoader's .load method does the actual
         // buffering and loading of the recordings, and stores
         // the buffers on the bufferloader instance.
-        this.get('bufferLoader').load();
+        this.get('bufferLoader').load(this);
+        // this.set('metronomeBuffer', this.get('bufferLoader').bufferList.splice(0,1));
 
       } else {
         // Web Audio API is not available. Ask the user to use a supported browser.
@@ -303,8 +309,11 @@ function(LoopNodeCollection){
         this.set('tempo', bpm);
 
         var loopNodes = this.get('loopNodes');
+        var metronomeNode = this.get('metronomeNode');
+        metronomeNode.get('source').playbackRate.value = parseInt(bpm) / 120;
 
         loopNodes.each(function(loopNode, i){
+          // if (i === 0) { return true;}
           var currentSource = loopNode.get('source');
           if(currentSource){
             currentSource.playbackRate.value = parseInt(bpm) / loopNode.get('recordedAtBpm');
@@ -312,7 +321,7 @@ function(LoopNodeCollection){
         });
       },
 
-      queue: function(currentLoop) {
+      queue: function(currentLoop, buffer) {
         // Grab the value associated with the button,
         // will be used to identify the sound associated with the button.
         var soundIndex = currentLoop.get('port') - 1;
@@ -331,7 +340,7 @@ function(LoopNodeCollection){
         // The remainder tells us how much of the bartime we have 
         // completed thus far.
 
-        var recordedAtBpm = currentLoop.get('recordedAtBpm');
+        var recordedAtBpm = currentLoop.get('recordedAtBpm') || 120;
         var multiplier = currentLoop.get('multiplier');
         var barTime = currentLoop.get('speed');
         var tempoAdjustment = this.get('tempoAdjustment');
@@ -357,7 +366,7 @@ function(LoopNodeCollection){
         console.log('source', source);
 
         // Associate the new source instance with the loaded buffer.
-        source.buffer = this.get('bufferLoader').bufferList[soundIndex];
+        source.buffer = buffer || this.get('bufferLoader').bufferList[soundIndex];
         source.loop = true;
         // source.playbackRate.value = playbackControl.value;
 
@@ -393,9 +402,6 @@ function(LoopNodeCollection){
 
         console.log("activated: ", delayInMilliseconds)
         setTimeout(letViewsKnowQueueIsComplete, delayToChangeViews)
-
-        // source.start(currentTime + delay, source.loopStart, source.buffer.duration);
-        // Addressed issue with Chrome 42 update;
         source.start(currentTime + delay);
 
         source.onended = function() {
@@ -406,14 +412,14 @@ function(LoopNodeCollection){
       },
 
 
-      pause: function(currentLoop) {
+      pause: function(currentLoop, buffer) {
         var soundIndex = currentLoop.get('port') - 1;
         var source = currentLoop.get('source');
 
         // Instead of creating a new bufferSource as per usual,
         // we retrieve the source that we have stored on our 
         // data objects.
-        source.buffer = this.get('bufferLoader').bufferList[soundIndex];
+        source.buffer = buffer || this.get('bufferLoader').bufferList[soundIndex];
         console.log('About to pause, logging source: ', source);
         source.stop();
       }

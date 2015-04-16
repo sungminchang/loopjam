@@ -15,10 +15,11 @@ var BufferLoader = function(context, data, callback) {
   // Need to keep references to each of the sources
   this.sources = {};
   this.loadCount = 0;
+  this.metronomeSet = false;
 
 };
 
-BufferLoader.prototype.loadBuffer = function(url, index) {
+BufferLoader.prototype.loadBuffer = function(url, index, that) {
   // Load buffer asynchronously
   var request = new XMLHttpRequest();
   console.log('About to load buffer of this url: ', url);
@@ -38,6 +39,12 @@ BufferLoader.prototype.loadBuffer = function(url, index) {
           return;
         }
         loader.bufferList[index] = buffer;
+        if (!this.metronomeSet) {
+          this.metronomeSet = !this.metronomeSet;
+          that.set('metronomeBuffer', loader.bufferList[0]);
+          console.log('added metronomeBuffer to trackModel: ', that.get('metronomeBuffer'));
+        }
+
 
         // if (++loader.loadCount == loader.urlList.length)
           // loader.onload(loader.bufferList);
@@ -55,9 +62,9 @@ BufferLoader.prototype.loadBuffer = function(url, index) {
   request.send();
 };
 
-BufferLoader.prototype.load = function() {
+BufferLoader.prototype.load = function(that) {
   for (var i = 0; i < this.urlList.length; ++i) {
-    this.loadBuffer(this.urlList[i], i);
+    this.loadBuffer(this.urlList[i], i, that);
   }
 };
 
