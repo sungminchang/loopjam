@@ -179,9 +179,9 @@ function(LoopNodeCollection, LoopNodeModel){
         
         var barTimeInMS = barTime * 1000;
 
-        setTimeout(this.startRecording.bind(this, currentLoop), delayInMilliseconds - 500)
+        setTimeout(this.startRecording.bind(this, currentLoop), delayInMilliseconds - 100)
         setTimeout(this.stopRecording.bind(this, currentLoop), delayInMilliseconds + barTimeInMS + 50)
-        setTimeout(this.preBuffer.bind(this), delayInMilliseconds + barTimeInMS + 500)
+        setTimeout(this.preBuffer.bind(this), delayInMilliseconds + barTimeInMS + 300)
       },
       
       startRecording: function(currentLoop) {
@@ -193,7 +193,7 @@ function(LoopNodeCollection, LoopNodeModel){
           currentLoop.set('rerender', !currentLoop.get('rerender'))
         }
 
-        setTimeout(rerenderRecording,500)
+        setTimeout(rerenderRecording,100)
 
         this.get('recorder') && this.get('recorder').record();
         // button.disabled = true;
