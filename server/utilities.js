@@ -21,6 +21,8 @@ module.exports.createUser = function(req,res){
 	.find({where:{username:username}})
 	.then(function(user){
 		if (!user){
+
+			console.log("doesn't exist");
 			models.Users
 			.create({where:{email:email, username:username}})
 			.then(function(newUser){
@@ -57,7 +59,7 @@ module.exports.checkUser = function(req,res){
 				response:"username doesn't exist"
 			});
 		}else{
-			console.log("SUCCESS MUTHABITCH!");
+			console.log("SUCCESS man!");
 			res.json(results);
 		}
 	});

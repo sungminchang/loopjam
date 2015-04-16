@@ -74,6 +74,16 @@ module.exports = function (grunt) {
           spawn: false,
         }
       }
+    },
+    shell: {
+      prodServer: {
+        command: 'git push azure master',
+        options: {
+          stdout: true,
+          stderr: true,
+          failOnError: true
+        }
+      }
     }
   });
 
@@ -102,6 +112,8 @@ module.exports = function (grunt) {
   });
 
     //Register Unit Tasks
+
+  grunt.registerTask('build', ['express:prod']);
   grunt.registerTask('default', [ 'express:dev', 'watch','nodemon','karma:unit']);
   grunt.registerTask('unit-test', ['karma:unit']);
   //Initiated in scripts line in package.json
