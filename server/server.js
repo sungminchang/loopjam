@@ -1,6 +1,7 @@
 'use strict'
 //Module dependencies
 var express = require('express');
+var cors = require('cors');
 //Create express server
 var app = express();
 
@@ -9,6 +10,9 @@ var db = require('./database/db');
 
 //Express configuration
 require('./routes')(app);
+
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+
 
 //Set up ports
 var port = process.env.PORT || 3000;

@@ -33,7 +33,7 @@ module.exports.createUser = function(req,res){
 			res.json({
 				response:"Please fill out all forms."
 			});
-		}else{
+		}else if (user){
 			res.json({
 				response:"Error-User already exists"
 			});
