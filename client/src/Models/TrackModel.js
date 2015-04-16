@@ -94,7 +94,6 @@ function(LoopNodeCollection, LoopNodeModel){
         // passing in our context and data object. BufferLoader
         // will buffer all of the recordings and hold onto
         // references for the buffers.
-                debugger;
         this.set('bufferLoader', new BufferLoader(
           this.get('context'),
           this.get('loopNodes').giveUrls() // DEVELOP THIS METHOD OUTDEVELOP THIS METHOD OUTDEVELOP THIS METHOD OUT

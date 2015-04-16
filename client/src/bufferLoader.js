@@ -39,11 +39,9 @@ BufferLoader.prototype.loadBuffer = function(url, index, that) {
           return;
         }
         loader.bufferList[index] = buffer;
-        debugger;
         if (!this.metronomeSet) {
           this.metronomeSet = !this.metronomeSet;
           that.set('metronomeBuffer', loader.bufferList[0]);
-          debugger;
           console.log('added metronomeBuffer to trackModel: ', that.get('metronomeBuffer'));
         }
 
@@ -65,7 +63,6 @@ BufferLoader.prototype.loadBuffer = function(url, index, that) {
 };
 
 BufferLoader.prototype.load = function(that) {
-  debugger;
   for (var i = 0; i < this.urlList.length; ++i) {
     this.loadBuffer(this.urlList[i], i, that);
   }
