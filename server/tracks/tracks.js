@@ -11,19 +11,16 @@
 		-allow a user to pull down tracks that are uniquely associated with their accounts
 */
 
-var utils = require('../utilities');
+var utils = require('./tracksController.js');
 
 module.exports = function (router){
-
-router.post('/signup', utils.createUser);
-
-router.post('/signin', utils.checkUser);
 	
 router.post('save/:id', utils.saveTrack);
 
 router.get('/:id', utils.fetchTracks);
 
 router.get('/user/:id', utils.fetchByUser);
+
 
 }
 

@@ -1,15 +1,4 @@
-var models = require('./database/db');
-
-//TODO
-	//Use Passport for User Authentication, employed by the
-	//createAccount & signIn
-
-module.exports.createSession = function (req,res,account){
-	console.log("this is the session", req.session);
-	return req.session.regenerate(function(err){
-		req.session.user = account;
-	});
-}
+var models = require('../database/db');
 
 module.exports.createUser = function(req,res){
 	//No state change on creating a user!
@@ -18,20 +7,19 @@ module.exports.createUser = function(req,res){
 	var password = req.body.password;
 	//To-Do: hash and store the password
 	models.Users
-	.find({where:{username:username}})
+	.find({where:{username:username, email:email}})
 	.then(function(user){
+		console.log(user);
 		if (!user){
-
-			console.log("doesn't exist");
 			models.Users
-			.create({where:{email:email, username:username}})
+			.create({email:email, username:username})
 			.then(function(newUser){
 				res.json({
 					response:"User Created!",
 				});
 			});
 		}
-		if (!username || !email){
+		if (!username || !email || !password){
 			res.json({
 				response:"Please fill out all forms."
 			});
@@ -50,7 +38,7 @@ module.exports.checkUser = function(req,res){
 	models.Users
 	.find({where: {username:username}})
 	.then(function(results){
-		if (!username){
+		if (!username || !password){
 			res.json({
 				response:"Please fill out all forms"
 			});
@@ -59,28 +47,7 @@ module.exports.checkUser = function(req,res){
 				response:"username doesn't exist"
 			});
 		}else{
-			console.log("SUCCESS man!");
 			res.json(results);
 		}
 	});
 };
-
-module.exports.saveTrack = function(req,res){
-	//check the current user session
-	//save by User and create new Track table
-	var trackName = req.body.trackName;
-};
-
-module.exports.fetchTracks = function(req,res){
-	//retrieve all tracks by a particular ID
-	models.Tracks
-	.findAll({limit:10, order:'updatedAt DESC'})
-	.then(function(tracks){
-		res.json(tracks);
-	});
-};
-
-module.exports.fetchByUser = function(req,res){
-	//search Tracks by User
-};
-
