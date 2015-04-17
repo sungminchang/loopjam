@@ -10,6 +10,7 @@ define([
 
     initialize: function(){
       this.model.on("change:selectedLoopNode", this.updateLoopNodeInfoView, this);
+      // $(window).resize(this.createFreqVisualizer).bind(this);
     },
 
     events:{
@@ -30,8 +31,9 @@ define([
       this.$el.find('.trackInfoView').append(new TrackInfoView({model: this.model}).render().el);
       this.$el.find('.loopNodesView').append(new LoopNodesView({collection: this.model.get('loopNodes')}).render().el);
 
+      // set height to window
+      this.$el.find('.loopNodesView').height($( window ).height());
 
-      // Remove later
       this.createFreqVisualizer();
 
       return this;
@@ -53,17 +55,27 @@ define([
 
     createFreqVisualizer: function(){
       // Refacor this code later to move out of track View, posssibly
-      var canvas_div = this.$el.find('.FreqVisualizerView')
-      var canvas = this.$el.find('.freqVisCanvas');
+      var height = $( window ).height();
+      var width = $( window ).width();
+
+      var canvas_div = this.$el.find('.bgVisualizerView')
+      canvas_div.height(height);
+      canvas_div.width(width);
+      canvas_div.css('position','absolute');
+      canvas_div.css('z-index', -1);
+
+      var canvas = this.$el.find('.bgfreqVisCanvas');
+      canvas.attr('height', canvas_div.height());
+      canvas.attr('width', canvas_div.width());
+
 
 
       var ctx = canvas[0].getContext("2d");
       ctx.imageSmoothingEnabled = !1;
       ctx.webkitImageSmoothingEnabled = ctx.mozImageSmoothingEnabled = !1;
 
-
-      this.model.set('visualFreqCanvas', canvas);
-      this.model.set('visualFreqCanvasCtx', ctx);
+      this.model.set('bgFreqCanvas', canvas);
+      this.model.set('bgFreqCanvasCtx', ctx);
     }
     
   });

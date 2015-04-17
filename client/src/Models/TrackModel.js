@@ -19,8 +19,8 @@ function(LoopNodeCollection, LoopNodeModel){
       metronomePlaying: false,
       analyser: null,
       visualFreqData: null,
-      visualFreqCanvas: null,
-      visualFreqCanvasCtx: null
+      bgFreqCanvas: null,
+      bgFreqCanvasCtx: null
     },
 
     initialize: function(params) {
@@ -143,24 +143,27 @@ function(LoopNodeCollection, LoopNodeModel){
       },
 
       freqAnimationUpdate: function(){
-        var analyser = this.get('analyser');
-        var frequencyData = this.get('visualFreqData');
-        var ctx = this.get('visualFreqCanvasCtx');
-        var canvas = this.get('visualFreqCanvas');
 
-        analyser.getByteFrequencyData(frequencyData)
+        // var analyser = this.get('analyser');
+        // var frequencyData = this.get('visualFreqData');
+        // var ctx = this.get('bgFreqCanvasCtx');
+        // var canvas = this.get('bgFreqCanvas');
 
-        var colWidth = Math.ceil(canvas.width() / (0.85 * analyser.frequencyBinCount));
-        ctx.clearRect(0, 0, canvas.width(), canvas.height());
-        var b, xPos, yPos, width, height;
+        // analyser.getByteFrequencyData(frequencyData)
+        // var colWidth = Math.ceil(canvas.width() / (0.85 * analyser.frequencyBinCount));
+        // ctx.clearRect(0, 0, canvas.width(), canvas.height());
+        // var freq, xPos, yPos, width, height;
+        // var img = new Image;
+        // img.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAAEklEQVR4AWNsP/eaATcYlcYKANQJFotqqVYoAAAAAElFTkSuQmCC";
         // ctx.fillStyle = ctx.createPattern(img, "repeat");
-        for (var i = 0; i < analyser.frequencyBinCount; i++) {
-            b = frequencyData[i] || 0, 
-            xPos = colWidth * i, xPos + colWidth < canvas.width() && (yPos = canvas.height(), 
-            width = colWidth - 1, 
-            height = -(Math.floor(b / 255 * canvas.height()) + 1), 
-            ctx.fillRect(xPos, yPos, width, height));
-        }
+        // for (var i = 0; i < analyser.frequencyBinCount; i++) {
+        //   freq = frequencyData[i] || 0; 
+        //   xPos = colWidth * i;
+        //   yPos = canvas.height(); 
+        //   width = colWidth - 1;
+        //   height = -(Math.floor(freq / 255 * canvas.height()) + 1); 
+        //   ctx.fillRect(xPos, yPos, width, height);
+        // }
       },
 
       recorderDelay: function(currentLoop) {
