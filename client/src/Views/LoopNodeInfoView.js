@@ -1,6 +1,8 @@
 define([
-  'text!templates/LoopNodeInfoViewTemplate.html'
-], function(template){
+  'text!templates/LoopNodeInfoViewTemplate.html',
+  'Views/VocorderView'
+
+], function(template, VocorderView){
   var LoopNodeInfoView = Backbone.View.extend({
 
     initialize: function(){
@@ -52,6 +54,8 @@ define([
       });
       
       $( ".amount" + port ).val( $( ".slider-vertical" + port ).slider( "value" ) );
+
+      this.$el.find('.VocorderView').html(new VocorderView({model: this.model}).render().el);
 
       return this;
     },

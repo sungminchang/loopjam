@@ -10,6 +10,7 @@ var LoopNodeModel = Backbone.Model.extend({
     volume: 100,
     gainNode: null,
     recordedAtBpm: null,
+    filter: null,
     // port: loopNodeForTrack.nextPort(),
     startPlayingTime: null,
     endPlayingTime: null,
@@ -36,10 +37,22 @@ var LoopNodeModel = Backbone.Model.extend({
 
 
     initialize: function(){
-       this.on('change:volume', function(){
-         var gainNode = this.get('gainNode')
-         gainNode.gain.value = this.get('volume') / 100
+      this.on('change:volume', function(){
+        var volume = Math.floor(this.get('volume'));
+        var gainNode = this.get('gainNode')
+        gainNode.gain.value = volume / 100;
+        console.log('gainNode.gain.value = ', gainNode.gain.value);
        });
+
+      this.on('change:filter', function(changed){
+
+        console.log('changed thing: ', changed);
+
+        // var biquadFilter = this.get('biquadFilterNode');
+        // biquadFilter.type = "lowshelf";
+        // biquadFilter.frequency.value = volume * 30;
+        // biquadFilter.gain.value = 25;
+      });
 
        // this.on('change:recording', function(){
        //    if(this.get('recording') === true){

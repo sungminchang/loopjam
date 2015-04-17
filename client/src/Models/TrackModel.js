@@ -23,6 +23,8 @@ function(LoopNodeCollection, LoopNodeModel){
 
     initialize: function(params) {
 
+
+
       var metronome = new LoopNodeModel(params.audioData.slice(0,1));
       this.set('metronomeNode', metronome);
 
@@ -105,7 +107,7 @@ function(LoopNodeCollection, LoopNodeModel){
         // the buffers on the bufferloader instance.
         this.get('bufferLoader').load(this);
         // this.set('metronomeBuffer', this.get('bufferLoader').bufferList.splice(0,1));
-
+        
       } else {
         // Web Audio API is not available. Ask the user to use a supported browser.
         alert('Web Audio API is not available');
@@ -402,8 +404,12 @@ function(LoopNodeCollection, LoopNodeModel){
         // Connect the source to the gainNode.
         source.connect(gainNode);
 
+        currentLoop.set('biquadFilterNode',context.createBiquadFilter());
+        var biquadFilterNode =  currentLoop.get('biquadFilterNode');
+
+        gainNode.connect(biquadFilterNode);
         // Connect the gainNode to the destination.
-        gainNode.connect(context.destination);
+        biquadFilterNode.connect(context.destination);
 
         // Connect the source to the analyser, and then the analyser to the context destination
         var analyser = this.get('analyser');
@@ -415,7 +421,6 @@ function(LoopNodeCollection, LoopNodeModel){
 
         // Play the sound, delaying the sound by the delay necessary
         // to make the sound play at the start of a new measure.
-        debugger;
         var delayInMilliseconds = barTime * 1000 - parseInt(delay.toString().replace(/\./g,'').slice(0,4)) 
         var delayToChangeViews = parseInt(delay.toString().replace(/\./g,'').slice(0,4)) 
 
