@@ -30,6 +30,10 @@ define([
       this.$el.find('.trackInfoView').append(new TrackInfoView({model: this.model}).render().el);
       this.$el.find('.loopNodesView').append(new LoopNodesView({collection: this.model.get('loopNodes')}).render().el);
 
+
+      // Remove later
+      this.createFreqVisualizer();
+
       return this;
     },
 
@@ -45,6 +49,21 @@ define([
       this.$el.find('.loopNodeInfoTitle').effect( "highlight", {color:"grey"}, 1000 );
       
       return this;
+    },
+
+    createFreqVisualizer: function(){
+      // Refacor this code later to move out of track View, posssibly
+      var canvas_div = this.$el.find('.FreqVisualizerView')
+      var canvas = this.$el.find('.freqVisCanvas');
+
+
+      var ctx = canvas[0].getContext("2d");
+      ctx.imageSmoothingEnabled = !1;
+      ctx.webkitImageSmoothingEnabled = ctx.mozImageSmoothingEnabled = !1;
+
+
+      this.model.set('visualFreqCanvas', canvas);
+      this.model.set('visualFreqCanvasCtx', ctx);
     }
     
   });

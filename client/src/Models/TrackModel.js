@@ -14,11 +14,13 @@ function(LoopNodeCollection, LoopNodeModel){
       loopNodes: null,  //soundData
       selectedLoopNode: null,
       animationTimer: null,
-      analyser: null,
-      visualFreqData: null,
       metronomeNode: null,
       metronomeBuffer: null,
-      metronomePlaying: false
+      metronomePlaying: false,
+      analyser: null,
+      visualFreqData: null,
+      visualFreqCanvas: null,
+      visualFreqCanvasCtx: null
     },
 
     initialize: function(params) {
@@ -38,7 +40,6 @@ function(LoopNodeCollection, LoopNodeModel){
 
       this.setAudioContext();
       this.setAnalyser();
-      this.freqAnimationUpdate();
 
       this.get('loopNodes').on("record", function(currentLoop){
         this.recorderDelay(currentLoop);     
@@ -144,8 +145,22 @@ function(LoopNodeCollection, LoopNodeModel){
       freqAnimationUpdate: function(){
         var analyser = this.get('analyser');
         var frequencyData = this.get('visualFreqData');
+        var ctx = this.get('visualFreqCanvasCtx');
+        var canvas = this.get('visualFreqCanvas');
 
-        analyser.getByteFrequencyData(frequencyData)        
+        analyser.getByteFrequencyData(frequencyData)
+
+        var colWidth = Math.ceil(canvas.width() / (0.85 * analyser.frequencyBinCount));
+        ctx.clearRect(0, 0, canvas.width(), canvas.height());
+        var b, xPos, yPos, width, height;
+        // ctx.fillStyle = ctx.createPattern(img, "repeat");
+        for (var i = 0; i < analyser.frequencyBinCount; i++) {
+            b = frequencyData[i] || 0, 
+            xPos = colWidth * i, xPos + colWidth < canvas.width() && (yPos = canvas.height(), 
+            width = colWidth - 1, 
+            height = -(Math.floor(b / 255 * canvas.height()) + 1), 
+            ctx.fillRect(xPos, yPos, width, height));
+        }
       },
 
       recorderDelay: function(currentLoop) {
