@@ -1,12 +1,20 @@
 'use strict'
 //Module dependencies
 var express = require('express');
-var cors = require('cors');
 //Create express server
 var app = express();
 
+
 //Database configuration
 var db = require('./server/database/db');
+
+//cors headers
+app.all('/', function(req,res,next){
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'X-Requested-With');
+  next();
+});
+
 
 //Express configuration
 require('./routes')(app);
@@ -18,7 +26,6 @@ var port = process.env.PORT || 3000;
 
 //Set up server
 var server = require('http').createServer(app);
-
 
 // Listen
 server.listen(port, function () {

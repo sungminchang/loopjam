@@ -15,12 +15,16 @@ module.exports = function (app){
 
 //Create Router
 var trackRouter = express.Router();
+var authRouter = express.Router();
+
 
 //Require needed routes
 require('./server/tracks/tracks')(trackRouter);
+require('./server/auth/auth')(authRouter);
 
 //Register our routes
 app.use('/tracks', trackRouter);
+app.use('/auth', authRouter);
 
 //Serve index files
  app.use(express.static(__dirname + '/client'));

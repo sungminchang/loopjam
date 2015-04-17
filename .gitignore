@@ -2,3 +2,12 @@ node_modules
 bower_components
 .DS_Store
 /server/database/config.js
+
+#Ignore for Deployment
+
+build/
+dist/
+
+#Ignore SSH keys and certificates
+loopjam.pem
+loopjam.key

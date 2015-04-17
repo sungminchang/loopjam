@@ -2,7 +2,7 @@
   "name": "loopjam",
   "version": "0.0.1",
   "private": true,
-  "description": "App loop man",
+  "description": "An interactive platform for creating live music online.",
   "scripts": {
     "test": "grunt test"
   },
@@ -19,8 +19,6 @@
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^0.1.7",
     "karma-jasmine": "^0.3.5",
-    "karma-junit-reporter": "^0.2.2",
-    "karma-phantomjs-launcher": "^0.1.4",
     "phantomjs": "^1.9.16",
     "requirejs": "~2.1.11"
   },
