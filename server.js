@@ -11,9 +11,6 @@ var db = require('./server/database/db');
 //Express configuration
 require('./routes')(app);
 
-// allow cross origin requests
-app.use(cors());
-
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 //Set up ports
