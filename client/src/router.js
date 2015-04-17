@@ -27,7 +27,8 @@ define([
       // Track View page
       // Note: we need to set up ids.
 
-      var audioData = [ {url: "/audio/metronome.mp3", speed:2, port: 1, recordedAtBpm: 120}
+      var audioData = [ {url: "/audio/metronome.mp3", speed:2, port: 1, recordedAtBpm: 120},
+        {url: "http://marcbalaban.com/wp-content/uploads/Everybody-dance-now-lyrics-P.mp3", speed:2, port: 1, recordedAtBpm: 120}
       ];
       var track = new TrackModel({audioData: audioData});
       var trackView = new TrackView({model: track});
