@@ -1,4 +1,7 @@
 var models = require('../database/db');
+var bcrypt = require('bcrypt-nodejs');
+var crypto = require('crypto');
+var key = "sprinkle";
 
 //TODO
 	//Use Passport for User Authentication, employed by the
@@ -9,11 +12,28 @@ module.exports.createSession = function (req,res,account){
 	return req.session.regenerate(function(err){
 		req.session.user = account;
 	});
-}
+};
+
 module.exports.saveTrack = function(req,res){
 	//check the current user session
 	//save by User and create new Track table
-	var trackName = req.body.trackName;
+
+	var Track = req.body.audioData;
+	var trackName = req.body.trackname;
+	var currentDate = Date.now().valueOf().toString();
+	var Track = JSON.parse(reqTrack);
+	var outputURLs = [];
+	for (var i = 0; i<Track.length; i++){
+		Track[i]['url'] = crypto.createHmac('sha1', trackName + currentDate).update((Math.random()*10000).toString()).digest('hex').slice(13);
+		outputURLs.push(Track[i]['url']);
+	}
+	Track = JSON.stringify(Track);
+	models.Tracks.findOrCreate({where:{trackname:trackName, audioData: Track}})
+		  .then(function(response){
+		  	res.json({
+		  		response: "User created"
+		  	});
+		  });
 };
 
 module.exports.fetchTracks = function(req,res){
