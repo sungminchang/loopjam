@@ -491,15 +491,27 @@ function(LoopNodeCollection, LoopNodeModel){
         }
 
         // POST data to our server
+        var mp3Data = this.get('loopNodes').where({port: 1})[0].get('mp3Data');
+        
         $.ajax({
-          type: "POST",
-          url: "/tracks",
-          data: trackData,
-          dataType: 'json',
+          type: "PUT",
+          url: "https://loopjammin.blob.core.windows.net/loopnodes/12345?st=2015-04-18T20%3A12%3A17Z&se=2015-04-18T23%3A32%3A17Z&sp=w&sv=2014-02-14&sr=b&sig=roL%2F8cahi%2BJCFykcO2ouw7CXPsHYgSaIst%2FqGAbvRCc%3D",
+          headers: {'x-ms-blob-type': 'BlockBlob'},
+          data: mp3Data,
           success: function(){
             console.log("Track data successfully saved.");
+            
           }
         });
+
+        // $.ajax({
+        //   type: "POST",
+        //   url: "/tracks",
+        //   data: trackData,
+        //   dataType: 'json',
+        //   success: trackSaveCallback
+          
+        // });
       },
 
       attachMp3ToNode: function(mp3Data, loopNodePort){
