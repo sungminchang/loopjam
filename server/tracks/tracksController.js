@@ -18,7 +18,7 @@ module.exports.saveTrack = function(req,res){
 	//check the current user session
 	//save by User and create new Track table
 
-	var Track = req.body.audioData;
+	var reqTrack = req.body.audioData;
 	var trackName = req.body.trackname;
 	var currentDate = Date.now().valueOf().toString();
 	var Track = JSON.parse(reqTrack);
@@ -39,10 +39,7 @@ module.exports.saveTrack = function(req,res){
 module.exports.fetchTracks = function(req,res){
 	//retrieve all tracks by a particular ID
 	models.Tracks
-	.findAll({limit:10, order:'updatedAt DESC'})
-	.then(function(tracks){
-		res.json(tracks);
-	});
+	.findAll({limit:10, order:'createdAt DESC'})
 };
 
 module.exports.fetchByUser = function(req,res){
