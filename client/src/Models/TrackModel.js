@@ -312,7 +312,10 @@ function(LoopNodeCollection, LoopNodeModel){
 
         var loopNodes = this.get('loopNodes');
         var metronomeNode = this.get('metronomeNode');
-        metronomeNode.get('source').playbackRate.value = parseInt(bpm) / 120;
+        var metronomeNodeSource = metronomeNode.get('source');
+        if (metronomeNodeSource) {
+          metronomeNodeSource.playbackRate.value = parseInt(bpm) / 120;
+        }
 
         loopNodes.each(function(loopNode, i){
           // if (i === 0) { return true;}
@@ -403,6 +406,7 @@ function(LoopNodeCollection, LoopNodeModel){
         var gainNode = currentLoop.get('gainNode');
         // Connect the source to the gainNode.
         source.connect(gainNode);
+        gainNode.gain.value = currentLoop.get('volume')/50 - 1;
 
         // Connect the gainNode to the destination.
         gainNode.connect(context.destination);
