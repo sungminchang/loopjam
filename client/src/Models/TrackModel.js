@@ -463,7 +463,6 @@ function(LoopNodeCollection, LoopNodeModel){
         console.log('source', source);
       },
 
-
       pause: function(currentLoop, buffer) {
         var soundIndex = currentLoop.get('port') - 1;
         var source = currentLoop.get('source');
@@ -474,19 +473,33 @@ function(LoopNodeCollection, LoopNodeModel){
         source.buffer = buffer || this.get('bufferLoader').bufferList[soundIndex];
         console.log('About to pause, logging source: ', source);
         source.stop();
+      },
+
+      saveTrack: function(){
+        var saveAttrKeys =['url', 'speed', 'multiplier', 'recordedAtBpm'];
+        var trackData = {result: []};
+
+        var LoopNodesAttrArray = this.get('loopNodes').toJSON('url');
+        for(var i = 0; i < LoopNodesAttrArray.length; i++){
+          var nodeData ={};
+          for(var j = 0; j < saveAttrKeys.length; j++){
+            nodeData[saveAttrKeys[j]] = LoopNodesAttrArray[i][saveAttrKeys[j]];
+          }
+          trackData.result.push(nodeData);
+        }
+
+        // POST data to our server
+        $.ajax({
+          type: "POST",
+          url: "/tracks",
+          data: trackData,
+          dataType: 'json',
+          success: function(){
+            console.log("Track data successfully saved.");
+          }
+        });
       }
 
-    // this.tempoAdjustment = 0; //adjustment parameter when user changes tempo. initially set at 0.
-    // this.bpm  = bpm || 120;
-
-
-    // storage array for all the containing loop node
-    // this.loopNodes = [];
-
-    // this.populateLoopNodes();
-    // this.setCueAnimation();
-    // this.addListeners();
-    // },
   })
   return TrackModel;
 });
