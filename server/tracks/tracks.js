@@ -15,9 +15,9 @@ var utils = require('./tracksController.js');
 
 module.exports = function (router){
 	
-router.post('save/:id', utils.saveTrack);
+router.post('/', utils.saveTrack);
 
-router.get('/:id', utils.fetchTracks);
+router.get('/', utils.fetchTracks);
 
 router.get('/user/:id', utils.fetchByUser);
 
