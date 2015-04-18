@@ -23,7 +23,7 @@ function(LoopNodeCollection, LoopNodeModel){
 
     initialize: function(params) {
 
-      var metronome = new LoopNodeModel(params.audioData.slice(0,1));
+      var metronome = new LoopNodeModel();
       this.set('metronomeNode', metronome);
 
       var loopNodesForTrack = new LoopNodeCollection(params.audioData);
@@ -103,7 +103,9 @@ function(LoopNodeCollection, LoopNodeModel){
         // Invoking bufferLoader's .load method does the actual
         // buffering and loading of the recordings, and stores
         // the buffers on the bufferloader instance.
-        this.get('bufferLoader').load(this);
+        this.get('bufferLoader').load();
+        this.get('bufferLoader').loadMetronome(this);
+        
         // this.set('metronomeBuffer', this.get('bufferLoader').bufferList.splice(0,1));
 
       } else {
@@ -310,7 +312,10 @@ function(LoopNodeCollection, LoopNodeModel){
 
         var loopNodes = this.get('loopNodes');
         var metronomeNode = this.get('metronomeNode');
-        metronomeNode.get('source').playbackRate.value = parseInt(bpm) / 120;
+        var metronomeNodeSource = metronomeNode.get('source');
+        if (metronomeNodeSource) {
+          metronomeNodeSource.playbackRate.value = parseInt(bpm) / 120;
+        }
 
         loopNodes.each(function(loopNode, i){
           // if (i === 0) { return true;}
@@ -387,9 +392,9 @@ function(LoopNodeCollection, LoopNodeModel){
         var source = currentLoop.get('source');
         console.log('source', source);
 
-        var tempBuffer = buffer || this.get('bufferLoader').bufferList[soundIndex];
+        var tempBuffer = this.get('bufferLoader').bufferList[soundIndex];
 
-        source.buffer = createRotatedAudioBuffer(this.get('context'), tempBuffer, tempBuffer.duration - barTime);
+        source.buffer = buffer || createRotatedAudioBuffer(this.get('context'), tempBuffer, tempBuffer.duration - barTime);
         
         // Associate the new source instance with the loaded buffer.
 
@@ -401,6 +406,7 @@ function(LoopNodeCollection, LoopNodeModel){
         var gainNode = currentLoop.get('gainNode');
         // Connect the source to the gainNode.
         source.connect(gainNode);
+        gainNode.gain.value = currentLoop.get('volume')/50 - 1;
 
         // Connect the gainNode to the destination.
         gainNode.connect(context.destination);
@@ -415,7 +421,6 @@ function(LoopNodeCollection, LoopNodeModel){
 
         // Play the sound, delaying the sound by the delay necessary
         // to make the sound play at the start of a new measure.
-        debugger;
         var delayInMilliseconds = barTime * 1000 - parseInt(delay.toString().replace(/\./g,'').slice(0,4)) 
         var delayToChangeViews = parseInt(delay.toString().replace(/\./g,'').slice(0,4)) 
 
