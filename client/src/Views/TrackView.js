@@ -11,6 +11,8 @@ define([
     initialize: function(){
       this.model.on("change:selectedLoopNode", this.updateLoopNodeInfoView, this);
       // $(window).resize(this.createFreqVisualizer).bind(this);
+
+
     },
 
     events:{
@@ -33,6 +35,10 @@ define([
 
       // set height to window
       this.$el.find('.loopNodesView').height($( window ).height());
+
+      //Event listening for mp3 data retrieval
+      this.$el.find('.mp3Blob').on('newmp3', this.attachMp3ToNode.bind(this));
+      
 
       this.createFreqVisualizer();
 
@@ -76,6 +82,13 @@ define([
 
       this.model.set('bgFreqCanvas', canvas);
       this.model.set('bgFreqCanvasCtx', ctx);
+    },
+
+    attachMp3ToNode: function(){
+      var mp3Data = this.$el.find('.mp3blobData').text();
+      var loopNodePort = parseInt(this.$el.find('.loopNodePort').text());
+      this.model.attachMp3ToNode(mp3Data, loopNodePort);
+
     }
     
   });

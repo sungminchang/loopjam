@@ -57,7 +57,8 @@ define([
 
     saveTrackModel: function(){
       // POST request to server
-      this.model.saveTrack();
+      var trackName = this.$el.find('.trackName').val();
+      this.model.saveTrack(trackName);
     }
 
   });

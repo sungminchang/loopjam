@@ -20,7 +20,8 @@ function(LoopNodeCollection, LoopNodeModel){
       analyser: null,
       visualFreqData: null,
       bgFreqCanvas: null,
-      bgFreqCanvasCtx: null
+      bgFreqCanvasCtx: null,
+      trackName: null
     },
 
     initialize: function(params) {
@@ -263,7 +264,7 @@ function(LoopNodeCollection, LoopNodeModel){
           // li.appendChild(au);
           // li.appendChild(hf);
           // recordingslist.appendChild(li);
-        });
+        }, currentLoop.get('port'));
       },
 
       preBuffer: function(){
@@ -475,9 +476,10 @@ function(LoopNodeCollection, LoopNodeModel){
         source.stop();
       },
 
-      saveTrack: function(){
+      saveTrack: function(trackName){
+        this.set('trackName', trackName);
         var saveAttrKeys =['url', 'speed', 'multiplier', 'recordedAtBpm'];
-        var trackData = {result: []};
+        var trackData = {trackName: trackName, loopData: []};
 
         var LoopNodesAttrArray = this.get('loopNodes').toJSON('url');
         for(var i = 0; i < LoopNodesAttrArray.length; i++){
@@ -485,7 +487,7 @@ function(LoopNodeCollection, LoopNodeModel){
           for(var j = 0; j < saveAttrKeys.length; j++){
             nodeData[saveAttrKeys[j]] = LoopNodesAttrArray[i][saveAttrKeys[j]];
           }
-          trackData.result.push(nodeData);
+          trackData.loopData.push(nodeData);
         }
 
         // POST data to our server
@@ -498,6 +500,11 @@ function(LoopNodeCollection, LoopNodeModel){
             console.log("Track data successfully saved.");
           }
         });
+      },
+
+      attachMp3ToNode: function(mp3Data, loopNodePort){
+        var loopNode = this.get('loopNodes').where({port: loopNodePort});
+        loopNode[0].set('mp3Data', mp3Data);
       }
 
   })
