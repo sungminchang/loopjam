@@ -10,6 +10,7 @@ var BufferLoader = function(context, data, callback) {
 
   this.context = context;
   this.urlList = urls;
+  this.metronomeUrl = '/audio/metronome.mp3'
   this.onload = callback;
   this.bufferList = new Array();
   // Need to keep references to each of the sources
@@ -38,13 +39,11 @@ BufferLoader.prototype.loadBuffer = function(url, index, that) {
           alert('error decoding file data: ' + url);
           return;
         }
-        loader.bufferList[index] = buffer;
-        if (!this.metronomeSet) {
-          this.metronomeSet = !this.metronomeSet;
-          that.set('metronomeBuffer', loader.bufferList[0]);
-          console.log('added metronomeBuffer to trackModel: ', that.get('metronomeBuffer'));
+        if (that) {
+          that.set('metronomeBuffer', buffer);
+        } else {
+          loader.bufferList[index] = buffer;
         }
-
 
         // if (++loader.loadCount == loader.urlList.length)
           // loader.onload(loader.bufferList);
@@ -62,10 +61,15 @@ BufferLoader.prototype.loadBuffer = function(url, index, that) {
   request.send();
 };
 
-BufferLoader.prototype.load = function(that) {
+BufferLoader.prototype.load = function() {
+
   for (var i = 0; i < this.urlList.length; ++i) {
-    this.loadBuffer(this.urlList[i], i, that);
+    this.loadBuffer(this.urlList[i], i);
   }
+};
+
+BufferLoader.prototype.loadMetronome = function(that) {
+  this.loadBuffer(this.metronomeUrl, 0, that);
 };
 
 
