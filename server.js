@@ -3,6 +3,7 @@
 var express = require('express');
 //Create express server
 var app = express();
+var csap = require('./server/azure/createSharedAccessPolicy.js');
 
 
 //Database configuration
@@ -19,6 +20,9 @@ app.all('/', function(req,res,next){
 //Express configuration
 require('./routes')(app);
 
+// allow cross origin requests
+app.use(cors());
+
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 //Set up ports
@@ -34,3 +38,5 @@ server.listen(port, function () {
 
 // Expose app
 exports = module.exports = app;
+
+csap.createSharedAccess(['']);
