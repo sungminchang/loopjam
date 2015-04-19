@@ -1,7 +1,7 @@
 node_modules
 bower_components
 .DS_Store
-/server/database/config.js
+server/azure/config.js
 
 #Ignore for Deployment
 
