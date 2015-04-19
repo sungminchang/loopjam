@@ -2,20 +2,13 @@
 //Module dependencies
 var express = require('express');
 //Create express server
-var app = express();
-var csap = require('./server/azure/createSharedAccessPolicy.js');
+var cors = require('cors');
 
+
+var app = express();
 
 //Database configuration
 var db = require('./server/database/db');
-
-//cors headers
-app.all('/', function(req,res,next){
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'X-Requested-With');
-  next();
-});
-
 
 //Express configuration
 require('./routes')(app);
@@ -39,4 +32,3 @@ server.listen(port, function () {
 // Expose app
 exports = module.exports = app;
 
-csap.createSharedAccess(['']);

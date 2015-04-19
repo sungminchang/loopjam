@@ -1,8 +1,8 @@
 var azure = require('azure-storage');
 var azureconnection = require('./databaseConnection.js')
 
-exports.createSharedAccess = function(arrayOfHashes){
-  var result = [];
+exports.createSharedAccess = function(arrayOfHashes,res){
+  var handShakeUrls = [];
 
   for(var i = 0; i < arrayOfHashes.length; i++){
     var startDate = new Date();
@@ -23,9 +23,8 @@ exports.createSharedAccess = function(arrayOfHashes){
     var token = azureconnection.blobService.generateSharedAccessSignature("loopnodes", arrayOfHashes[i], sharedAccessPolicy);
     var sasUrl = azureconnection.blobService.getUrl("loopnodes", arrayOfHashes[i], token);
 
-    result.push(sasUrl);
+    handShakeUrls.push(sasUrl);
   }
 
-  console.log(result);
-  return result;
+  return handShakeUrls;
 }

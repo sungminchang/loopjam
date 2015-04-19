@@ -1,6 +1,8 @@
 var models = require('../database/db');
 var bcrypt = require('bcrypt-nodejs');
 var crypto = require('crypto');
+var csap = require('../azure/createSharedAccessPolicy.js');
+
 var key = "sprinkle";
 
 //TODO
@@ -17,7 +19,6 @@ module.exports.createSession = function (req,res,account){
 module.exports.saveTrack = function(req,res){
 	//check the current user session
 	//save by User and create new Track table
-
 	
 	var reqTrack = req.body.audioData;
 	var trackName = req.body.trackname;
@@ -30,11 +31,10 @@ module.exports.saveTrack = function(req,res){
 	}
 	Track = JSON.stringify(Track);
 	models.Tracks.findOrCreate({where:{trackname:trackName, audioData: Track}})
-		  .then(function(response){
-		  	res.json({
-		  		response: "User created!"
-		  	});
-		  });
+  .then(function(response){				
+		res.send(csap.createSharedAccess(outputURLs));
+	});
+		 
 };
 
 module.exports.fetchTracks = function(req,res){
