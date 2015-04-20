@@ -4,8 +4,11 @@ module.exports = function (router){
 	
 router.post('/signup', utils.createUser);
 
-router.get('/signin', utils.checkUser);
+router.get('/login', utils.checkUser);
 
+router.post('/logout',utils.logout);
+
+router.post('/isLoggedIn', utils.checkLoggedIn);
 
 }
 
