@@ -40,7 +40,6 @@ function(LoopNodeCollection, LoopNodeModel){
       this.setAnalyser();
       this.freqAnimationUpdate();
 
-
       this.get('loopNodes').on("record", function(currentLoop){
         this.recorderDelay(currentLoop);     
       }.bind(this))
@@ -146,11 +145,8 @@ function(LoopNodeCollection, LoopNodeModel){
         var analyser = this.get('analyser');
         var frequencyData = this.get('visualFreqData');
 
-        analyser.getByteFrequencyData(frequencyData)
-
-        
+        analyser.getByteFrequencyData(frequencyData)        
       },
-
 
       recorderDelay: function(currentLoop) {
 
