@@ -27,7 +27,6 @@ define([
       // Track View page
       // Note: we need to set up ids.
 
-
       $(function() {
           $(".dial").knob({
           });
@@ -43,6 +42,8 @@ define([
 
       var track = new TrackModel({audioData: audioData});
       var trackView = new TrackView({model: track});
+
+
 
       $(".main").html(trackView.render().el);
       track.setCueAnimation();
