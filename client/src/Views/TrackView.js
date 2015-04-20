@@ -10,6 +10,7 @@ define([
 
     initialize: function(){
       this.model.on("change:selectedLoopNode", this.updateLoopNodeInfoView, this);
+      this.model.get('loopNodes').on("remove", this.renderLoopNodesView, this);
     },
 
     events:{
@@ -45,6 +46,16 @@ define([
       this.$el.find('.loopNodeInfoTitle').effect( "highlight", {color:"grey"}, 1000 );
       
       return this;
+    },
+
+    renderLoopNodesView: function() {
+      var loopNodesView = this.$el.find('.loopNodesView');
+      console.log('about ot render the new loopNodesView')
+      loopNodesView.children().detach();
+
+      loopNodesView.append(new LoopNodesView({collection: this.model.get('loopNodes')}).render().el);
+      $(".dial").knob({});
+
     }
     
   });

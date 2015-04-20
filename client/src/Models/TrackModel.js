@@ -51,6 +51,11 @@ function(LoopNodeCollection, LoopNodeModel){
 
       this.get('loopNodes').on("pause", function(currentLoop){
         this.pause(currentLoop);     
+      }.bind(this)),
+
+      this.get('loopNodes').on('removeLoopNode', function(currentLoop){
+        this.get('loopNodes').remove(currentLoop);
+        this.pause(currentLoop);
       }.bind(this))
 
       // this.on("change:tempo", function(currentLoop){
