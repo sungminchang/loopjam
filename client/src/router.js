@@ -27,19 +27,28 @@ define([
       // Track View page
       // Note: we need to set up ids.
 
-      var audioData = [ {url: "", speed:2, port: 1, recordedAtBpm: 120}];
+      $(function() {
+          $(".dial").knob({
+          });
+      });
+
+      if(id === "new"){
+        var audioData = [ {url: "../audio/metronome.mp3", speed:2, port: 1, recordedAtBpm: 120, recorded: true}];
+      } else {
+
+      }
+
       var track = new TrackModel({audioData: audioData});
       var trackView = new TrackView({model: track});
+
+
 
       $(".main").html(trackView.render().el);
       track.setCueAnimation();
 
       track.get('loopNodes').each(function(loopNode){loopNode.set('rerender', !loopNode.get('rerender'))})
 
-      $(function() {
-          $(".dial").knob({
-          });
-      });
+    
 
     },
     default: function(badUrl){
