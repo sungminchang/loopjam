@@ -2,6 +2,10 @@ node_modules
 bower_components
 .DS_Store
 
+=======
+server/azure/config.js
+
+
 #Ignore for Deployment
 
 build/

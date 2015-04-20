@@ -2,12 +2,19 @@
 //Module dependencies
 var express = require('express');
 //Create express server
+
 var app = express();
+
+var cors = require('cors');
+
 //Database configuration
 var db = require('./server/database/db');
 
 //Express configuration
 require('./routes')(app);
+
+// allow cross origin requests
+app.use(cors());
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
@@ -23,3 +30,4 @@ server.listen(port, function () {
 
 // Expose app
 exports = module.exports = app;
+

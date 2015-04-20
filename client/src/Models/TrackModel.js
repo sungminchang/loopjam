@@ -40,7 +40,6 @@ function(LoopNodeCollection, LoopNodeModel){
       this.setAnalyser();
       this.freqAnimationUpdate();
 
-
       this.get('loopNodes').on("record", function(currentLoop){
         this.recorderDelay(currentLoop);     
       }.bind(this))
@@ -146,11 +145,8 @@ function(LoopNodeCollection, LoopNodeModel){
         var analyser = this.get('analyser');
         var frequencyData = this.get('visualFreqData');
 
-        analyser.getByteFrequencyData(frequencyData)
-
-        
+        analyser.getByteFrequencyData(frequencyData)        
       },
-
 
       recorderDelay: function(currentLoop) {
 
@@ -172,7 +168,9 @@ function(LoopNodeCollection, LoopNodeModel){
         console.log('tempoAdjustment', tempoAdjustment, 'barTimePlayed', barTimePlayed, 'delay', delay);
 
         console.log('Will delay by ', delay, 'seconds');
-        var delayInMilliseconds = parseInt(delay.toString().replace(/\./g,'').slice(0,4))  // FUNCTION TO CHANGE!!!
+        var delayInMilliseconds = delay.toString().split('.');
+        delayInMilliseconds[1] = delayInMilliseconds[1].slice(0,3)
+        delayInMilliseconds = parseInt(delayInMilliseconds.join(''))
 
         console.log("Context Current-time", this.get('context').currentTime)
         console.log("Record will start in:", delayInMilliseconds, "ms")
@@ -181,8 +179,8 @@ function(LoopNodeCollection, LoopNodeModel){
         
         var barTimeInMS = barTime * 1000;
 
-        setTimeout(this.startRecording.bind(this, currentLoop), delayInMilliseconds - 100)
-        setTimeout(this.stopRecording.bind(this, currentLoop), delayInMilliseconds + barTimeInMS + 50)
+        setTimeout(this.startRecording.bind(this, currentLoop), delayInMilliseconds - 10)
+        setTimeout(this.stopRecording.bind(this, currentLoop), delayInMilliseconds + barTimeInMS + 100)
         setTimeout(this.preBuffer.bind(this), delayInMilliseconds + barTimeInMS + 300)
       },
       
@@ -195,7 +193,7 @@ function(LoopNodeCollection, LoopNodeModel){
           currentLoop.set('rerender', !currentLoop.get('rerender'))
         }
 
-        setTimeout(rerenderRecording,100)
+        setTimeout(rerenderRecording,10)
 
         this.get('recorder') && this.get('recorder').record();
         // button.disabled = true;
@@ -421,8 +419,11 @@ function(LoopNodeCollection, LoopNodeModel){
 
         // Play the sound, delaying the sound by the delay necessary
         // to make the sound play at the start of a new measure.
-        var delayInMilliseconds = barTime * 1000 - parseInt(delay.toString().replace(/\./g,'').slice(0,4)) 
-        var delayToChangeViews = parseInt(delay.toString().replace(/\./g,'').slice(0,4)) 
+        var delayToChangeViews = delay.toString().split('.');
+        delayToChangeViews[1] = delayToChangeViews[1].slice(0,3)
+        delayToChangeViews = parseInt(delayToChangeViews.join(''))
+
+        console.log("delayToChangeViews: ", delay.toString(), delayToChangeViews)
 
         var letViewsKnowQueueIsComplete = function(){
           currentLoop.set('playing', !currentLoop.get('playing'))
@@ -430,7 +431,7 @@ function(LoopNodeCollection, LoopNodeModel){
           currentLoop.set('rerender', !currentLoop.get('rerender'))
         }
 
-        console.log("activated: ", delayInMilliseconds)
+        // console.log("activated: ", delayInMilliseconds)
         setTimeout(letViewsKnowQueueIsComplete, delayToChangeViews)
         
         source.loopStart = 0;
