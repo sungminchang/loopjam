@@ -2,6 +2,7 @@ node_modules
 bower_components
 .DS_Store
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 #Ignore Azure Credentials
 server/azure/config.js
@@ -9,6 +10,9 @@ server/azure/config.js
 */server/azure/config.js
 >>>>>>> changed .gitignore file
 
+=======
+server/azure/config.js
+>>>>>>> .gitignore now working
 
 #Ignore for Deployment
 
