@@ -24,47 +24,44 @@ BufferLoader.prototype.loadBuffer = function(url, index, that) {
   // Load buffer asynchronously
   var request = new XMLHttpRequest();
   console.log('About to load buffer of this url: ', url);
-  request.open("GET", url, true);
 
-  if(url.substr(url.length - 10) !== ".mp3base64"){
-    request.responseType = "arraybuffer";
-  }
+    request.open("GET", url, true);
 
-  var loader = this;
-
-  request.onload = function() {
-    var arrayBuf = request.response;
-    if(url.substr(url.length - 10) === ".mp3base64"){
-      // The file uploaded in our Azure S3 server is in base64 format, so we decode it to arraybuffer here.
-      arrayBuf = Base64Binary.decode(request.response.substr(22)).buffer;
+    if(url.substr(url.length - 10) !== ".mp3base64"){
+      request.responseType = "arraybuffer";
     }
-    // Asynchronously decode the audio file data in request.response
-    loader.context.decodeAudioData(
-      arrayBuf,
-      function(buffer) {
-        if (!buffer) {
-          alert('error decoding file data: ' + url);
-          return;
-        }
-        if (!that.get('metronomeBuffer')) {
-          that.set('metronomeBuffer', buffer);
-        } else {
-          loader.bufferList[index] = buffer;
-          console.log('loaded buffer: ', buffer);
-          that.queue(that.get('loopNodes').models[index], buffer);
-          that.get('loopNodes').each(function(loopNode) { 
-            loopNode.set('rerender', !loopNode.get('rerender'));
-          });
 
-        }
+    var loader = this;
 
-        // if (++loader.loadCount == loader.urlList.length)
-          // loader.onload(loader.bufferList);
-      },
-      function(error) {
-        console.error('decodeAudioData error', error);
+    request.onload = function() {
+      var arrayBuf = request.response;
+      if(url.substr(url.length - 10) === ".mp3base64"){
+        // The file uploaded in our Azure S3 server is in base64 format, so we decode it to arraybuffer here.
+        arrayBuf = Base64Binary.decode(request.response.substr(22)).buffer;
       }
-    );
+      // Asynchronously decode the audio file data in request.response
+      loader.context.decodeAudioData(
+        arrayBuf,
+        function(buffer) {
+          if (!buffer) {
+            alert('error decoding file data: ' + url);
+            return;
+          }
+          if (!loader.metronomeSet) {
+            loader.metronomeSet = true;
+            that.set('metronomeBuffer', buffer);
+          } else {
+            loader.bufferList[index] = buffer;
+            var loopNodeDiv = $('.btn-play')[index].click();
+          }
+
+          // if (++loader.loadCount == loader.urlList.length)
+            // loader.onload(loader.bufferList);
+        },
+        function(error) {
+          console.error('decodeAudioData error', error);
+        }
+      );
   };
 
   request.onerror = function(data) {
@@ -81,7 +78,13 @@ BufferLoader.prototype.load = function(that) {
 };
 
 BufferLoader.prototype.loadMetronome = function(that) {
-  this.loadBuffer(this.metronomeUrl, 0, that);
+  this.loadBuffer(this.metronomeUrl, 0, that, true);
+};
+
+BufferLoader.prototype.update = function(url, index, that) {
+  this.urlList[index] = url;
+  this.loadBuffer(url, index, that);
+
 };
 
 

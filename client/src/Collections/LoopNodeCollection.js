@@ -94,6 +94,9 @@ define([
         return loopNode.get('url');
       });
     },
+    rerender: function() {
+      this.trigger('rerender', this);
+    },
     // Assigns placeholder for where the track should be placed on the screen.
     reassignPorts: function(){
       this.models.forEach(function(loopNode, i) {

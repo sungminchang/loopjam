@@ -7,6 +7,7 @@ define([
     initialize: function() {
       this.collection.on('add', this.renderNewLoopNode, this);
       this.collection.on('remove', this.removeLoopNode, this);
+      this.collection.on('rerender', this.render, this);
       
     },
 
@@ -29,7 +30,7 @@ define([
 
 
       var that = this;
-      // this.$el.children().detach();
+      this.$el.children().remove();
       this.collection.each(function(loopNode) {
         that.$el.append(new LoopNodeEntryView({model: loopNode}).render().el);
       });
