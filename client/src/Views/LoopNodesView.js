@@ -6,6 +6,7 @@ define([
 
     initialize: function() {
       this.collection.on('add', this.renderNewLoopNode, this);
+      this.collection.on('remove', this.removeLoopNode, this);
       
     },
 
@@ -46,6 +47,26 @@ define([
       $(".dial").knob({});
 
       return this;
+    },
+
+    removeLoopNode: function(currentLoop){
+      var $addButton = this.$el.find('.addNewLoop');
+      $addButton.detach();
+      var loopNodeDivs = this.$el.find('.col-md-4.col-sm-6');
+      var port = currentLoop.get('port');
+      var loopNodeDiv = loopNodeDivs[port - 1];
+      $(loopNodeDiv).parent().remove();
+
+      this.$el.append($addButton);
+
+      this.render();
+      $(".dial").knob({});
+      
+
+      this.collection.each(function(loopNode){loopNode.set('rerender', !loopNode.get('rerender'))})
+
+
+      // this.delegateEvents(this.events);
     }
 
 
