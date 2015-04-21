@@ -2,11 +2,6 @@ var models = require('../database/db');
 var bcrypt = require('bcrypt-nodejs');
 var crypto = require('crypto');
 var csap = require('../azure/createSharedAccessPolicy.js');
-var key = "sprinkle";
-
-//TODO
-	//Use Passport for User Authentication, employed by the
-	//createAccount & signIn
 
 module.exports.createSession = function (req,res,account){
 	console.log("this is the session", req.session);

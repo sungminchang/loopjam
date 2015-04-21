@@ -2,7 +2,7 @@ node_modules
 bower_components
 .DS_Store
 
-=======
+#Ignore Azure Credentials
 server/azure/config.js
 
 
