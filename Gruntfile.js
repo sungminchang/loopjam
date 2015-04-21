@@ -139,7 +139,7 @@ module.exports = function (grunt) {
     //Register Unit Tasks
 
   grunt.registerTask('build', ['jshint','clean','concat','uglify','cssmin']);
-  grunt.registerTask('default', [ 'express:dev', 'watch','nodemon','karma:unit']);
+  grunt.registerTask('default', ['express:dev', 'watch','nodemon','karma:unit']);
   grunt.registerTask('unit-test', ['karma:unit']);
   //Initiated in scripts line in package.json
   grunt.registerTask('test', ['jshint', 'express:dev']);
