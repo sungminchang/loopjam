@@ -479,7 +479,7 @@ function(LoopNodeCollection, LoopNodeModel){
       saveTrack: function(trackName){
         this.set('trackName', trackName);
         var saveAttrKeys =['url', 'speed', 'multiplier', 'recordedAtBpm'];
-        var trackData = {trackName: trackName, loopData: []};
+        var trackData = {trackname: trackName, audioData: []};
 
         var LoopNodesAttrArray = this.get('loopNodes').toJSON('url');
         for(var i = 0; i < LoopNodesAttrArray.length; i++){
@@ -487,8 +487,10 @@ function(LoopNodeCollection, LoopNodeModel){
           for(var j = 0; j < saveAttrKeys.length; j++){
             nodeData[saveAttrKeys[j]] = LoopNodesAttrArray[i][saveAttrKeys[j]];
           }
-          trackData.loopData.push(nodeData);
+          trackData.audioData.push(nodeData);
         }
+
+        console.log(trackData);
 
         var trackSaveCallback = function(URLArray){
           for(var i = 0; i < URLArray.length; i++){

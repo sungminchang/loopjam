@@ -26,16 +26,15 @@ BufferLoader.prototype.loadBuffer = function(url, index, that) {
   console.log('About to load buffer of this url: ', url);
   request.open("GET", url, true);
 
-  if(url.substr(url.length - 4) === '.mp3' || url.substr(url.length - 4) === '.wav'){
+  if(url.substr(url.length - 10) !== ".mp3base64"){
     request.responseType = "arraybuffer";
   }
 
   var loader = this;
 
   request.onload = function() {
-
     var arrayBuf = request.response;
-    if(url.substr(url.length - 4) !== '.mp3' && url.substr(url.length - 4) !== '.wav'){
+    if(url.substr(url.length - 10) === ".mp3base64"){
       // The file uploaded in our Azure S3 server is in base64 format, so we decode it to arraybuffer here.
       arrayBuf = Base64Binary.decode(request.response.substr(22)).buffer;
     }
