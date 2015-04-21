@@ -490,41 +490,31 @@ function(LoopNodeCollection, LoopNodeModel){
           trackData.loopData.push(nodeData);
         }
 
-        // POST data to our server
-        var mp3Data = this.get('loopNodes').where({port: 1})[0].get('mp3Data');
+        var trackSaveCallback = function(URLArray){
+          for(var i = 0; i < URLArray.length; i++){
+            var mp3Data = this.get('loopNodes').where({port: i + 1})[0].get('mp3Data');
+            $.ajax({
+              type: "PUT",
+              url: URLArray[i],
+              headers: {'x-ms-blob-type': 'BlockBlob'},
+              data: mp3Data,
+              success: function(){
+                console.log("Port ", i + 1, " loop successfully uploaded.");
+                
+              }
+            });            
+          }
+          
+        }
 
         $.ajax({
-          type: "PUT",
-          url: "https://loopjammin.blob.core.windows.net/loopnodes/abcde?st=2015-04-18T21%3A29%3A40Z&se=2015-04-19T00%3A49%3A40Z&sp=w&sv=2014-02-14&sr=b&sig=XG5Ntol9JEPCMFNW1BKAT%2BAkPYGgg8nIUW2bQ4fz9N0%3D",
-          headers: {'x-ms-blob-type': 'BlockBlob'},
-          data: mp3Data,
-          success: function(){
-            console.log("Track data successfully saved.");
-            
-          }
-        });
-
-        // var ajaxRequest = new XMLHttpRequest();
-
-        // try {
-        //         // Performing a PutBlob (BlockBlob) against storage
-        //         ajaxRequest.open('PUT', "https://loopjammin.blob.core.windows.net/loopnodes/54321?st=2015-04-18T21%3A08%3A04Z&se=2015-04-19T00%3A28%3A04Z&sp=w&sv=2014-02-14&sr=b&sig=uxei%2FqN%2BsTReZ7%2BQr2mhdi2S%2BiW%2F%2Bsahwz6riKWyMak%3D", true);
-        //         // ajaxRequest.setRequestHeader('Content-Type', 'image/jpeg');
-        //         ajaxRequest.setRequestHeader('x-ms-blob-type', 'BlockBlob');
-        //         ajaxRequest.send('test');
-        //     }
-        //     catch (e) {
-        //         alert("can't upload the image to server.\n" + e.toString());
-        //     }
-
-        // $.ajax({
-        //   type: "POST",
-        //   url: "/tracks",
-        //   data: trackData,
-        //   dataType: 'json',
-        //   success: trackSaveCallback
+          type: "POST",
+          url: "/tracks",
+          data: trackData,
+          dataType: 'json',
+          success: trackSaveCallback
           
-        // });
+        });
       },
 
       attachMp3ToNode: function(mp3Data, loopNodePort){
