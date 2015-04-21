@@ -116,7 +116,7 @@ function(LoopNodeCollection, LoopNodeModel){
         // Invoking bufferLoader's .load method does the actual
         // buffering and loading of the recordings, and stores
         // the buffers on the bufferloader instance.
-        this.get('bufferLoader').load();
+        this.get('bufferLoader').load(this);
         this.get('bufferLoader').loadMetronome(this);
         
         // this.set('metronomeBuffer', this.get('bufferLoader').bufferList.splice(0,1));
@@ -293,7 +293,7 @@ function(LoopNodeCollection, LoopNodeModel){
           // Invoking bufferLoader's .load method does the actual
           // buffering and loading of the recordings, and stores
           // the buffers on the bufferloader instance.
-          this.get('bufferLoader').load();
+          this.get('bufferLoader').load(this);
       },
 
     setCueAnimation: function(){

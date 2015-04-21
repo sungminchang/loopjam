@@ -39,7 +39,6 @@ define([
       var playing = this.model.get('playing');
   
       this.$el.html(this.template(this.model.attributes));
-
       // Pre-recording
       if(queue && !recording && !playing && !recorded){
         console.log("Queue View Activated")

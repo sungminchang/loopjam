@@ -46,10 +46,16 @@ BufferLoader.prototype.loadBuffer = function(url, index, that) {
           alert('error decoding file data: ' + url);
           return;
         }
-        if (that) {
+        if (!that.get('metronomeBuffer')) {
           that.set('metronomeBuffer', buffer);
         } else {
           loader.bufferList[index] = buffer;
+          console.log('loaded buffer: ', buffer);
+          that.queue(that.get('loopNodes').models[index], buffer);
+          that.get('loopNodes').each(function(loopNode) { 
+            loopNode.set('rerender', !loopNode.get('rerender'));
+          });
+
         }
 
         // if (++loader.loadCount == loader.urlList.length)
@@ -68,10 +74,9 @@ BufferLoader.prototype.loadBuffer = function(url, index, that) {
   request.send();
 };
 
-BufferLoader.prototype.load = function() {
-
+BufferLoader.prototype.load = function(that) {
   for (var i = 0; i < this.urlList.length; ++i) {
-    this.loadBuffer(this.urlList[i], i);
+    this.loadBuffer(this.urlList[i], i, that);
   }
 };
 
