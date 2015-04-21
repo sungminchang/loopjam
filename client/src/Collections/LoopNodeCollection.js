@@ -104,10 +104,16 @@ define([
       return this.models.length + 1;
     },
     addNewLoopNode: function(multiplier){
-      multiplier = multiplier || 2;
-      var port = this.nextPort();
-      var newLoopNode = new LoopNodeModel({multiplier: multiplier, port: port});
-      this.add(newLoopNode);
+      if (this.models.length <= 8) {
+        multiplier = multiplier || 2;
+        var port = this.nextPort();
+        var newLoopNode = new LoopNodeModel({multiplier: multiplier, port: port});
+        this.add(newLoopNode);
+      }
+
+      if (this.models.length === 9) {
+        $('.addNewLoop').children().remove();
+      }
     }
 
 
