@@ -5,9 +5,3 @@ before_script:
 - npm install -g bower
 - bower install
 - npm install -g grunt-cli
-# deploy:
-#   provider: s3
-#   access_key_id: "YOUR AWS ACCESS KEY"
-#   secret_access_key: "YOUR AWS SECRET KEY"
-#   bucket: "S3 Bucket"
-#   skip_cleanup: true

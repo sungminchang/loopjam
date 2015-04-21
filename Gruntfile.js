@@ -8,11 +8,37 @@ module.exports = function (grunt) {
    //    localConfig = {};
    //  }
 
-  //Begin initConfig
-
+  //Initialize grunt tasks
   grunt.initConfig({
    pkg: grunt.file.readJSON('package.json'),
     //Set up tasks
+    clean: {
+      dist: "dist/*"
+    },
+    concat:{
+      options:{
+        separator: ';'
+      },
+      dist:{
+        src: ['client/src/**/*.js'],
+        dest: 'dist/<%= pkg.name %>.js'
+      }
+    },
+
+    uglify:{
+      dist:{
+        files: {
+          'dist/<%= pkg.name %>.min.js' : ['<%= concat.dist.dest %>']
+        }
+      }
+    },
+    cssmin: {
+      target: {
+        files: {
+        'dist/style.min.css' : ['client/styles.css', 'client/**/*.css']
+        }
+      }
+    },
     express: {
       options: {
         port: process.env.PORT || 3000
@@ -29,12 +55,11 @@ module.exports = function (grunt) {
         }
       }
     },
-
     jshint: {
       options: {
         jshintrc :'.jshintrc'
       },
-      files: ['client/src/server.js']
+      files: ['client/src/app.js']
     },
 
     karma: {
@@ -89,6 +114,7 @@ module.exports = function (grunt) {
 
   //Load Grunt tasks
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-express-server');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
@@ -112,7 +138,7 @@ module.exports = function (grunt) {
 
     //Register Unit Tasks
 
-  grunt.registerTask('build', []);
+  grunt.registerTask('build', ['jshint','clean','concat','uglify','cssmin']);
   grunt.registerTask('default', [ 'express:dev', 'watch','nodemon','karma:unit']);
   grunt.registerTask('unit-test', ['karma:unit']);
   //Initiated in scripts line in package.json

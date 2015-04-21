@@ -2,10 +2,10 @@
 //Module dependencies
 var express = require('express');
 //Create express server
-var cors = require('cors');
-
 
 var app = express();
+
+var cors = require('cors');
 
 //Database configuration
 var db = require('./server/database/db');
@@ -24,7 +24,6 @@ var port = process.env.PORT || 3000;
 //Set up server
 var server = require('http').createServer(app);
 
-// Listen
 server.listen(port, function () {
   console.log('Express server listening on %d, in %s mode', port, app.get('env'));
 });
