@@ -34,6 +34,9 @@ var LoopNodeModel = Backbone.Model.extend({
       this.trigger("pause", this);
     },
 
+    removeLoopNode: function() {
+      this.trigger('removeLoopNode', this);
+    },
 
     initialize: function(){
       this.on('change:volume', function(){

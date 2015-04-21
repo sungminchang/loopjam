@@ -52,6 +52,18 @@ function(LoopNodeCollection, LoopNodeModel){
         this.pause(currentLoop);     
       }.bind(this))
 
+      this.get('loopNodes').on('removeLoopNode', function(currentLoop){
+        var port = currentLoop.get('port');
+        if (currentLoop.get('source')) {
+          this.pause(currentLoop);
+        }
+        this.get('bufferLoader').bufferList.splice(port - 1, 1);
+        this.get('loopNodes').remove(currentLoop);
+
+      }.bind(this))
+        // --> 'Remove' Event
+
+
       // this.on("change:tempo", function(currentLoop){
       //   console.log('changing the tempo');
       //   this.changeTempo(this.get('tempo'));
