@@ -58,19 +58,21 @@
       worker.postMessage({ command: 'getBuffer' })
     }
 
-    this.exportWAV = function(cb, type){
+    this.exportWAV = function(cb, portNum, type){
       currCallback = cb || config.callback;
       type = type || config.type || 'audio/wav';
       if (!currCallback) throw new Error('Callback not set');
       worker.postMessage({
         command: 'exportWAV',
-        type: type
+        type: type,
+        portNum: portNum
       });
     }
 	
 	//Mp3 conversion
     worker.onmessage = function(e){
-      var blob = e.data;
+      var portNum = e.data.portNum;
+      var blob = e.data.audioBlob;
 	  //console.log("the blob " +  blob + " " + blob.size + " " + blob.type);
 	  
 	  var arrayBuffer;
@@ -83,7 +85,7 @@
         
         console.log(data);
 		console.log("Converting to Mp3");
-		log.innerHTML += "\n" + "Converting to Mp3";
+		// log.innerHTML += "\n" + "Converting to Mp3";
 
         encoderWorker.postMessage({ cmd: 'init', config:{
             mode : 3,
@@ -98,21 +100,29 @@
             if (e.data.cmd == 'data') {
 			
 				console.log("Done converting to Mp3");
-				log.innerHTML += "\n" + "Done converting to Mp3";
+				// log.innerHTML += "\n" + "Done converting to Mp3";
 				
 				/*var audio = new Audio();
 				audio.src = 'data:audio/mp3;base64,'+encode64(e.data.buf);
 				audio.play();*/
                 
-				//console.log ("The Mp3 data " + e.data.buf);
+				console.log ("The Mp3 data " + e.data.buf);
 				
 				var mp3Blob = new Blob([new Uint8Array(e.data.buf)], {type: 'audio/mp3'});
-				uploadAudio(mp3Blob);
+        console.log ("mp3Blob:", mp3Blob );
+
+				// uploadAudio(mp3Blob);
 				
 				var url = 'data:audio/mp3;base64,'+encode64(e.data.buf);
 				var li = document.createElement('li');
 				var au = document.createElement('audio');
 				var hf = document.createElement('a');
+
+        // push to DOM, so main thread can retrieve it.
+
+        $('.mp3blobData').text(url);
+        $('.loopNodePort').text(portNum);
+        $('.mp3Blob').trigger('newmp3');
 				  
 				au.controls = true;
 				au.src = url;
@@ -121,7 +131,7 @@
 				hf.innerHTML = hf.download;
 				li.appendChild(au);
 				li.appendChild(hf);
-				recordingslist.appendChild(li);
+				// recordingslist.appendChild(li);
 				
             }
         };
@@ -195,7 +205,7 @@
 				contentType: false
 			}).done(function(data) {
 				//console.log(data);
-				log.innerHTML += "\n" + data;
+				// log.innerHTML += "\n" + data;
 			});
 		};      
 		reader.readAsDataURL(mp3Data);

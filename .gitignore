@@ -5,7 +5,6 @@ bower_components
 #Ignore Azure Credentials
 server/azure/config.js
 
-
 #Ignore for Deployment
 
 build/

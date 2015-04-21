@@ -9,7 +9,9 @@ define([
     },
 
     events: {
-      'click button': 'playMetronome'
+      'click .playMet': 'playMetronome',
+      'click .saveTrackBtn': 'saveTrackModel',
+
     },
 
     render: function() {
@@ -51,7 +53,13 @@ define([
       }
 
       console.log('tempo changed: ', this.model.get('tempo'));
-    } 
+    },
+
+    saveTrackModel: function(){
+      // POST request to server
+      var trackName = this.$el.find('.trackName').val();
+      this.model.saveTrack(trackName);
+    }
 
   });
 

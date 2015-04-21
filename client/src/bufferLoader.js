@@ -10,7 +10,7 @@ var BufferLoader = function(context, data, callback) {
 
   this.context = context;
   this.urlList = urls;
-  this.metronomeUrl = '/audio/metronome.mp3'
+  this.metronomeUrl = 'audio/metronome.mp3'
   this.onload = callback;
   this.bufferList = new Array();
   // Need to keep references to each of the sources
@@ -25,15 +25,23 @@ BufferLoader.prototype.loadBuffer = function(url, index, that) {
   var request = new XMLHttpRequest();
   console.log('About to load buffer of this url: ', url);
   request.open("GET", url, true);
-  request.responseType = "arraybuffer";
+
+  if(url.substr(url.length - 4) === '.mp3' || url.substr(url.length - 4) === '.wav'){
+    request.responseType = "arraybuffer";
+  }
 
   var loader = this;
 
   request.onload = function() {
 
+    var arrayBuf = request.response;
+    if(url.substr(url.length - 4) !== '.mp3' && url.substr(url.length - 4) !== '.wav'){
+      // The file uploaded in our Azure S3 server is in base64 format, so we decode it to arraybuffer here.
+      arrayBuf = Base64Binary.decode(request.response.substr(22)).buffer;
+    }
     // Asynchronously decode the audio file data in request.response
     loader.context.decodeAudioData(
-      request.response,
+      arrayBuf,
       function(buffer) {
         if (!buffer) {
           alert('error decoding file data: ' + url);

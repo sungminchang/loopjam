@@ -13,7 +13,7 @@ this.onmessage = function(e){
       record(e.data.buffer);
       break;
     case 'exportWAV':
-      exportWAV(e.data.type);
+      exportWAV(e.data.type, e.data.portNum);
       break;
     case 'getBuffer':
       getBuffer();
@@ -34,7 +34,7 @@ function record(inputBuffer){
   recLength += inputBuffer[0].length;
 }
 
-function exportWAV(type){
+function exportWAV(type, portNum){
   var bufferL = mergeBuffers(recBuffersL, recLength);
   //var bufferR = mergeBuffers(recBuffersR, recLength);
   //var interleaved = interleave(bufferL, bufferR);
@@ -42,7 +42,8 @@ function exportWAV(type){
   var dataview = encodeWAV(bufferL);
   var audioBlob = new Blob([dataview], { type: type });
 
-  this.postMessage(audioBlob);
+  var postObj = {audioBlob: audioBlob, portNum: portNum}
+  this.postMessage(postObj);
 }
 
 function getBuffer() {

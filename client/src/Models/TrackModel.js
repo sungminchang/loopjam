@@ -14,11 +14,14 @@ function(LoopNodeCollection, LoopNodeModel){
       loopNodes: null,  //soundData
       selectedLoopNode: null,
       animationTimer: null,
-      analyser: null,
-      visualFreqData: null,
       metronomeNode: null,
       metronomeBuffer: null,
-      metronomePlaying: false
+      metronomePlaying: false,
+      analyser: null,
+      visualFreqData: null,
+      bgFreqCanvas: null,
+      bgFreqCanvasCtx: null,
+      trackName: null
     },
 
     initialize: function(params) {
@@ -38,7 +41,6 @@ function(LoopNodeCollection, LoopNodeModel){
 
       this.setAudioContext();
       this.setAnalyser();
-      this.freqAnimationUpdate();
 
       this.get('loopNodes').on("record", function(currentLoop){
         this.recorderDelay(currentLoop);     
@@ -142,10 +144,27 @@ function(LoopNodeCollection, LoopNodeModel){
       },
 
       freqAnimationUpdate: function(){
-        var analyser = this.get('analyser');
-        var frequencyData = this.get('visualFreqData');
 
-        analyser.getByteFrequencyData(frequencyData)        
+        // var analyser = this.get('analyser');
+        // var frequencyData = this.get('visualFreqData');
+        // var ctx = this.get('bgFreqCanvasCtx');
+        // var canvas = this.get('bgFreqCanvas');
+
+        // analyser.getByteFrequencyData(frequencyData)
+        // var colWidth = Math.ceil(canvas.width() / (0.85 * analyser.frequencyBinCount));
+        // ctx.clearRect(0, 0, canvas.width(), canvas.height());
+        // var freq, xPos, yPos, width, height;
+        // var img = new Image;
+        // img.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAAEklEQVR4AWNsP/eaATcYlcYKANQJFotqqVYoAAAAAElFTkSuQmCC";
+        // ctx.fillStyle = ctx.createPattern(img, "repeat");
+        // for (var i = 0; i < analyser.frequencyBinCount; i++) {
+        //   freq = frequencyData[i] || 0; 
+        //   xPos = colWidth * i;
+        //   yPos = canvas.height(); 
+        //   width = colWidth - 1;
+        //   height = -(Math.floor(freq / 255 * canvas.height()) + 1); 
+        //   ctx.fillRect(xPos, yPos, width, height);
+        // }
       },
 
       recorderDelay: function(currentLoop) {
@@ -245,7 +264,7 @@ function(LoopNodeCollection, LoopNodeModel){
           // li.appendChild(au);
           // li.appendChild(hf);
           // recordingslist.appendChild(li);
-        });
+        }, currentLoop.get('port'));
       },
 
       preBuffer: function(){
@@ -445,7 +464,6 @@ function(LoopNodeCollection, LoopNodeModel){
         console.log('source', source);
       },
 
-
       pause: function(currentLoop, buffer) {
         var soundIndex = currentLoop.get('port') - 1;
         var source = currentLoop.get('source');
@@ -456,19 +474,54 @@ function(LoopNodeCollection, LoopNodeModel){
         source.buffer = buffer || this.get('bufferLoader').bufferList[soundIndex];
         console.log('About to pause, logging source: ', source);
         source.stop();
+      },
+
+      saveTrack: function(trackName){
+        this.set('trackName', trackName);
+        var saveAttrKeys =['url', 'speed', 'multiplier', 'recordedAtBpm'];
+        var trackData = {trackName: trackName, loopData: []};
+
+        var LoopNodesAttrArray = this.get('loopNodes').toJSON('url');
+        for(var i = 0; i < LoopNodesAttrArray.length; i++){
+          var nodeData ={};
+          for(var j = 0; j < saveAttrKeys.length; j++){
+            nodeData[saveAttrKeys[j]] = LoopNodesAttrArray[i][saveAttrKeys[j]];
+          }
+          trackData.loopData.push(nodeData);
+        }
+
+        var trackSaveCallback = function(URLArray){
+          for(var i = 0; i < URLArray.length; i++){
+            var mp3Data = this.get('loopNodes').where({port: i + 1})[0].get('mp3Data');
+            $.ajax({
+              type: "PUT",
+              url: URLArray[i],
+              headers: {'x-ms-blob-type': 'BlockBlob'},
+              data: mp3Data,
+              success: function(){
+                console.log("Port ", i + 1, " loop successfully uploaded.");
+                
+              }
+            });            
+          }
+          
+        }
+
+        $.ajax({
+          type: "POST",
+          url: "/tracks",
+          data: trackData,
+          dataType: 'json',
+          success: trackSaveCallback
+          
+        });
+      },
+
+      attachMp3ToNode: function(mp3Data, loopNodePort){
+        var loopNode = this.get('loopNodes').where({port: loopNodePort});
+        loopNode[0].set('mp3Data', mp3Data);
       }
 
-    // this.tempoAdjustment = 0; //adjustment parameter when user changes tempo. initially set at 0.
-    // this.bpm  = bpm || 120;
-
-
-    // storage array for all the containing loop node
-    // this.loopNodes = [];
-
-    // this.populateLoopNodes();
-    // this.setCueAnimation();
-    // this.addListeners();
-    // },
   })
   return TrackModel;
 });
