@@ -26,12 +26,15 @@ define([
     showTrackView: function(id){
       // Track View page
       // Note: we need to set up ids.
+<<<<<<< HEAD
 
       $(function() {
           $(".dial").knob({
           });
       });
 
+=======
+>>>>>>> started on routing IDs.  Changed frontpage and added container to loopNodes.
     var audioData = null
       
       if(id === "new"){
@@ -42,8 +45,6 @@ define([
 
       var track = new TrackModel({audioData: audioData});
       var trackView = new TrackView({model: track});
-
-
 
       $(".main").html(trackView.render().el);
       track.setCueAnimation();
