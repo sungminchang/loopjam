@@ -37,7 +37,6 @@ define([
       var track = new TrackModel({audioData: audioData});
       var trackView = new TrackView({model: track});
 
-
       $(".main").html(trackView.render().el);
       track.setCueAnimation();
 
@@ -45,7 +44,6 @@ define([
 
       $(".dial").knob();
       
-
     },
     default: function(badUrl){
       // Route all bad url's to here.
