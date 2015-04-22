@@ -19,6 +19,21 @@ h1, h2, h3, h4{
  display: block; margin-bottom: 10px; 
 } 
 */
+.navbar{
+  margin-bottom:0px;
+  border-radius: 0px
+}
+
+.btn-xxl {
+  padding: 20px 26px;
+  font-size: 35px;
+  border-radius: 8px;
+}
+
+
+/*.jumbotron{
+  margin-bottom:0px;
+}*/
 
 .mp3Blob {
   display: none;

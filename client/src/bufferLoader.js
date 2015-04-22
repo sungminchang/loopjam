@@ -27,18 +27,19 @@ BufferLoader.prototype.loadBuffer = function(url, index, that) {
 
     request.open("GET", url, true);
 
-    if(url.substr(url.length - 10) !== ".mp3base64"){
-      request.responseType = "arraybuffer";
+  if(url.substr(url.length - 10) !== ".mp3Base64"){
+    request.responseType = "arraybuffer";
+  }
+
+  var loader = this;
+
+  request.onload = function() {
+    var arrayBuf = request.response;
+    if(url.substr(url.length - 10) === ".mp3Base64"){
+      // The file uploaded in our Azure S3 server is in base64 format, so we decode it to arraybuffer here.
+      arrayBuf = Base64Binary.decode(request.response.substr(22)).buffer;
     }
 
-    var loader = this;
-
-    request.onload = function() {
-      var arrayBuf = request.response;
-      if(url.substr(url.length - 10) === ".mp3base64"){
-        // The file uploaded in our Azure S3 server is in base64 format, so we decode it to arraybuffer here.
-        arrayBuf = Base64Binary.decode(request.response.substr(22)).buffer;
-      }
       // Asynchronously decode the audio file data in request.response
       loader.context.decodeAudioData(
         arrayBuf,

@@ -26,5 +26,6 @@ exports.createSharedAccess = function(arrayOfHashes,res){
     handShakeUrls.push(sasUrl);
   }
 
+
   return handShakeUrls;
 }
