@@ -12,6 +12,7 @@ define([
       this.model.on("change:selectedLoopNode", this.updateLoopNodeInfoView, this);
       // $(window).resize(this.createFreqVisualizer).bind(this);
 
+
       window.onbeforeunload = function (e) {
           e = e || window.event;
           var hash = (window.location.hash);
@@ -22,7 +23,7 @@ define([
 
           // For Safari
           if (hash === '#/tracks/new') {
-            return 'Before you go, you might want toasdfasd save your loopnodes.';
+            return 'Before you go, you might want to save your loopnodes.';
           }
       };
     },
