@@ -39,6 +39,9 @@ define([
         track.setCueAnimation();
 
         track.get('loopNodes').each(function(loopNode){loopNode.set('rerender', !loopNode.get('rerender'))})
+      $(".main").html(trackView.render().el);
+      track.setd3timer();
+
 
         $(".dial").knob();
       } else {

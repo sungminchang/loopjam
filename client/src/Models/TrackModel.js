@@ -21,7 +21,8 @@ function(LoopNodeCollection, LoopNodeModel){
       visualFreqData: null,
       bgFreqCanvas: null,
       bgFreqCanvasCtx: null,
-      trackName: null
+      trackName: null,
+      updateAnim: true
     },
 
     initialize: function(params) {
@@ -61,8 +62,21 @@ function(LoopNodeCollection, LoopNodeModel){
         }
         this.get('bufferLoader').bufferList.splice(port - 1, 1);
         this.get('loopNodes').remove(currentLoop);
-
       }.bind(this))
+
+      this.get('loopNodes').on("add", function(){
+        this.set('updateAnim', true);
+      }.bind(this));
+
+      this.get('loopNodes').on("remove", function(){
+        this.set('updateAnim', true);
+      }.bind(this));
+
+      this.on("change:tempoAdjustment", function(){
+        this.set('updateAnim', true);
+      }.bind(this));
+
+      this
         // --> 'Remove' Event
 
 
@@ -288,37 +302,51 @@ function(LoopNodeCollection, LoopNodeModel){
             }
           }
       },
+      
+      setd3timer: function(){
+        d3.timer(function(){
+          this.CueAnimation();
+          this.freqAnimationUpdate();
+        }.bind(this));
 
-    setCueAnimation: function(){
-      var count = 0;
+      },
 
-      d3.timer(function(){
-        var loopNodes = this.get('loopNodes');
-        var bar = calcBar(this.get('tempo'));
-        var angularSpeed = calcSpeed(bar);
+      CueAnimation: function(){
 
-        loopNodes.each(function(loopNode) {
+        if(this.get('updateAnim')){
+          var loopNodes = this.get('loopNodes');
+          var loopNodesArr = [];
+          var loopNodesClasses = [];
+          var $loopNodesClasses = [];
+          loopNodes.each(function(loopNode, i){
+            loopNodesArr[i] = loopNode;
+            loopNodesClasses[i] = '.loopNode' + loopNode.get('port');
+            $loopNodesClasses[i] = $(loopNodesClasses[i]);
+          }.bind(this));          
+          this.set('updateAnime', false);
+          var bar = calcBar(this.get('tempo'));
+          var angularSpeed = calcSpeed(bar);
+          var tempoAdjustment = this.get('tempoAdjustment');
+        }
 
-          var loopNodeClass = '.loopNode' + loopNode.get('port');
-          var rotateDeg = (this.get('context').currentTime * angularSpeed - this.get('tempoAdjustment')) / loopNode.get('multiplier');
+        loopNodesArr.forEach(function(loopNode, i) {
+          var rotateDeg = (this.get('context').currentTime * angularSpeed - tempoAdjustment) / loopNode.get('multiplier');
           var degree = (rotateDeg % 360)
 
             // Recording && play flags for cursor
             if((!loopNode.get('queue') && loopNode.get('recording') && !loopNode.get('playing') && !loopNode.get('recorded')) 
               || (!loopNode.get('queue') && !loopNode.get('recording') && loopNode.get('playing') && loopNode.get('recorded'))){
-              $(loopNodeClass).trigger('configure', {cursor: false});
+              $loopNodesClasses[i].trigger('configure', {cursor: false});
             } else {
-              $(loopNodeClass).trigger('configure', {cursor: true});
+              $loopNodesClasses[i].trigger('configure', {cursor: true});
             }
 
           // console.log(degree)
-              $(loopNodeClass).val(degree).trigger('change');
+              $loopNodesClasses[i].val(degree).trigger('change');
             
           }.bind(this));
         // frequency analyzer
         // this.freqAnimationUpdate();
-
-        }.bind(this));
       },
 
       changeTempo: function(bpm, t){
