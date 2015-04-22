@@ -24,6 +24,8 @@ define([
       // Show All Tracks page
     },
     showTrackView: function(id){
+
+      
       // Track View page
       // Note: we need to set up ids.
 
