@@ -3,12 +3,12 @@ var bcrypt = require('bcrypt-nodejs');
 var crypto = require('crypto');
 var csap = require('../azure/createSharedAccessPolicy.js');
 
-module.exports.createSession = function (req,res,account){
-	console.log("this is the session", req.session);
-	return req.session.regenerate(function(err){
-		req.session.user = account;
-	});
-};
+// module.exports.createSession = function (req,res,account){
+// 	console.log("this is the session", req.session);
+// 	return req.session.regenerate(function(err){
+// 		req.session.user = account;
+// 	});
+// };
 
 module.exports.saveTrack = function(req,res){
 	//check the current user session
@@ -34,7 +34,7 @@ module.exports.saveTrack = function(req,res){
 module.exports.fetchAllTracks = function(req,res){
 	//retrieve all tracks by a particular ID
 	models.Tracks
-	.findAll({limit:10, order:'"updatedAt" DESC'})
+	.findAll({limit:10, order:'"createdAt" DESC'})
 	.then(function(response){
 		if (!response){
 			//in the one case that our site is created, and no tracks have been created.
