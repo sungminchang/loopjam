@@ -16,6 +16,7 @@ define([
     },
 
     initialize: function() {
+      this.on('remove', this.reassignPorts, this);
       // this.populateLoopNodes();
       // this.on("hello", function(){
       //   console.log("Listened to Hello")      
@@ -93,17 +94,29 @@ define([
         return loopNode.get('url');
       });
     },
+    rerender: function() {
+      this.trigger('rerender', this);
+    },
     // Assigns placeholder for where the track should be placed on the screen.
-    nextPort: function(){
-      if (!this.length) return 1;
-      console.log('port', this.last());
-      return this.last().get('port') + 1;
+    reassignPorts: function(){
+      this.models.forEach(function(loopNode, i) {
+        loopNode.set('port', i + 1);
+      });
+    },
+    nextPort: function() {
+      return this.models.length + 1;
     },
     addNewLoopNode: function(multiplier){
-      multiplier = multiplier || 2;
-      var port = this.nextPort();
-      var newLoopNode = new LoopNodeModel({multiplier: multiplier, port: port});
-      this.add(newLoopNode);
+      if (this.models.length <= 8) {
+        multiplier = multiplier || 2;
+        var port = this.nextPort();
+        var newLoopNode = new LoopNodeModel({multiplier: multiplier, port: port});
+        this.add(newLoopNode);
+      }
+
+      if (this.models.length === 9) {
+        $('.addNewLoop').children().remove();
+      }
     }
 
 

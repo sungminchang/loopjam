@@ -23,6 +23,9 @@ define([
         this.model.pause();
         // console.log("record")
       },
+      'click .remove': function() {
+        this.model.removeLoopNode();
+      },
       'change .volumeControl': function(){
         
       }

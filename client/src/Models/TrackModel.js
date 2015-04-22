@@ -54,6 +54,18 @@ function(LoopNodeCollection, LoopNodeModel){
         this.pause(currentLoop);     
       }.bind(this))
 
+      this.get('loopNodes').on('removeLoopNode', function(currentLoop){
+        var port = currentLoop.get('port');
+        if (currentLoop.get('source')) {
+          this.pause(currentLoop);
+        }
+        this.get('bufferLoader').bufferList.splice(port - 1, 1);
+        this.get('loopNodes').remove(currentLoop);
+
+      }.bind(this))
+        // --> 'Remove' Event
+
+
       // this.on("change:tempo", function(currentLoop){
       //   console.log('changing the tempo');
       //   this.changeTempo(this.get('tempo'));
@@ -104,7 +116,7 @@ function(LoopNodeCollection, LoopNodeModel){
         // Invoking bufferLoader's .load method does the actual
         // buffering and loading of the recordings, and stores
         // the buffers on the bufferloader instance.
-        this.get('bufferLoader').load();
+        this.get('bufferLoader').load(this);
         this.get('bufferLoader').loadMetronome(this);
         
         // this.set('metronomeBuffer', this.get('bufferLoader').bufferList.splice(0,1));
@@ -268,20 +280,13 @@ function(LoopNodeCollection, LoopNodeModel){
       },
 
       preBuffer: function(){
-            // Initialize a new instance of the BufferLoader class,
-          // passing in our context and data object. BufferLoader
-          // will buffer all of the recordings and hold onto
-          // references for the buffers.
-          this.set('bufferLoader', new BufferLoader(
-            this.get('context'),
-            this.get('loopNodes').giveUrls() // NEED TO DEVELOP THIS OUT NEED TO DEVELOP THIS OUT
-            )
-          );
-
-          // Invoking bufferLoader's .load method does the actual
-          // buffering and loading of the recordings, and stores
-          // the buffers on the bufferloader instance.
-          this.get('bufferLoader').load();
+          var newUrls = this.get('loopNodes').giveUrls();
+          var oldUrls = this.get('bufferLoader').urlList;
+          for (var i = 0; i < newUrls.length; i++) {
+            if (oldUrls.indexOf(newUrls[i]) === -1) {
+              this.get('bufferLoader').update(newUrls[i], i, this);
+            }
+          }
       },
 
     setCueAnimation: function(){
