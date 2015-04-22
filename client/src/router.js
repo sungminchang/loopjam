@@ -27,11 +27,6 @@ define([
       // Track View page
       // Note: we need to set up ids.
 
-      $(function() {
-          $(".dial").knob({
-          });
-      });
-
     var audioData = null
       
       if(id === "new"){
