@@ -15,7 +15,6 @@ var Users = sequelize.define('Users', {
 	},
 	token: Sequelize.STRING,
 	password: Sequelize.STRING,
-	salt: Sequelize.STRING,
 	email: Sequelize.STRING
 });
 

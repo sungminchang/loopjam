@@ -1,10 +1,11 @@
 var utils = require('./authController.js');
+var passport = require('./passport');
 
 module.exports = function (router){
 	
-// router.post('/signup', utils.createUser);
+router.post('/signup', utils.createUser);
 
-router.get('/login', utils.login);
+router.get('/login', passport.authenticate('local'),utils.login);
 
 router.post('/logout',utils.logout);
 

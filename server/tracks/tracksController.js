@@ -37,7 +37,7 @@ module.exports.fetchAllTracks = function(req,res){
 	.findAll({limit:10, order:'"updatedAt" DESC'})
 	.then(function(response){
 		if (!response){
-			//in the one case that our site is created
+			//in the one case that our site is created, and no tracks have been created.
 			res.json('No tracks have been created!');
 		}
 		res.json(response);
