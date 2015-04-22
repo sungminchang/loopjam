@@ -13,6 +13,19 @@ define([
       // $(window).resize(this.createFreqVisualizer).bind(this);
 
 
+      window.onbeforeunload = function (e) {
+          e = e || window.event;
+          var hash = (window.location.hash);
+
+          if (e && hash === '#/tracks/new') {
+              e.returnValue = 'Before you go, you might want to save your loopnodes.';
+          }
+
+          // For Safari
+          if (hash === '#/tracks/new') {
+            return 'Before you go, you might want to save your loopnodes.';
+          }
+      };
     },
 
     events:{
