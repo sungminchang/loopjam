@@ -24,6 +24,9 @@ BufferLoader.prototype.loadBuffer = function(url, index, that) {
   // Load buffer asynchronously
   var request = new XMLHttpRequest();
   console.log('About to load buffer of this url: ', url);
+    // if(url.substr(url.length - 10) === ".mp3Base64"){
+    //   url = "https://loopjammin.blob.core.windows.net/loopnodes/" + url;
+    // }
 
     request.open("GET", url, true);
 
@@ -53,7 +56,7 @@ BufferLoader.prototype.loadBuffer = function(url, index, that) {
             that.set('metronomeBuffer', buffer);
           } else {
             loader.bufferList[index] = buffer;
-            var loopNodeDiv = $('.btn-play')[index].click();
+            // var loopNodeDiv = $('.btn-play')[index].click();
           }
 
           // if (++loader.loadCount == loader.urlList.length)

@@ -30,20 +30,21 @@ define([
     var audioData = null
       
       if(id === "new"){
-       audioData =  [ {url: "../audio/metronome.mp3", speed:2, port: 1, recordedAtBpm: 120, recorded: true}];
+        // https://loopjammin.blob.core.windows.net/loopnodes/853ce6188630fcc47df53b664df.mp3Base64 -- mp3Multipler: 2
+        audioData =  [ {url: "audio/tambourines2.mp3", speed:2, port: 1, recordedAtBpm: 120, recorded: true}];
+        var track = new TrackModel({audioData: audioData});
+        var trackView = new TrackView({model: track});
+
+        $(".main").html(trackView.render().el);
+        track.setCueAnimation();
+
+        track.get('loopNodes').each(function(loopNode){loopNode.set('rerender', !loopNode.get('rerender'))})
+
+        $(".dial").knob();
       } else {
         // Fetch
       }
 
-      var track = new TrackModel({audioData: audioData});
-      var trackView = new TrackView({model: track});
-
-      $(".main").html(trackView.render().el);
-      track.setCueAnimation();
-
-      track.get('loopNodes').each(function(loopNode){loopNode.set('rerender', !loopNode.get('rerender'))})
-
-      $(".dial").knob();
       
     },
     default: function(badUrl){

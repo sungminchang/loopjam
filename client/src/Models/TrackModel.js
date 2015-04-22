@@ -210,8 +210,8 @@ function(LoopNodeCollection, LoopNodeModel){
         
         var barTimeInMS = barTime * 1000;
 
-        setTimeout(this.startRecording.bind(this, currentLoop), delayInMilliseconds - 10)
-        setTimeout(this.stopRecording.bind(this, currentLoop), delayInMilliseconds + barTimeInMS + 100)
+        setTimeout(this.startRecording.bind(this, currentLoop), delayInMilliseconds - 20)
+        setTimeout(this.stopRecording.bind(this, currentLoop), delayInMilliseconds + barTimeInMS + 50)
         setTimeout(this.preBuffer.bind(this), delayInMilliseconds + barTimeInMS + 300)
       },
       
@@ -224,7 +224,7 @@ function(LoopNodeCollection, LoopNodeModel){
           currentLoop.set('rerender', !currentLoop.get('rerender'))
         }
 
-        setTimeout(rerenderRecording,10)
+        setTimeout(rerenderRecording,20)
 
         this.get('recorder') && this.get('recorder').record();
         // button.disabled = true;
@@ -388,7 +388,7 @@ function(LoopNodeCollection, LoopNodeModel){
         var multiplier = currentLoop.get('multiplier');
         var barTime = currentLoop.get('speed');
         var tempoAdjustment = this.get('tempoAdjustment');
-        var mp3Multiplier = this.get('mp3Multiplier');
+        var mp3Multiplier = currentLoop.get('mp3Multiplier');
 
         var remainder = (currentTime - tempoAdjustment / 360 * calcBar(tempo))  % (multiplier * calcBar(tempo));
         console.log('currentTime:', currentTime);
@@ -411,7 +411,7 @@ function(LoopNodeCollection, LoopNodeModel){
 
         var tempBuffer = this.get('bufferLoader').bufferList[soundIndex];
 
-
+        debugger;
         source.buffer = buffer || createRotatedAudioBuffer(this.get('context'), tempBuffer, tempBuffer.duration - barTime * mp3Multiplier);
         
         // Associate the new source instance with the loaded buffer.
