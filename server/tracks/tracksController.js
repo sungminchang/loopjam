@@ -20,7 +20,7 @@ module.exports.saveTrack = function(req,res){
 	var trackHash = crypto.createHash('sha1').update(trackName + currentDate).digest('hex').slice(5);
 	var outputURLs = [];
 	for (var i = 0; i<reqTrack.length; i++){
-		reqTrack[i]['url'] = crypto.createHmac('sha1', trackName + currentDate).update((Math.random()*10000).toString()).digest('hex').slice(13);
+		reqTrack[i]['url'] = crypto.createHmac('sha1', trackName + currentDate).update((Math.random()*10000).toString()).digest('hex').slice(13) + ".mp3Base64";
 		outputURLs.push(reqTrack[i]['url']);
 	}
 	reqTrack = JSON.stringify(reqTrack);

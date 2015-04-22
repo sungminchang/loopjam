@@ -369,7 +369,6 @@ function(LoopNodeCollection, LoopNodeModel){
             }
         }
 
-
         var context = this.get('context');
 
         // Grab the data object associated with the button.
@@ -389,6 +388,7 @@ function(LoopNodeCollection, LoopNodeModel){
         var multiplier = currentLoop.get('multiplier');
         var barTime = currentLoop.get('speed');
         var tempoAdjustment = this.get('tempoAdjustment');
+        var mp3Multiplier = this.get('mp3Multiplier');
 
         var remainder = (currentTime - tempoAdjustment / 360 * calcBar(tempo))  % (multiplier * calcBar(tempo));
         console.log('currentTime:', currentTime);
@@ -400,7 +400,6 @@ function(LoopNodeCollection, LoopNodeModel){
         console.log('delay: ', delay);
 
         console.log('expected time of play: ', delay + currentTime);
-
         // Reassign the source associated with the soundData object
         // to a new buffer source. This way, we can reference the same
         // source to stop playing the loop. However, once stopped,
@@ -412,7 +411,8 @@ function(LoopNodeCollection, LoopNodeModel){
 
         var tempBuffer = this.get('bufferLoader').bufferList[soundIndex];
 
-        source.buffer = buffer || createRotatedAudioBuffer(this.get('context'), tempBuffer, tempBuffer.duration - barTime);
+
+        source.buffer = buffer || createRotatedAudioBuffer(this.get('context'), tempBuffer, tempBuffer.duration - barTime * mp3Multiplier);
         
         // Associate the new source instance with the loaded buffer.
 
@@ -479,7 +479,7 @@ function(LoopNodeCollection, LoopNodeModel){
 
       saveTrack: function(trackName){
         this.set('trackName', trackName);
-        var saveAttrKeys =['url', 'speed', 'multiplier', 'recordedAtBpm'];
+        var saveAttrKeys =['url', 'speed', 'multiplier', 'recordedAtBpm', 'mp3Multipier', 'recorded'];
         var trackData = {trackname: trackName, audioData: []};
 
         var LoopNodesAttrArray = this.get('loopNodes').toJSON('url');
@@ -488,6 +488,8 @@ function(LoopNodeCollection, LoopNodeModel){
           for(var j = 0; j < saveAttrKeys.length; j++){
             nodeData[saveAttrKeys[j]] = LoopNodesAttrArray[i][saveAttrKeys[j]];
           }
+          nodeData.mp3Multiplier = 2;
+          nodeData.recorded = true;
           trackData.audioData.push(nodeData);
         }
 
@@ -495,7 +497,7 @@ function(LoopNodeCollection, LoopNodeModel){
         var trackSaveCallback = function(URLArray){
 
           var uploadSync = function(i){
-            
+
             var mp3Data = this.get('loopNodes').where({port: i + 1})[0].get('mp3Data');
             $.ajax({
               type: "PUT",

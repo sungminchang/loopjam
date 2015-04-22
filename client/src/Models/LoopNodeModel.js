@@ -6,6 +6,7 @@ var LoopNodeModel = Backbone.Model.extend({
     //refactor speed to barTime
     speed: 2,
     multiplier: 1,
+    mp3Multiplier: 1,
     source: null,
     volume: 100,
     gainNode: null,
