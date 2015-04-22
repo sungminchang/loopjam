@@ -170,14 +170,15 @@ function(LoopNodeCollection, LoopNodeModel){
       },
 
       freqAnimationUpdate: function(){
-
-        // var analyser = this.get('analyser');
-        // var frequencyData = this.get('visualFreqData');
-        // var ctx = this.get('bgFreqCanvasCtx');
-        // var canvas = this.get('bgFreqCanvas');
-
+        // if(this.get('updateAnim')){
+        //   var analyser = this.get('analyser');
+        //   var frequencyData = this.get('visualFreqData');
+        //   var ctx = this.get('bgFreqCanvasCtx');
+        //   var canvas = this.get('bgFreqCanvas');
+        //   var colWidth = Math.ceil(canvas.width() / (0.85 * analyser.frequencyBinCount));
+        // }
+        
         // analyser.getByteFrequencyData(frequencyData)
-        // var colWidth = Math.ceil(canvas.width() / (0.85 * analyser.frequencyBinCount));
         // ctx.clearRect(0, 0, canvas.width(), canvas.height());
         // var freq, xPos, yPos, width, height;
         // var img = new Image;
@@ -302,7 +303,7 @@ function(LoopNodeCollection, LoopNodeModel){
             }
           }
       },
-      
+
       setd3timer: function(){
         d3.timer(function(){
           this.CueAnimation();
