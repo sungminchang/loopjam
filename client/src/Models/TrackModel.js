@@ -290,23 +290,19 @@ function(LoopNodeCollection, LoopNodeModel){
       },
 
     setCueAnimation: function(){
+      var count = 0;
+
       d3.timer(function(){
         var loopNodes = this.get('loopNodes');
-        var audioCtxTime = this.get('context').currentTime;
         var bar = calcBar(this.get('tempo'));
         var angularSpeed = calcSpeed(bar);
-        var tempoAdjustment = this.get('tempoAdjustment');
+
         loopNodes.each(function(loopNode) {
 
-          var delta = audioCtxTime;
-          var svg = loopNode.get('d3Obj').svg;
           var loopNodeClass = '.loopNode' + loopNode.get('port');
-          var multiplier = loopNode.get('multiplier');
-          var rotateDeg = (delta * angularSpeed - tempoAdjustment) / multiplier;
+          var rotateDeg = (this.get('context').currentTime * angularSpeed - this.get('tempoAdjustment')) / loopNode.get('multiplier');
           var degree = (rotateDeg % 360)
 
-
-          
             // Recording && play flags for cursor
             if((!loopNode.get('queue') && loopNode.get('recording') && !loopNode.get('playing') && !loopNode.get('recorded')) 
               || (!loopNode.get('queue') && !loopNode.get('recording') && loopNode.get('playing') && loopNode.get('recorded'))){
@@ -315,12 +311,12 @@ function(LoopNodeCollection, LoopNodeModel){
               $(loopNodeClass).trigger('configure', {cursor: true});
             }
 
-          // console.log(degree)        
+          // console.log(degree)
               $(loopNodeClass).val(degree).trigger('change');
             
-          });
+          }.bind(this));
         // frequency analyzer
-        this.freqAnimationUpdate();
+        // this.freqAnimationUpdate();
 
         }.bind(this));
       },
@@ -495,32 +491,37 @@ function(LoopNodeCollection, LoopNodeModel){
           trackData.audioData.push(nodeData);
         }
 
-        console.log(trackData);
 
         var trackSaveCallback = function(URLArray){
-          for(var i = 0; i < URLArray.length; i++){
+
+          var uploadSync = function(i){
+            
             var mp3Data = this.get('loopNodes').where({port: i + 1})[0].get('mp3Data');
             $.ajax({
               type: "PUT",
               url: URLArray[i],
               headers: {'x-ms-blob-type': 'BlockBlob'},
               data: mp3Data,
-              success: function(){
-                console.log("Port ", i + 1, " loop successfully uploaded.");
+              success: function(data){
+                if(i !== URLArray.length - 1) uploadSync(i + 1);
+                console.log(mp3Data, "accepted");
                 
               }
             });            
-          }
-          
-        }
+          }.bind(this)
+
+          uploadSync(0)
+
+        }.bind(this)
 
         $.ajax({
           type: "POST",
-          url: "/tracks",
+          url: "tracks",
           data: trackData,
-          dataType: 'json',
-          success: trackSaveCallback
-          
+            
+          success: function(data){
+            trackSaveCallback(data);
+          }
         });
       },
 

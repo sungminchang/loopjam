@@ -17,15 +17,14 @@ module.exports.saveTrack = function(req,res){
 	var reqTrack = req.body.audioData;
 	var trackName = req.body.trackname;
 	var currentDate = Date.now().valueOf().toString();
-	var Track = JSON.parse(reqTrack);
 	var trackHash = crypto.createHash('sha1').update(trackName + currentDate).digest('hex').slice(5);
 	var outputURLs = [];
-	for (var i = 0; i<Track.length; i++){
-		Track[i]['url'] = crypto.createHmac('sha1', trackName + currentDate).update((Math.random()*10000).toString()).digest('hex').slice(13);
-		outputURLs.push(Track[i]['url']);
+	for (var i = 0; i<reqTrack.length; i++){
+		reqTrack[i]['url'] = crypto.createHmac('sha1', trackName + currentDate).update((Math.random()*10000).toString()).digest('hex').slice(13);
+		outputURLs.push(reqTrack[i]['url']);
 	}
-	Track = JSON.stringify(Track);
-		models.Tracks.findOrCreate({where:{trackname:trackName, audioData: Track, trackID: trackHash}})
+	reqTrack = JSON.stringify(reqTrack);
+		models.Tracks.findOrCreate({where:{trackname:trackName, audioData: reqTrack, trackID: trackHash}})
 		.then(function(response){				
 		res.send(csap.createSharedAccess(outputURLs));
 	});
