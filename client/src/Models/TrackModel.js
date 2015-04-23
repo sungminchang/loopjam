@@ -170,28 +170,28 @@ function(LoopNodeCollection, LoopNodeModel){
       },
 
       freqAnimationUpdate: function(){
-        // if(this.get('updateAnim')){
-        //   var analyser = this.get('analyser');
-        //   var frequencyData = this.get('visualFreqData');
-        //   var ctx = this.get('bgFreqCanvasCtx');
-        //   var canvas = this.get('bgFreqCanvas');
-        //   var colWidth = Math.ceil(canvas.width() / (0.85 * analyser.frequencyBinCount));
-        // }
+        if(this.get('updateAnim')){
+          var analyser = this.get('analyser');
+          var frequencyData = this.get('visualFreqData');
+          var ctx = this.get('bgFreqCanvasCtx');
+          var canvas = this.get('bgFreqCanvas');
+          var colWidth = Math.ceil(canvas.width() / (0.85 * analyser.frequencyBinCount));
+        }
         
-        // analyser.getByteFrequencyData(frequencyData)
-        // ctx.clearRect(0, 0, canvas.width(), canvas.height());
-        // var freq, xPos, yPos, width, height;
-        // var img = new Image;
-        // img.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAAEklEQVR4AWNsP/eaATcYlcYKANQJFotqqVYoAAAAAElFTkSuQmCC";
-        // ctx.fillStyle = ctx.createPattern(img, "repeat");
-        // for (var i = 0; i < analyser.frequencyBinCount; i++) {
-        //   freq = frequencyData[i] || 0; 
-        //   xPos = colWidth * i;
-        //   yPos = canvas.height(); 
-        //   width = colWidth - 1;
-        //   height = -(Math.floor(freq / 255 * canvas.height()) + 1); 
-        //   ctx.fillRect(xPos, yPos, width, height);
-        // }
+        analyser.getByteFrequencyData(frequencyData)
+        ctx.clearRect(0, 0, canvas.width(), canvas.height());
+        var freq, xPos, yPos, width, height;
+        var img = new Image;
+        img.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAAEklEQVR4AWNsP/eaATcYlcYKANQJFotqqVYoAAAAAElFTkSuQmCC";
+        ctx.fillStyle = ctx.createPattern(img, "repeat");
+        for (var i = 0; i < analyser.frequencyBinCount; i++) {
+          freq = frequencyData[i] || 0; 
+          xPos = colWidth * i;
+          yPos = canvas.height();   
+          width = colWidth - 1;
+          height = -(Math.floor(freq / 255 * canvas.height()) + 1); 
+          ctx.fillRect(xPos, yPos, width, height);
+        }
       },
 
       recorderDelay: function(currentLoop) {
@@ -246,8 +246,6 @@ function(LoopNodeCollection, LoopNodeModel){
         // button.nextElementSibling.disabled = false;
         console.log('Recording...');
         console.time("recording1")
-      
-
       },
 
       stopRecording: function(currentLoop) {
@@ -334,16 +332,22 @@ function(LoopNodeCollection, LoopNodeModel){
           var rotateDeg = (this.get('context').currentTime * angularSpeed - tempoAdjustment) / loopNode.get('multiplier');
           var degree = (rotateDeg % 360)
 
+          degree = degree / 360
+
+
             // Recording && play flags for cursor
             if((!loopNode.get('queue') && loopNode.get('recording') && !loopNode.get('playing') && !loopNode.get('recorded')) 
               || (!loopNode.get('queue') && !loopNode.get('recording') && loopNode.get('playing') && loopNode.get('recorded'))){
-              $loopNodesClasses[i].trigger('configure', {cursor: false});
+              var arc = d3.svg.arc().innerRadius(60).outerRadius(100).startAngle(0);
             } else {
-              $loopNodesClasses[i].trigger('configure', {cursor: true});
+              var arc = d3.svg.arc().innerRadius(60).outerRadius(100).startAngle(degree * (2 * Math.PI) - 0.15);
             }
 
           // console.log(degree)
-              $loopNodesClasses[i].val(degree).trigger('change');
+              d3.select(loopNodesClasses[i]).select('path').datum({endAngle: degree * (2 * Math.PI)})
+              .style("fill", "skyblue")
+              .attr("d", arc);
+              // $loopNodesClasses[i].val(degree).trigger('change');
             
           }.bind(this));
         // frequency analyzer
