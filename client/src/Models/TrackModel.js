@@ -191,7 +191,6 @@ function(LoopNodeCollection, LoopNodeModel){
       },
 
       recorderDelay: function(currentLoop) {
-
         console.log('Starting Record:');
         // Grab the amount of time a bar takes to complete.
         var tempo = this.get('tempo');

@@ -7,12 +7,14 @@ define([
 
       this.model.on('playLoop', this.render, this)
       this.model.on('change:rerender', this.render, this)
+      this.model.on('disableRecord', this.disableRecord, this)
     },
 
     events:{
       'click .record-new': function() {
         console.log("record click")
         this.model.record();
+        this.model.trigger('recording');
         this.model.set('queue', !this.model.get('queue'));
         this.model.set('rerender', !this.model.get('rerender'));        
       },
@@ -80,6 +82,11 @@ define([
       }
 
       return this;
+    },
+
+    disableRecord: function() {
+      this.stopListening('click .record-new');
+      setTimeout(function() {this.$('.record-new').listenTo('click')}.bind(this), 1000);
     }
     
   });
