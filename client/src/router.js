@@ -36,14 +36,9 @@ define([
         var trackView = new TrackView({model: track});
 
         $(".main").html(trackView.render().el);
-        track.setCueAnimation();
-
+        track.setd3timer();
         track.get('loopNodes').each(function(loopNode){loopNode.set('rerender', !loopNode.get('rerender'))})
-      $(".main").html(trackView.render().el);
-      track.setd3timer();
-
-
-        $(".dial").knob();
+        
       } else {
         // Fetch
       }
