@@ -10,6 +10,9 @@ BufferLoader.prototype.loadBuffer = function(loopNode) {
   var url = loopNode.get('url');
   console.log('About to load buffer of this url: ', url);
   var request = new XMLHttpRequest();
+  if(url.substr(url.length - 10) === ".mp3Base64"){
+    url = "https://loopjammin.blob.core.windows.net/loopnodes/" + url
+  }
   request.open("GET", url, true);
 
   if(url.substr(url.length - 10) !== ".mp3Base64"){
