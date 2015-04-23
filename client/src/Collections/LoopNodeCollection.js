@@ -124,7 +124,14 @@ define([
       this.models.forEach(function(loopNode, i) {
         loopNode.disableRecord();
       });
-    }
+    },
+    enableRecord: function() {
+      this.models.forEach(function(loopNode, i) {
+        loopNode.enableRecord();
+      });
+    },
+
+
 
 
   });
