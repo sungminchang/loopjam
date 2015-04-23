@@ -56,6 +56,10 @@ define([
 
     },
 
+    recordButtonDisable: function() {
+      
+    }
+
 
   });
 

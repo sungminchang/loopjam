@@ -17,6 +17,8 @@ define([
 
     initialize: function() {
       this.on('remove', this.reassignPorts, this);
+      this.on('record', this.disableRecord, this);
+
       // this.populateLoopNodes();
       // this.on("hello", function(){
       //   console.log("Listened to Hello")      
@@ -117,6 +119,11 @@ define([
       if (this.models.length === 9) {
         $('.addNewLoop').children().remove();
       }
+    },
+    disableRecord: function() {
+      this.models.forEach(function(loopNode, i) {
+        loopNode.disableRecord();
+      });
     }
 
 
