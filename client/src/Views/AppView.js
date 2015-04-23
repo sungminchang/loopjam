@@ -25,6 +25,7 @@ define([
       var recentsTemplate = Handlebars.compile(recentTracksTemplate)
       this.$el.find('.recentTracks').html(recentsTemplate());
       var $this = this;
+      
       $.ajax({
         type: 'GET',
         // url of the upload directory
@@ -41,7 +42,7 @@ define([
 
         var d = linkifyData(data);
         $this.$el.find('#table').bootstrapTable({
-          data: d,
+          data: d
           });
       });
     }
