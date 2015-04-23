@@ -63,7 +63,8 @@ define([
         var linkifyData = function(d) {
           for (var i = 0; i < d.length; i++) {
             var trackname = d[i]['trackname'].toString();
-            d[i]['trackname'] = '<a href="/#/tracks/' + trackname + '">' + trackname + ' </a> ';
+            var trackID = d[i]['trackID'].toString();
+            d[i]['trackname'] = '<a href="/#/tracks/' + trackID + '">' + trackname + ' </a> ';
           }
           return d;
         };

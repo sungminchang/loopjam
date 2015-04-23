@@ -129,9 +129,6 @@ define([
       this.models.forEach(function(loopNode, i) {
         loopNode.enableRecord();
       });
-    },
-
-
     }
 
 
