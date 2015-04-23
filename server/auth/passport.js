@@ -18,7 +18,16 @@ passport.deserializeUser(function(user,done){
 passport.use(new LocalStrategy({
   username: 'username',
   password: 'password'
-}, function(username,password, accessToken, email,done){
+}, function(username,password, email,done){
+  User.find({where: {username:username}})
+  .then(function(user){
+    if (!user){
+      return done(null, false, {message: 'Ain\'t nobody round here wit\' dat name'});
+    } else if (user){
+      return done(null, user, {message:'User exists!'});
+    }
+  });
+
 }));
 
 module.exports = passport;

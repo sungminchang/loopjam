@@ -4,13 +4,14 @@ var bcrypt = require('bcrypt-nodejs');
 
 
 module.exports.login = function(req, res,next){
+  //compare password against one from database
 };
 
 module.exports.logout = function (req,res){
 	req.logout();
 	req.session.destroy();
-	// res.redirect('/');
-	res.send(200);
+	res.redirect('/');
+	// res.send(200);
 };
 
 

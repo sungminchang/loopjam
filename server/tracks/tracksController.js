@@ -44,6 +44,8 @@ module.exports.fetchAllTracks = function(req,res){
 	});
 };
 
+module.exports.fetch
+
 module.exports.fetchTrackById = function (req,res){
 	var trackHash = req.body.trackID;
 	models.Tracks
