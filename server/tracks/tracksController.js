@@ -14,6 +14,8 @@ module.exports.saveTrack = function(req,res){
 	//check the current user session
 	//save by User and create new Track table
 
+	//check user loggedIn
+
 	var reqTrack = req.body.audioData;
 	var trackName = req.body.trackname;
 	var currentDate = Date.now().valueOf().toString();
@@ -44,7 +46,6 @@ module.exports.fetchAllTracks = function(req,res){
 	});
 };
 
-module.exports.fetch
 
 module.exports.fetchTrackById = function (req,res){
 	var trackHash = req.body.trackID;
@@ -62,7 +63,7 @@ module.exports.fetchTrackById = function (req,res){
 	});
 };
 
-module.exports.fetchByUser = function(req,res){
+module.exports.fetchTrackByUserID = function(req,res){
 	//search Tracks by User
 };
 
