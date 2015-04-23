@@ -54,7 +54,7 @@ define([
 
       return this;
 
-    },
+    }
 
   });
 
