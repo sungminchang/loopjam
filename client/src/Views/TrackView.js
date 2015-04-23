@@ -16,12 +16,12 @@ define([
           e = e || window.event;
           var hash = (window.location.hash);
 
-          if (e && hash === '#/tracks/new') {
+          if (e && hash.indexOf('#/tracks/') !== -1) {
               e.returnValue = 'Before you go, you might want to save your loopnodes.';
           }
 
           // For Safari
-          if (hash === '#/tracks/new') {
+          if (hash.indexOf('#/tracks/') !== -1) {
             return 'Before you go, you might want toasdfasd save your loopnodes.';
           }
       };
