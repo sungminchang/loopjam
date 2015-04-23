@@ -20,7 +20,9 @@ var LoopNodeModel = Backbone.Model.extend({
     playing: false,
     queue: false,
     rerender: false,
-    mp3Data: null
+    mp3Data: null,
+    port: null,
+    buffer: null
   },
 
 

@@ -28,6 +28,7 @@ function(LoopNodeCollection, LoopNodeModel){
     initialize: function(params) {
 
       var metronome = new LoopNodeModel();
+      metronome.set('url', 'audio/853ce6188630fcc47df53b664df.mp3Base64');
       this.set('metronomeNode', metronome);
 
       var loopNodesForTrack = new LoopNodeCollection(params.audioData);
@@ -60,7 +61,6 @@ function(LoopNodeCollection, LoopNodeModel){
         if (currentLoop.get('source')) {
           this.pause(currentLoop);
         }
-        this.get('bufferLoader').bufferList.splice(port - 1, 1);
         this.get('loopNodes').remove(currentLoop);
       }.bind(this))
 
@@ -117,23 +117,17 @@ function(LoopNodeCollection, LoopNodeModel){
 
         window.URL = window.URL || window.webkitURL
 
-        // Initialize a new instance of the BufferLoader class,
-        // passing in our context and data object. BufferLoader
-        // will buffer all of the recordings and hold onto
-        // references for the buffers.
-        this.set('bufferLoader', new BufferLoader(
-          this.get('context'),
-          this.get('loopNodes').giveUrls() // DEVELOP THIS METHOD OUTDEVELOP THIS METHOD OUTDEVELOP THIS METHOD OUT
-          )
-        );
+   
+        //buffer is loaded and added to each loop node as 'buffer' attribute 
+        var bufferLoader = new BufferLoader(this.get('context'));
+        bufferLoader.loadBuffer(this.get('metronomeNode'));
+
+        this.get('loopNodes').forEach(function(loopNode){
+          var bufferLoader = new BufferLoader(this.get('context'));
+          bufferLoader.loadBuffer(loopNode);
+        }.bind(this));
         
-        // Invoking bufferLoader's .load method does the actual
-        // buffering and loading of the recordings, and stores
-        // the buffers on the bufferloader instance.
-        this.get('bufferLoader').load(this);
-        this.get('bufferLoader').loadMetronome(this);
-        
-        // this.set('metronomeBuffer', this.get('bufferLoader').bufferList.splice(0,1));
+        // this.set('', this.get('bufferLoader').bufferList.splice(0,1));
 
       } else {
         // Web Audio API is not available. Ask the user to use a supported browser.
@@ -170,6 +164,7 @@ function(LoopNodeCollection, LoopNodeModel){
       },
 
       freqAnimationUpdate: function(){
+
         if(this.get('updateAnim')){
           var analyser = this.get('analyser');
           var frequencyData = this.get('visualFreqData');
@@ -192,6 +187,7 @@ function(LoopNodeCollection, LoopNodeModel){
           height = -(Math.floor(freq / 255 * canvas.height()) + 1); 
           ctx.fillRect(xPos, yPos, width, height);
         }
+
       },
 
       recorderDelay: function(currentLoop) {
@@ -227,7 +223,12 @@ function(LoopNodeCollection, LoopNodeModel){
 
         setTimeout(this.startRecording.bind(this, currentLoop), delayInMilliseconds - 20)
         setTimeout(this.stopRecording.bind(this, currentLoop), delayInMilliseconds + barTimeInMS + 50)
-        setTimeout(this.preBuffer.bind(this), delayInMilliseconds + barTimeInMS + 300)
+        
+        var bufferLoader = new BufferLoader(this.get('context'));
+        bufferLoader.loadBuffer(this.get('metronomeNode'));
+        setTimeout(function(){
+          bufferLoader.loadBuffer(currentLoop)
+        }, delayInMilliseconds + barTimeInMS + 300)
       },
       
       startRecording: function(currentLoop) {
@@ -296,12 +297,12 @@ function(LoopNodeCollection, LoopNodeModel){
           var newUrls = this.get('loopNodes').giveUrls();
           var oldUrls = this.get('bufferLoader').urlList;
           for (var i = 0; i < newUrls.length; i++) {
-            if (oldUrls.indexOf(newUrls[i]) === -1) {
+            if (oldUrls.indexOf(newUrls[0]) === -1) {
               this.get('bufferLoader').update(newUrls[i], i, this);
             }
           }
       },
-
+      
       setd3timer: function(){
         d3.timer(function(){
           this.CueAnimation();
@@ -377,9 +378,7 @@ function(LoopNodeCollection, LoopNodeModel){
         });
       },
 
-      queue: function(currentLoop, buffer) {
-        var soundIndex = currentLoop.get('port') - 1;
-        console.log('soundIndex from play: ', soundIndex);
+      queue: function(currentLoop) {
 
         // Bug fix for Chrome 42
         var createRotatedAudioBuffer = function(audioContext, audioBuffer, offset) {
@@ -442,10 +441,10 @@ function(LoopNodeCollection, LoopNodeModel){
         var source = currentLoop.get('source');
         console.log('source', source);
 
-        var tempBuffer = this.get('bufferLoader').bufferList[soundIndex];
+        var tempBuffer = currentLoop.get('buffer');
+        console.log(tempBuffer);
 
-        debugger;
-        source.buffer = buffer || createRotatedAudioBuffer(this.get('context'), tempBuffer, tempBuffer.duration - barTime * mp3Multiplier);
+        source.buffer = createRotatedAudioBuffer(this.get('context'), tempBuffer, tempBuffer.duration - barTime * mp3Multiplier);
         
         // Associate the new source instance with the loaded buffer.
 
@@ -498,14 +497,13 @@ function(LoopNodeCollection, LoopNodeModel){
         console.log('source', source);
       },
 
-      pause: function(currentLoop, buffer) {
-        var soundIndex = currentLoop.get('port') - 1;
+      pause: function(currentLoop) {
         var source = currentLoop.get('source');
 
         // Instead of creating a new bufferSource as per usual,
         // we retrieve the source that we have stored on our 
         // data objects.
-        source.buffer = buffer || this.get('bufferLoader').bufferList[soundIndex];
+        source.buffer = currentLoop.get('buffer');
         console.log('About to pause, logging source: ', source);
         source.stop();
       },
