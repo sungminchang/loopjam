@@ -110,7 +110,6 @@
       			var mp3Blob = new Blob([new Uint8Array(e.data.buf)], {type: 'audio/mp3'});
       			
       			var url = 'data:audio/mp3;base64,'+encode64(e.data.buf);
-            debugger;
             // push to DOM, so main thread can retrieve it.
             $('.mp3blobData').text(url);
             $('.loopNodePort').text(portNum);
