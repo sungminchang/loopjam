@@ -21,7 +21,8 @@ function(LoopNodeCollection, LoopNodeModel){
       visualFreqData: null,
       bgFreqCanvas: null,
       bgFreqCanvasCtx: null,
-      trackName: null
+      trackName: null,
+      updateAnim: true
     },
 
     initialize: function(params) {
@@ -61,8 +62,21 @@ function(LoopNodeCollection, LoopNodeModel){
         }
         this.get('bufferLoader').bufferList.splice(port - 1, 1);
         this.get('loopNodes').remove(currentLoop);
-
       }.bind(this))
+
+      this.get('loopNodes').on("add", function(){
+        this.set('updateAnim', true);
+      }.bind(this));
+
+      this.get('loopNodes').on("remove", function(){
+        this.set('updateAnim', true);
+      }.bind(this));
+
+      this.on("change:tempoAdjustment", function(){
+        this.set('updateAnim', true);
+      }.bind(this));
+
+      this
         // --> 'Remove' Event
 
 
@@ -156,27 +170,28 @@ function(LoopNodeCollection, LoopNodeModel){
       },
 
       freqAnimationUpdate: function(){
-
-        // var analyser = this.get('analyser');
-        // var frequencyData = this.get('visualFreqData');
-        // var ctx = this.get('bgFreqCanvasCtx');
-        // var canvas = this.get('bgFreqCanvas');
-
-        // analyser.getByteFrequencyData(frequencyData)
-        // var colWidth = Math.ceil(canvas.width() / (0.85 * analyser.frequencyBinCount));
-        // ctx.clearRect(0, 0, canvas.width(), canvas.height());
-        // var freq, xPos, yPos, width, height;
-        // var img = new Image;
-        // img.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAAEklEQVR4AWNsP/eaATcYlcYKANQJFotqqVYoAAAAAElFTkSuQmCC";
-        // ctx.fillStyle = ctx.createPattern(img, "repeat");
-        // for (var i = 0; i < analyser.frequencyBinCount; i++) {
-        //   freq = frequencyData[i] || 0; 
-        //   xPos = colWidth * i;
-        //   yPos = canvas.height(); 
-        //   width = colWidth - 1;
-        //   height = -(Math.floor(freq / 255 * canvas.height()) + 1); 
-        //   ctx.fillRect(xPos, yPos, width, height);
-        // }
+        if(this.get('updateAnim')){
+          var analyser = this.get('analyser');
+          var frequencyData = this.get('visualFreqData');
+          var ctx = this.get('bgFreqCanvasCtx');
+          var canvas = this.get('bgFreqCanvas');
+          var colWidth = Math.ceil(canvas.width() / (0.85 * analyser.frequencyBinCount));
+        }
+        
+        analyser.getByteFrequencyData(frequencyData)
+        ctx.clearRect(0, 0, canvas.width(), canvas.height());
+        var freq, xPos, yPos, width, height;
+        var img = new Image;
+        img.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAAEklEQVR4AWNsP/eaATcYlcYKANQJFotqqVYoAAAAAElFTkSuQmCC";
+        ctx.fillStyle = ctx.createPattern(img, "repeat");
+        for (var i = 0; i < analyser.frequencyBinCount; i++) {
+          freq = frequencyData[i] || 0; 
+          xPos = colWidth * i;
+          yPos = canvas.height();   
+          width = colWidth - 1;
+          height = -(Math.floor(freq / 255 * canvas.height()) + 1); 
+          ctx.fillRect(xPos, yPos, width, height);
+        }
       },
 
       recorderDelay: function(currentLoop) {
@@ -210,8 +225,8 @@ function(LoopNodeCollection, LoopNodeModel){
         
         var barTimeInMS = barTime * 1000;
 
-        setTimeout(this.startRecording.bind(this, currentLoop), delayInMilliseconds - 10)
-        setTimeout(this.stopRecording.bind(this, currentLoop), delayInMilliseconds + barTimeInMS + 100)
+        setTimeout(this.startRecording.bind(this, currentLoop), delayInMilliseconds - 20)
+        setTimeout(this.stopRecording.bind(this, currentLoop), delayInMilliseconds + barTimeInMS + 50)
         setTimeout(this.preBuffer.bind(this), delayInMilliseconds + barTimeInMS + 300)
       },
       
@@ -224,15 +239,13 @@ function(LoopNodeCollection, LoopNodeModel){
           currentLoop.set('rerender', !currentLoop.get('rerender'))
         }
 
-        setTimeout(rerenderRecording,10)
+        setTimeout(rerenderRecording,20)
 
         this.get('recorder') && this.get('recorder').record();
         // button.disabled = true;
         // button.nextElementSibling.disabled = false;
         console.log('Recording...');
         console.time("recording1")
-      
-
       },
 
       stopRecording: function(currentLoop) {
@@ -289,36 +302,56 @@ function(LoopNodeCollection, LoopNodeModel){
           }
       },
 
-    setCueAnimation: function(){
-      var count = 0;
+      setd3timer: function(){
+        d3.timer(function(){
+          this.CueAnimation();
+          this.freqAnimationUpdate();
+        }.bind(this));
 
-      d3.timer(function(){
-        var loopNodes = this.get('loopNodes');
-        var bar = calcBar(this.get('tempo'));
-        var angularSpeed = calcSpeed(bar);
+      },
 
-        loopNodes.each(function(loopNode) {
+      CueAnimation: function(){
 
-          var loopNodeClass = '.loopNode' + loopNode.get('port');
-          var rotateDeg = (this.get('context').currentTime * angularSpeed - this.get('tempoAdjustment')) / loopNode.get('multiplier');
+        if(this.get('updateAnim')){
+          var loopNodes = this.get('loopNodes');
+          var loopNodesArr = [];
+          var loopNodesClasses = [];
+          var $loopNodesClasses = [];
+          loopNodes.each(function(loopNode, i){
+            loopNodesArr[i] = loopNode;
+            loopNodesClasses[i] = '.loopNode' + loopNode.get('port');
+            $loopNodesClasses[i] = $(loopNodesClasses[i]);
+          }.bind(this));          
+          this.set('updateAnime', false);
+          var bar = calcBar(this.get('tempo'));
+          var angularSpeed = calcSpeed(bar);
+          var tempoAdjustment = this.get('tempoAdjustment');
+        }
+
+        loopNodesArr.forEach(function(loopNode, i) {
+          var rotateDeg = (this.get('context').currentTime * angularSpeed - tempoAdjustment) / loopNode.get('multiplier');
           var degree = (rotateDeg % 360)
+
+          degree = degree / 360
+
 
             // Recording && play flags for cursor
             if((!loopNode.get('queue') && loopNode.get('recording') && !loopNode.get('playing') && !loopNode.get('recorded')) 
               || (!loopNode.get('queue') && !loopNode.get('recording') && loopNode.get('playing') && loopNode.get('recorded'))){
-              $(loopNodeClass).trigger('configure', {cursor: false});
+              var arc = d3.svg.arc().innerRadius(60).outerRadius(100).startAngle(0);
             } else {
-              $(loopNodeClass).trigger('configure', {cursor: true});
+              var arc = d3.svg.arc().innerRadius(60).outerRadius(100).startAngle(degree * (2 * Math.PI) - 0.15);
             }
 
           // console.log(degree)
-              $(loopNodeClass).val(degree).trigger('change');
+              d3.select(loopNodesClasses[i]).select('path').datum({endAngle: degree * (2 * Math.PI)})
+              .style("fill", "skyblue")
+              .attr("d", arc);
+              // $loopNodesClasses[i].val(degree).trigger('change');
             
           }.bind(this));
         // frequency analyzer
         // this.freqAnimationUpdate();
-
-        }.bind(this));
       },
 
       changeTempo: function(bpm, t){
@@ -388,7 +421,7 @@ function(LoopNodeCollection, LoopNodeModel){
         var multiplier = currentLoop.get('multiplier');
         var barTime = currentLoop.get('speed');
         var tempoAdjustment = this.get('tempoAdjustment');
-        var mp3Multiplier = this.get('mp3Multiplier');
+        var mp3Multiplier = currentLoop.get('mp3Multiplier');
 
         var remainder = (currentTime - tempoAdjustment / 360 * calcBar(tempo))  % (multiplier * calcBar(tempo));
         console.log('currentTime:', currentTime);
@@ -411,7 +444,7 @@ function(LoopNodeCollection, LoopNodeModel){
 
         var tempBuffer = this.get('bufferLoader').bufferList[soundIndex];
 
-
+        debugger;
         source.buffer = buffer || createRotatedAudioBuffer(this.get('context'), tempBuffer, tempBuffer.duration - barTime * mp3Multiplier);
         
         // Associate the new source instance with the loaded buffer.
