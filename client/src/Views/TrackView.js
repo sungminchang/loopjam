@@ -22,7 +22,7 @@ define([
 
           // For Safari
           if (hash.indexOf('#/tracks/') !== -1) {
-            return 'Before you go, you might want toasdfasd save your loopnodes.';
+            return 'Before you go, you might want to save your loopnodes.';
           }
       };
     },
