@@ -191,7 +191,6 @@ function(LoopNodeCollection, LoopNodeModel){
       },
 
       recorderDelay: function(currentLoop) {
-
         console.log('Starting Record:');
         // Grab the amount of time a bar takes to complete.
         var tempo = this.get('tempo');
@@ -253,7 +252,9 @@ function(LoopNodeCollection, LoopNodeModel){
             
         console.log("time stopped recording:", this.get('context').currentTime)
         this.get('recorder') && this.get('recorder').stop();
-        console.timeEnd("recording1")
+        console.timeEnd("recording1");
+
+        setTimeout(function() {this.get('loopNodes').enableRecord()}.bind(this), 100);
         // button.disabled = true;
         // button.previousElementSibling.disabled = false;
         console.log('Stopped recording.');

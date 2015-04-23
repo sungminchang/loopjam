@@ -13,6 +13,7 @@ define([
 ], function(text, AppRouter){
   $(function(){
     var appRouter = new AppRouter();
+
     Backbone.history.start();
     // Backbone.history.start({pushState: true });
   });

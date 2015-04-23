@@ -7,12 +7,15 @@ define([
 
       this.model.on('playLoop', this.render, this)
       this.model.on('change:rerender', this.render, this)
+      this.model.on('disableRecord', this.disableRecord, this)
+      this.model.on('enableRecord', this.enableRecord, this)
     },
 
     events:{
       'click .record-new': function() {
         console.log("record click")
         this.model.record();
+        this.model.trigger('recording');
         this.model.set('queue', !this.model.get('queue'));
         this.model.set('rerender', !this.model.get('rerender'));        
       },
@@ -80,6 +83,26 @@ define([
       }
 
       return this;
+    },
+
+    disableRecord: function() {
+      this.delegateEvents({
+      'click .play': function() {
+        this.model.playQueue();
+        this.model.set('queue', !this.model.get('queue'));
+        this.model.set('rerender', !this.model.get('rerender'));  
+        
+      },
+      'click .pause': function() {
+        this.model.pause();
+        this.model.set('playing', !this.model.get('playing'))
+        this.model.set('rerender', !this.model.get('rerender'));
+      }
+    });
+    },
+
+    enableRecord: function() {
+      this.delegateEvents(this.events);
     }
     
   });

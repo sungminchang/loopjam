@@ -14,6 +14,7 @@ define([
       '*badUrl': 'default'
     },
 
+
     showAppView: function(){
       // Landing Page
       var appModel = new AppModel();
@@ -24,6 +25,8 @@ define([
       // Show All Tracks page
     },
     showTrackView: function(id){
+
+      
       // Track View page
       // Note: we need to set up ids.
 
