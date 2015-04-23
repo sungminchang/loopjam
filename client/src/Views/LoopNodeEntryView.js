@@ -54,10 +54,6 @@ define([
 
       return this;
 
-    },
-
-    recordButtonDisable: function() {
-      
     }
 
 
