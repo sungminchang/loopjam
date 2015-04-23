@@ -3,11 +3,12 @@ define([
   'Views/AppView',
   'Models/TrackModel',
   'Views/TrackView',
-], function(AppModel, AppView, TrackModel, TrackView){
+  'Views/MainView'
+], function(AppModel, AppView, TrackModel, TrackView, MainView){
   var AppRouter = Backbone.Router.extend({
     routes: {
       // Routes
-      '': 'showAppView',
+      '': 'loadMainView',
       'tracks': 'showTracks',
       'tracks/:id': 'showTrackView',
       // bad url's
@@ -15,22 +16,25 @@ define([
     },
 
 
-    showAppView: function(){
-      // Landing Page
-      var appModel = new AppModel();
-      var appView = new AppView({model: appModel});
-      $(".main").html(appView.render().el);
+    loadMainView: function(){
+      if(!this.mainView){
+        this.mainView = new MainView();
+        $('body').html(this.mainView.render().el);
+      }
+      this.mainView.renderAppView();
     },
     showTracks: function(){
       // Show All Tracks page
     },
     showTrackView: function(id){
-
-      
+      if(!this.mainView){
+        this.mainView = new MainView();
+        $('body').html(this.mainView.render().el);
+      }
       // Track View page
       // Note: we need to set up ids.
 
-    var audioData = null
+      var audioData = null
       
       if(id === "new"){
         // https://loopjammin.blob.core.windows.net/loopnodes/853ce6188630fcc47df53b664df.mp3Base64 -- mp3Multipler: 2
@@ -38,7 +42,7 @@ define([
         var track = new TrackModel({audioData: audioData});
         var trackView = new TrackView({model: track});
 
-      $(".main").html(trackView.render().el);
+      this.mainView.renderTrackView(trackView);
       track.setd3timer();
       track.get('loopNodes').each(function(loopNode){loopNode.set('rerender', !loopNode.get('rerender'))})
 
@@ -56,7 +60,7 @@ define([
               var track = new TrackModel({audioData: audioData});
               var trackView = new TrackView({model: track});
 
-            $(".main").html(trackView.render().el);
+            this.mainView.renderTrackView(trackView);
             track.setd3timer();
             track.get('loopNodes').each(function(loopNode){loopNode.set('rerender', !loopNode.get('rerender'))})
 
