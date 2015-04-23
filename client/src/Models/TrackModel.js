@@ -28,7 +28,7 @@ function(LoopNodeCollection, LoopNodeModel){
     initialize: function(params) {
 
       var metronome = new LoopNodeModel();
-      metronome.set('url', 'audio/853ce6188630fcc47df53b664df.mp3Base64');
+      metronome.set('url', 'audio/metronome.mp3');
       this.set('metronomeNode', metronome);
 
       var loopNodesForTrack = new LoopNodeCollection(params.audioData);
@@ -306,7 +306,7 @@ function(LoopNodeCollection, LoopNodeModel){
       setd3timer: function(){
         d3.timer(function(){
           this.CueAnimation();
-          this.freqAnimationUpdate();
+          //  this.freqAnimationUpdate();
         }.bind(this));
 
       },

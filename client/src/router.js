@@ -31,7 +31,7 @@ define([
       
       if(id === "new"){
         // https://loopjammin.blob.core.windows.net/loopnodes/853ce6188630fcc47df53b664df.mp3Base64 -- mp3Multipler: 2
-        audioData =  [ {url: "https://loopjammin.blob.core.windows.net/loopnodes/853ce6188630fcc47df53b664df.mp3Base64", speed:2, port: 1, recordedAtBpm: 120, recorded: true, mp3Multiplier:2} ,{url: "https://loopjammin.blob.core.windows.net/loopnodes/853ce6188630fcc47df53b664df.mp3Base64", speed:2, port: 2, recordedAtBpm: 120, recorded: true, mp3Multiplier:2}];
+        audioData =  [ {url: "", speed:2, port: 1, recordedAtBpm: 120}]
         var track = new TrackModel({audioData: audioData});
         var trackView = new TrackView({model: track});
 
@@ -39,10 +39,28 @@ define([
       track.setd3timer();
       track.get('loopNodes').each(function(loopNode){loopNode.set('rerender', !loopNode.get('rerender'))})
 
-
-        $(".dial").knob();
       } else {
-        // Fetch
+
+          $.ajax({
+            type: "POST",
+            url: "/tracks/:id",
+            data: {trackID: id},
+            success: function(data){
+              audioData =  JSON.parse(data.audioData);
+              for(var i = 0; i < audioData.length; i++){
+                audioData[i].port = i + 1;
+              }
+              var track = new TrackModel({audioData: audioData});
+              var trackView = new TrackView({model: track});
+
+            $(".main").html(trackView.render().el);
+            track.setd3timer();
+            track.get('loopNodes').each(function(loopNode){loopNode.set('rerender', !loopNode.get('rerender'))})
+
+            },
+            error: function(data){
+            }
+          });
       }
 
       
