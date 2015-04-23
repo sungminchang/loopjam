@@ -42,6 +42,10 @@ var LoopNodeModel = Backbone.Model.extend({
       this.trigger('removeLoopNode', this);
     },
 
+    disableRecord: function() {
+      this.trigger('disableRecord', this);
+    },
+
     initialize: function(){
 
       this.on('change:volume', function(){
@@ -62,7 +66,7 @@ var LoopNodeModel = Backbone.Model.extend({
        //    }
        //  }) 
 
-     }
+    }
   });
   return LoopNodeModel;
 });
