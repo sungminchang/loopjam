@@ -7,36 +7,6 @@ define([
     template: Handlebars.compile(template),
 
     initialize: function(){
-      // var $this = this;
-      // // Maybe I should do this at a certain time
-      // // Like when the other components have loaded
-      // $.ajax({
-      //   type: 'GET',
-      //   // url of the upload directory
-      //   url: '/tracks'
-      // }).done(function(data) {
-      //   console.log(data)
-      //   $this.$el.find('#table').bootstrapTable({
-      //     data: data,
-      //     columns: [{
-      //         field: 'trackname',
-      //         title: 'Track Name'
-      //       },
-      //       { field: 'id',
-      //         title: 'ID',
-      //       },
-      //       {
-      //         field: 'createdAt',
-      //         title: 'createdAt'
-      //       }]
-      //     });
-
-      //   // this.renderRecentTracks(data);
-      //   // log.innerHTML += "\n" + data;
-      //   });
-
-
-
 
       },
 
