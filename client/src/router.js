@@ -14,21 +14,6 @@ define([
       '*badUrl': 'default'
     },
 
-    // execute: function(callback, args) {
-
-
-    //   console.log('logging out window.location.hash: ', window.location.hash);
-    //   console.log('logging out args: ', args);
-    //   if (window.location.hash === '' && args[0] === null) {
-    //     debugger;
-    //     var e = window.event;
-    //     e.returnValue = 'Before you go, you might want to save your track.'
-    //     e();
-    //   } else {
-    //     callback(args[0]);
-    //     console.log('logging out args', args);
-    //   }
-    // },
 
     showAppView: function(){
       // Landing Page
