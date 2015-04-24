@@ -8,6 +8,7 @@ module.exports.isValidPassword = function (user,password){
 
 module.exports.logout = function (req,res){
   req.logout();
+  console.log('about to logout, printing out req', req);
   req.session.destroy();
   res.redirect('/');
   // res.send(200);
@@ -32,9 +33,11 @@ module.exports.createUser = function(req,res){
   .find({where:{username:username}})
   .then(function(user){
     if (!username || !password || !email){
+      console.log('A FIELD IS MISSING FILL OUT ALL FIELDS');
       res.send("Please fill out all forms.");
     }
     if (!user){
+      console.log('Creating new user!');
       bcrypt.genSalt(10, function(err,salt){
         bcrypt.hash(password,salt,null,function(err,hash){
           models.Users
@@ -45,6 +48,7 @@ module.exports.createUser = function(req,res){
       });
     });
     } else if (user){
+      console.log('USERNAME ALREADY TAKEN, CHOOSE ANOTHER USERNAME');
       res.send('Username already exists!');
     }
   });
