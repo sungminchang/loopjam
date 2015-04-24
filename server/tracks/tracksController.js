@@ -22,9 +22,13 @@ module.exports.saveTrack = function(req,res){
 	var trackHash = crypto.createHash('sha1').update(trackName + currentDate).digest('hex').slice(5);
 	var outputURLs = [];
 	for (var i = 0; i<reqTrack.length; i++){
-		reqTrack[i]['url'] = crypto.createHmac('sha1', trackName + currentDate).update((Math.random()*10000).toString()).digest('hex').slice(13) + ".mp3Base64";
-		outputURLs.push(reqTrack[i]['url']);
+		console.log('reqTrack[i].url', reqTrack[i].url.substr(reqTrack[i].url.length - 10));
+		if(reqTrack[i].url.substr(reqTrack[i].url.length - 10) !== ".mp3Base64"){
+			reqTrack[i].url = crypto.createHmac('sha1', trackName + currentDate).update((Math.random()*10000).toString()).digest('hex').slice(13) + ".mp3Base64";
+			outputURLs.push(reqTrack[i].url);			
+		}
 	}
+	console.log('outputURLs', outputURLs);
 	reqTrack = JSON.stringify(reqTrack);
 		models.Tracks.findOrCreate({where:{trackname:trackName, audioData: reqTrack, trackID: trackHash}})
 		.then(function(response){				
