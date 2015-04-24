@@ -20,10 +20,10 @@ module.exports.checkLoggedIn = function(req,res,next){
 	res.redirect('/');
 };
 
-module.exports.createUser = function(user,pass,address){
-  var username = user;
-  var password = pass;
-  var email = address;
+module.exports.createUser = function(req,res){
+  var username = req.body.username;
+  var password = req.body.password;
+  var email = req.body.email;
 
   models.Users
   .find({where:{username:username}})
