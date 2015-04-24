@@ -35,16 +35,18 @@ passport.use('login', new LocalStrategy({
 }));
 
 passport.use('signup', new LocalStrategy({},
-  function(req, username,password, email, done){
+  function(username,password,done){
+    console.log("this is the username",username);
+    console.log("this is the password",password);
     models.Users.find({where: {username:username}})
     .then(function(user){
-      if(!username || !email || !password){
+      if(!username || !password){
         return done(null, false, {message: 'Please fill out all forms!'});
       } else if (!user){
         bcrypt.genSalt(10,function(err,salt){
           bcrypt.hash(password,salt,null,function(err,hash){
             models.Users
-            .create({password:hash,username:username,email:email, salt:salt});
+            .create({password:hash,username:username, salt:salt});
           });
         });
         return done(null,false,{message:'User Created!'});
