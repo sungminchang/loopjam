@@ -34,7 +34,7 @@ passport.use('login', new LocalStrategy({
   });
 }));
 
-passport.use('signup', new LocalStrategy({},
+passport.use('signup', new LocalStrategy({
   function(req, username,password, email, done){
     models.Users.find({where: {username:username}})
     .then(function(user){
@@ -52,7 +52,9 @@ passport.use('signup', new LocalStrategy({},
         return done(null,false,{message:'User already exists!'});
       }
     });
-  }));
+  }
+}));
+
 
 
 

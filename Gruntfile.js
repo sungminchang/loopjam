@@ -63,7 +63,14 @@ module.exports = function (grunt) {
     },
 
     karma: {
-      
+      unit: {
+        configFile : 'karma.conf.js'
+      },
+      continuous: {
+        configFile: 'karma.conf.js',
+        singleRun: true,
+        browsers: ['PhantomJS']
+      }
     },
     nodemon: {
       dev: {
@@ -84,6 +91,11 @@ module.exports = function (grunt) {
           spawn: false,
         }
       }
+      // },
+      // karma: {
+      //   files:['test/*.js'],
+      //   tasks: ['karma:unit:run']
+      // }
     },
     shell: {
       prodServer: {
