@@ -22,6 +22,7 @@ function(LoopNodeCollection, LoopNodeModel){
       bgFreqCanvas: null,
       bgFreqCanvasCtx: null,
       trackName: null,
+      hashURL: null,
       updateAnim: true,
       converting: 0
     },
@@ -528,7 +529,7 @@ function(LoopNodeCollection, LoopNodeModel){
           nodeData.recorded = true;
           trackData.audioData.push(nodeData);
         }
-
+        this.trigger("modalShowWaiting");
 
         var trackSaveCallback = function(URLArray){
 
@@ -542,11 +543,16 @@ function(LoopNodeCollection, LoopNodeModel){
               data: mp3Data,
               success: function(data){
                 if(i !== URLArray.length - 2) uploadSync(i + 1);
+                else if (i === URLArray.length - 2){   
+                  this.set('hashURL', URLArray[URLArray.length - 1]);
+                  this.trigger("modalShowShare");
+                }
                 console.log(mp3Data, "accepted");
                 
-              }
+              }.bind(this)
             });            
           }.bind(this)
+ 
           uploadSync(0)
 
         }.bind(this)
