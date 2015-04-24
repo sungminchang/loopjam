@@ -97,9 +97,7 @@ define([
       $(this.el).find('.saved-title').html(modalTitle);
       
       $(this.el).find('.saved-body').html(modalBody); 
-      $(this.el).find('.saved-footer').html(modalFooter); 
-   
-      <a href="https://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+      $(this.el).find('.saved-footer').html(modalFooter);    
     }
   });
 
