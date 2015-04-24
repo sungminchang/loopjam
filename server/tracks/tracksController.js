@@ -28,7 +28,7 @@ module.exports.saveTrack = function(req,res){
 	reqTrack = JSON.stringify(reqTrack);
 		models.Tracks.findOrCreate({where:{trackname:trackName, audioData: reqTrack, trackID: trackHash}})
 		.then(function(response){				
-		res.send(csap.createSharedAccess(outputURLs));
+		res.send(csap.createSharedAccess(outputURLs, trackHash));
 	});
 
 };

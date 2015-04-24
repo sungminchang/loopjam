@@ -22,6 +22,7 @@ function(LoopNodeCollection, LoopNodeModel){
       bgFreqCanvas: null,
       bgFreqCanvasCtx: null,
       trackName: null,
+      hashURL: null,
       updateAnim: true
     },
 
@@ -528,6 +529,8 @@ function(LoopNodeCollection, LoopNodeModel){
 
         var trackSaveCallback = function(URLArray){
 
+          this.trigger("modalShowWaiting");
+
           var uploadSync = function(i){
 
             var mp3Data = this.get('loopNodes').where({port: i + 1})[0].get('mp3Data');
@@ -537,10 +540,14 @@ function(LoopNodeCollection, LoopNodeModel){
               headers: {'x-ms-blob-type': 'BlockBlob'},
               data: mp3Data,
               success: function(data){
-                if(i !== URLArray.length - 1) uploadSync(i + 1);
+                debugger;
+                if(i !== URLArray.length - 2) uploadSync(i + 1);
+                else if (i === URLArray.length - 2){
+                  this.set('hashURL', URLArray[URLArray.length - 1]);
+                  this.trigger("modalShowShare")
+                }
                 console.log(mp3Data, "accepted");
-                
-              }
+              }.bind(this)
             });            
           }.bind(this)
 
