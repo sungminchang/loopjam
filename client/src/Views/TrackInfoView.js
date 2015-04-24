@@ -98,6 +98,8 @@ define([
       
       $(this.el).find('.saved-body').html(modalBody); 
       $(this.el).find('.saved-footer').html(modalFooter);    
+      $(this.el).find('.saved-footer').html(modalFooter); 
+   
     }
   });
 
