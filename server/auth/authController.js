@@ -1,7 +1,7 @@
 var models = require('../database/db');
 
 module.exports.isValidPassword = function (user,password){
-    return bCrypt.compareSync(password, user.password);
+    return bcrypt.compareSync(password, user.password);
 };
 
 module.exports.logout = function (req,res){
