@@ -21,47 +21,39 @@
       </label>
   </div>
 
-  <br>
-  <br>
-  <input class="trackName" type="text" name="trackName" value="Name"> <br>
-  <button class="saveTrackBtn btn btn-default">Save track</button>
-  <br>
-  <br>
+<br>
+<br>
+<br>
 
-  <!-- !!!!!!!!!!Modal for Share!!!!!!!!!!!-->
   <div class="container">
     <div class="row">
       <!-- Button trigger modal -->
-  <button class="btn btn-default"  title="Saved your track" data-toggle="modal" data-target="#savedModel">
-    <i class="fa fa-save"></i> Save Track
-  </button>
+        <button class="btn btn-default"  title="Saved your track" data-toggle="modal" data-target="#savedModel">
+          <i class="fa fa-save"></i> Save Track
+        </button>
 
-
-
-  <div class="modal fade" id="savedModel" tabindex="-1" role="dialog" aria-labelledby="savedTitle" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-          <h4 class="modal-title" id="savedTitle"><i class="fa fa-save"></i> Save Complete</h4>
+        <div class="modal fade" id="savedModel" tabindex="-1" role="dialog" aria-labelledby="savedTitle" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title saved-title" id="savedTitle"><i class="fa fa-save"></i> Save</h4>
+              </div>
+              <div class="modal-body saved-body">
+              <h5> Name your track:</h5>
+              <div class="input-group">
+                <input class="trackName form-control" type="text" maxlength="20" name="trackName">
+                <span class="input-group-btn">
+                  <button class="btn btn-default start-save saveTrackBtn" type="button">Save</button>
+                </span>
+              </div>
+              </div>
+              <div class="modal-footer saved-footer">
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="modal-body">
-        <h5> Share your track</h5>
-          <p><a title="Facebook" href=""><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-facebook fa-stack-1x"></i></span></a> <a title="Twitter" href=""><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-twitter fa-stack-1x"></i></span></a></p>
-          <p class="trackURL">URL:</p>
-    
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-      </div>
     </div>
   </div>
-    </div>
-  </div>
-  <!-- !!!!!!!!!!Modal for Share!!!!!!!!!!!-->
-
-
-
 </div>
 

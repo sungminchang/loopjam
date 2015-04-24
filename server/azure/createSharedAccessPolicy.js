@@ -1,7 +1,7 @@
 var azure = require('azure-storage');
 var azureconnection = require('./databaseConnection.js')
 
-exports.createSharedAccess = function(arrayOfHashes,res){
+exports.createSharedAccess = function(arrayOfHashes,trackHash){
   var handShakeUrls = [];
 
   for(var i = 0; i < arrayOfHashes.length; i++){
@@ -25,6 +25,8 @@ exports.createSharedAccess = function(arrayOfHashes,res){
 
     handShakeUrls.push(sasUrl);
   }
+
+  handShakeUrls.push(trackHash);
 
 
   return handShakeUrls;
