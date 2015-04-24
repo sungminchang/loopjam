@@ -47,7 +47,7 @@ define([
       track.get('loopNodes').each(function(loopNode){loopNode.set('rerender', !loopNode.get('rerender'))})
 
       } else {
-
+        $this = this;
           $.ajax({
             type: "POST",
             url: "/tracks/:id",
@@ -60,7 +60,7 @@ define([
               var track = new TrackModel({audioData: audioData});
               var trackView = new TrackView({model: track});
 
-            this.mainView.renderTrackView(trackView);
+            $this.mainView.renderTrackView(trackView);
             track.setd3timer();
             track.get('loopNodes').each(function(loopNode){loopNode.set('rerender', !loopNode.get('rerender'))})
 
