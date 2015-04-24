@@ -1,14 +1,16 @@
+var passport = require('./passport');
 var utils = require('./authController.js');
 
 module.exports = function (router){
 	
-router.post('/signup', utils.createUser);
+// router.post('/signup',passport.authenticate('signup'),utils.createUser);
+router.post('/signup',passport.authenticate('signup'));
+// router.post('/login', passport.authenticate('local'),utils.login);
+router.post('/login', passport.authenticate('local'));
 
-router.get('/login', utils.checkUser);
+router.post('/logout', utils.logout);
 
-router.post('/logout',utils.logout);
-
-router.post('/isLoggedIn', utils.checkLoggedIn);
+router.get('/isLoggedIn', utils.checkLoggedIn);
 
 }
 

@@ -3,16 +3,18 @@ var bcrypt = require('bcrypt-nodejs');
 var crypto = require('crypto');
 var csap = require('../azure/createSharedAccessPolicy.js');
 
-module.exports.createSession = function (req,res,account){
-	console.log("this is the session", req.session);
-	return req.session.regenerate(function(err){
-		req.session.user = account;
-	});
-};
+// module.exports.createSession = function (req,res,account){
+// 	console.log("this is the session", req.session);
+// 	return req.session.regenerate(function(err){
+// 		req.session.user = account;
+// 	});
+// };
 
 module.exports.saveTrack = function(req,res){
 	//check the current user session
 	//save by User and create new Track table
+
+	//check user loggedIn
 
 	var reqTrack = req.body.audioData;
 	var trackName = req.body.trackname;
@@ -34,15 +36,16 @@ module.exports.saveTrack = function(req,res){
 module.exports.fetchAllTracks = function(req,res){
 	//retrieve all tracks by a particular ID
 	models.Tracks
-	.findAll({limit:10, order:'"updatedAt" DESC'})
+	.findAll({limit:10, order:'"createdAt" DESC'})
 	.then(function(response){
 		if (!response){
-			//in the one case that our site is created
+			//in the one case that our site is created, and no tracks have been created.
 			res.json('No tracks have been created!');
 		}
 		res.json(response);
 	});
 };
+
 
 module.exports.fetchTrackById = function (req,res){
 	var trackHash = req.body.trackID;
@@ -60,7 +63,7 @@ module.exports.fetchTrackById = function (req,res){
 	});
 };
 
-module.exports.fetchByUser = function(req,res){
+module.exports.fetchTrackByUserID = function(req,res){
 	//search Tracks by User
 };
 

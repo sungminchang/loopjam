@@ -13,9 +13,8 @@ var Users = sequelize.define('Users', {
 		type: Sequelize.STRING,
 		unique: true
 	},
-	token: Sequelize.STRING,
-	password: Sequelize.STRING,
 	salt: Sequelize.STRING,
+	password: Sequelize.STRING,
 	email: Sequelize.STRING
 });
 
@@ -26,9 +25,9 @@ var Tracks = sequelize.define('Tracks', {
 });
 
 //Establish Table Relationships
-// Users.hasMany(Tracks);
-// Tracks.belongsTo(Users);
-sequelize.sync();
+Users.hasMany(Tracks);
+Tracks.belongsTo(Users);
+sequelize.sync(/*{force:true}*/);
 
 //Check connection to database
 sequelize.authenticate().complete(function(err) {
