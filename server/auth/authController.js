@@ -1,6 +1,7 @@
 var models = require('../database/db');
 
 module.exports.isValidPassword = function (user,password){
+    //refactor
     return bcrypt.compareSync(password, user.password);
 };
 
@@ -13,6 +14,7 @@ module.exports.logout = function (req,res){
 
 module.exports.checkLoggedIn = function(req,res,next){
 	//if the user is authenticated, continue on to the next function call
+  console.log("HERE!");
 	if (req.isAuthenticated()){
 		return next();
 	}
