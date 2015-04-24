@@ -23,8 +23,8 @@ define([
 
       signup.on('click', function() {
         var d = JSON.stringify({
-            username:'Harry',
-            password: 'Fireboltasdfasdf',
+            username:'Hagrid',
+            password: 'Firebolt',
             email:'123@123.com'
           });
 
@@ -42,19 +42,41 @@ define([
 
       login.on('click', function() {
         var d = JSON.stringify({
-            username:'Harry',
-            password: 'Fireboltasdfasdf',
+            username:'Hagrid',
+            password: 'Firebolt',
             email:'123@123.com'
           });
 
         $.ajax({
           type: 'POST',
           accept: 'application/json',
-          url: 'auth/login',
+          url: '/auth/login',
           data: d,
           contentType:"application/json; charset=utf-8"
         }).done(function(data) { console.log('got a reply from server, logging out the data', data);
           });
+        return false;
+      });
+
+
+      var logout = this.$el.find('#logout');
+
+      logout.on('click', function() {
+        var d = JSON.stringify({
+            username:'Hagrid',
+            password: 'Firebolt',
+            email:'123@123.com'
+          });
+
+        $.ajax({
+          type: 'POST',
+          accept: 'application/json',
+          url: '/auth/logout',
+          data: d,
+          contentType:"application/json; charset=utf-8"
+        }).done(function(data) { console.log('got a reply from server, logging out the data', data);
+          });
+        return false;
       });
 
       return this;
