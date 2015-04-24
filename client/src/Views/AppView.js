@@ -19,32 +19,48 @@ define([
       this.renderRecentTracks();
 
 
-      $.ajax({
-        type: "POST",
-        url: "/tracks/:id",
-        data: {trackID: id},
-        success: function(data){
-          audioData =  JSON.parse(data.audioData);
-          for(var i = 0; i < audioData.length; i++){
-            audioData[i].port = i + 1;
-          }
-          var track = new TrackModel({audioData: audioData});
-          var trackView = new TrackView({model: track});
-
-        $this.mainView.renderTrackView(trackView);
-        track.setd3timer();
-        track.get
-
-
       var signup = this.$el.find('#signup');
+
       signup.on('click', function() {
+        var d = JSON.stringify({
+            username:'Harry',
+            password: 'Fireboltasdfasdf',
+            email:'123@123.com'
+          });
+
         $.ajax({
           type: 'POST',
-          url: '/signup'
-        })
+          accept: 'application/json',
+          url: 'auth/signup',
+          data: d,
+          contentType:"application/json; charset=utf-8"
+        }).done(function(data) { console.log('got a reply from server, logging out the data', data);
+          });
       });
+
+      var login = this.$el.find('#login');
+
+      login.on('click', function() {
+        var d = JSON.stringify({
+            username:'Harry',
+            password: 'Fireboltasdfasdf',
+            email:'123@123.com'
+          });
+
+        $.ajax({
+          type: 'POST',
+          accept: 'application/json',
+          url: 'auth/login',
+          data: d,
+          contentType:"application/json; charset=utf-8"
+        }).done(function(data) { console.log('got a reply from server, logging out the data', data);
+          });
+      });
+
       return this;
     },
+
+
 
     renderRecentTracks: function() {
       this.$el.find('.recentTracks').children().detach();
