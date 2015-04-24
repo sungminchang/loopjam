@@ -1,4 +1,5 @@
 var models = require('../database/db');
+var bcrypt = require('bcrypt-nodejs');
 
 module.exports.isValidPassword = function (user,password){
     //refactor

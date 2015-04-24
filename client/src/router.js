@@ -47,12 +47,12 @@ define([
       track.get('loopNodes').each(function(loopNode){loopNode.set('rerender', !loopNode.get('rerender'))})
 
       } else {
-
+        $this = this;
           $.ajax({
             type: "POST",
             url: "/tracks/:id",
-            data: {trackID: id},
-            success: function(data){
+            data: {trackID: id}
+          }).done(function(data){
               audioData =  JSON.parse(data.audioData);
               for(var i = 0; i < audioData.length; i++){
                 audioData[i].port = i + 1;
@@ -60,14 +60,11 @@ define([
               var track = new TrackModel({audioData: audioData});
               var trackView = new TrackView({model: track});
 
-            this.mainView.renderTrackView(trackView);
+            $this.mainView.renderTrackView(trackView);
             track.setd3timer();
             track.get('loopNodes').each(function(loopNode){loopNode.set('rerender', !loopNode.get('rerender'))})
 
-            },
-            error: function(data){
-            }
-          });
+            });
       }
 
       
