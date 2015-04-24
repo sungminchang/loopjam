@@ -78,7 +78,7 @@ define([
         svg.selectAll(".cue").attr("transform", function(d) {
           // amount to rotate from original (xPos:0, yPos:1) position
           var rotateDeg = (delta * angularSpeed - tempoAdjustment) / multiplier;
-
+          debugger;
           // animation at 90, 180, 270, and 360 degree
 
           if(rotateDeg % 90 < 20 || rotateDeg % 90 > 80){
