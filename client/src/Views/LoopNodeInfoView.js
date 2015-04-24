@@ -54,7 +54,7 @@ define([
         }.bind(this)
       });
       
-      $( ".amount" + port ).val( $( ".slider-vertical" + port ).slider( "value" ) );
+      this.$el.find( ".amount" + port ).val( volume );
 
       return this;
     },
@@ -63,8 +63,7 @@ define([
       var port = this.model.get('port');
       var volume = this.model.get('volume');
 
-      this.$el.find('.slider-vertical' + port).slider( "option", "value" , volume);
-      $( ".amount" + port ).val( $( ".slider-vertical" + port ).slider( "value" ) );
+      this.$el.find( ".amount" + port ).val( volume );
     },
 
     rerecordButtonDisable: function(){

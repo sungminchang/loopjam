@@ -22,6 +22,7 @@ define([
       this.$el.html(this.template(this.model.attributes));
 
       var port = this.model.get('port');
+      var tempo = this.model.get('tempo');
 
       $(this.el).find('#slider-vertical' + port).slider({
         orientation: "horizontal",
@@ -36,7 +37,7 @@ define([
       });
 
 
-      $( "#amount" + port ).val( $( "#slider-vertical" + port ).slider( "value" ) );
+      this.$el.find( "#amount" + port ).val( tempo );
 
       // this.delegateEvents();
 
