@@ -529,9 +529,10 @@ function(LoopNodeCollection, LoopNodeModel){
           nodeData.recorded = true;
           trackData.audioData.push(nodeData);
         }
-        this.trigger("modalShowWaiting");
 
         var trackSaveCallback = function(URLArray){
+          
+          this.trigger("modalShowWaiting");
 
           var uploadSync = function(i){
 
