@@ -1,26 +1,27 @@
 
 <div class="panel panel-default">
   <div class="panel-heading loopNodeInfoTitle">
-    <h3 class="panel-title "> Loop #{{port}} Info</h3>
-</h3>
+    <h3 class="panel-title" style="font-size: 18px"> Loop #{{port}} Settings</h3>
   </div>
   <div class="panel-body">
-  <button class="btn btn-danger re-record" value="1"><i class="fa fa-circle"></i> Re-record</button>
-
-  <p>
-   <label for="amount{{port}}">Volume:</label>
-   <input type="text" class="amount{{port}}" readonly style="border:0; color:#f6931f; font-weight:bold; width:35px ;">
-  </p>
-
-  <div class="slider-vertical{{port}}" style="height:200px;"></div>
-  </div>
-
-  <button class="btn btn-danger remove">
-    <span class="glyphicon glyphicon-remove">
+  <div class="col-md-12">
+    <div class="col-md-6" style="margin-top:30px">
+      <button class="btn btn-danger re-record btn-l" value="1"><i class="fa fa-circle"></i> Re-record</button>
+<br>
+<br>
+  <button class="btn btn-default remove btn-l" style="margin-left: 4px;">
+    <span class="glyphicon glyphicon-trash">
     </span>
-    Remove LoopNode
+    Remove
   </button>
-
+  </div>
+  <div class="col-md-6">
+      <p>
+       <label style = "font-size:18px; margin-left: 10px; font-weight:600;" for="amount{{port}}">Volume:</label>
+       <input type="text" class="amount{{port}}" readonly style="border:0; font-size:20px; color:#f6931f; font-weight:bold; width:35px; background:#273A47;">
+      </p>
+    <div class="slider-vertical{{port}}" style="height:90px; left: 50px"></div>
+      </div>
   </div>
 </div>
 

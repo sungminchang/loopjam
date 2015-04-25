@@ -1,31 +1,11 @@
-
-
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h3 class="panel-title">Track Info</h3>
+    <h3 class="panel-title" style="font-size: 18px">Track Info</h3>
   </div>
   <div class="panel-body">
-    <div class="col-md-12">
-    
-  <div class="col-md-6">
-  <p class="navbar-text"><strong><i class="fa fa-clock-o"></i> Metronome:</strong></p>
-  
-  <div class="onoffswitch">
-      <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox playMet" id="myonoffswitch">
-      <label class="onoffswitch-label" for="myonoffswitch">
-          <span class="onoffswitch-inner"></span>
-          <span class="onoffswitch-switch" style="height: 18px"></span>
-      </label>
-  </div>
-
-<br>
-<br>
-<br>
-
-  <div class="container">
-    <div class="row">
-      <!-- Button trigger modal -->
-        <button class="btn btn-default"  title="Saved your track" data-toggle="modal" data-target="#savedModel" disabled="disabled">
+    <div clas="col-md-12">
+    <!-- Button trigger modal -->
+        <button class="btn btn-default btn-xl btn-save"  style="background-color:#56BA9A" title="Saved your track" data-toggle="modal" data-target="#savedModel" disabled="disabled">
           <i class="fa fa-save"></i> Save Track
         </button>
 
@@ -50,16 +30,41 @@
             </div>
           </div>
         </div>
-    </div>
+        </div>
+  <div class="col-md-6" style="margin-top: 26px">
+
+      <!-- Button trigger modal -->
+
+  <p><strong><i class="fa fa-clock-o"></i> Metronome</strong></p>
+
+  <div class="onoffswitch">
+      <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox playMet" id="myonoffswitch">
+      <label class="onoffswitch-label" for="myonoffswitch">
+          <span class="onoffswitch-inner"></span>
+          <span class="onoffswitch-switch" style="height: 18px"></span>
+      </label>
   </div>
+    
+  <br>
+    <p><strong><i class="fa fa-bar-chart"></i> Visualizer</strong></p>
+  <div class="onoffswitch-visualizer">
+      <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox visualizer" id="myonoffswitch-visualzier">
+      <label class="onoffswitch-label" for="myonoffswitch-visualzier">
+          <span class="onoffswitch-inner"></span>
+          <span class="onoffswitch-switch" style="height: 18px"></span>
+      </label>
+  </div>
+
 </div>
 
-<div class="col-md-6">
-  <label for="amount{{port}}">Tempo:</label>
-    <input type="text" id="amount{{port}}" readonly style="border:0; color:#f6931f; font-weight:bold; width:35px">
-    <div id="slider-vertical{{port}}" style="height:200px;"></div>
-  </div>
 
+<div class="col-md-6">
+
+<div class="tempo" style="margin-top:20px">
+  <label style="font-size:18px; margin-left: 10px; font-weight:600" for="amount{{port}}">Tempo:</label>
+    <input type="text" id="amount{{port}}" readonly style="border:0; font-size:20px; color:#f6931f; font-weight:bold; width:35px; background:#273A47"><div id="slider-vertical{{port}}" style="height:100px; left:50px"></div>
+  </div>
+</div>
 
 </div>
   </div>

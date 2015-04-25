@@ -45,6 +45,7 @@ define([
       this.$el.append(new LoopNodeEntryView({model: newLoopNode}).render().el);
       this.$el.append($addButton);
 
+
       return this;
     },
 
@@ -59,7 +60,7 @@ define([
       this.$el.append($addButton);
 
       this.render();
-
+      
       this.collection.each(function(loopNode){loopNode.set('rerender', !loopNode.get('rerender'))})
 
 

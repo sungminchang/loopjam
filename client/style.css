@@ -3,14 +3,23 @@
 @import 'src/flat-ui.min.css';
 
 /*Dark: #1C2932
-2nd Dark: #273A47
-Mid-Dark: #395567;
-Mid: #A5BAC5;
-Light: #B8CCD5;
-Very Light: #CFDEE5
-Red: #EC4F43;
-Green: #56BA9A;
+  2nd Dark: #273A47
+  Mid-Dark: #395567;
+  Mid: #A5BAC5;
+  Light: #B8CCD5;
+  Very Light: #CFDEE5
+  Red: #EC4F43;
+  Green: #56BA9A;
 */
+
+html, body
+{
+    height: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+  background-color: #273A47;
+}
 
 .navbar{
   background: #1C2932;
@@ -19,32 +28,21 @@ Green: #56BA9A;
 }
 
 body{
-  background-color: #1C2932;
 }
 
 .loopNodesView{
   padding:25px; 
   background-color:#395567; 
   margin-top:-40px; 
-  height:1000px; 
-  box-shadow: 10px 10px 10px 10px rgba(0,0,0,0.25);
 }
 
 .sideBar{
   padding:25px; 
-  background-color:#273A47; 
+  background-color:#1C2932; 
   margin-top:-40px; 
-  height:1000px; 
-  box-shadow: 3px 3px 5px 0px rgba(0,0,0,0.25);
+  background:#273A47;
 }
 
-.btn-danger{
-  background-color: #EC4F43
-}
-
-.btn-success{
-  background-color: #56BA9A
-}
 
 .fa-circle-o-notch{
   color: #EC4F43;
@@ -87,6 +85,35 @@ h1, h2, h3, h4{
   border-radius: 8px;
 }
 
+.btn-xl {
+  padding: 10px 16px;
+  font-size: 26px;
+  border-radius: 8px;
+  left:-17px;
+}
+
+.btn-l {
+  padding: 9px 15px;
+  font-size: 20px;
+  border-radius: 8px;
+  left:-17px;
+}
+
+.btn-save{
+  position: relative;
+  margin-top:25px;
+  left:90px;
+}
+
+
+
+.btn-danger{
+  background-color: #EC4F43
+}
+
+.btn-success{
+  background-color: #56BA9A
+}
 
 /*.jumbotron{
   margin-bottom:0px;
@@ -362,18 +389,18 @@ h1, h2, h3, h4{
 .onoffswitch {
     position: absolute;
   width: 85px;
-  left: 175px;
+  left: 30px;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
-  top: 175px;
+  top: 30px;
 }
 .onoffswitch-checkbox {
     display: none;
 }
 .onoffswitch-label {
     display: block; overflow: hidden; cursor: pointer;
-    border: 2px solid #999999; border-radius: 20px;
+    border: 2px solid #999999; border-radius: 20px; width:100px;
 }
 .onoffswitch-inner {
     display: block; width: 200%; margin-left: -100%;
@@ -397,10 +424,16 @@ h1, h2, h3, h4{
     text-align: right;
 }
 .onoffswitch-switch {
-    display: block; width: 18px; margin: 6px;
-    background: #FFFFFF;
-    border: 2px solid #999999; border-radius: 20px;
-    position: absolute; top: 0; bottom: 0; right: 56px;
+  display: block;
+  width: 20px;
+  margin: 6px;
+  background: #FFFFFF;
+  border: 2px solid #999999;
+  border-radius: 7px;
+  position: absolute;
+  top: 1px;
+  bottom: 0;
+  right: 40px;
     -moz-transition: all 0.3s ease-in 0s; -webkit-transition: all 0.3s ease-in 0s;
     -o-transition: all 0.3s ease-in 0s; transition: all 0.3s ease-in 0s; 
 }
@@ -411,6 +444,18 @@ h1, h2, h3, h4{
     right: 0px; 
 }
 
+.onoffswitch-visualizer {
+  position: absolute;
+  width: 85px;
+  left: 30px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  top: 106px;
+
+}
+
+
 .loader{
   margin: 0 0 2em;
   height: 100px;
@@ -420,4 +465,48 @@ h1, h2, h3, h4{
   margin: 0 auto 1em;
   display: inline-block;
   vertical-align: top;
+}
+
+
+/*  Vertical Sliders */
+
+.slider-text{
+  border:0px; 
+  color:#f6931f; 
+  font-weight:bold; 
+  width:35px
+}
+
+.tempo-slider{
+  height:200px;
+}
+
+.ui-slider-vertical .ui-slider-handle {
+  left: -1.3em;
+}
+
+.ui-slider .ui-slider-handle{
+  width: 3.2em;
+}
+
+.panel{
+
+}
+
+.panel-body{
+  background:#273A47;
+  color:#CFDEE5;
+}
+
+/*Dark: #1C2932
+  2nd Dark: #273A47
+*/
+
+.panel-heading{
+  color: #CFDEE5;
+  background-color: #1C2932;
+  border: 0px;
+}
+
+.panel-default{
 }
