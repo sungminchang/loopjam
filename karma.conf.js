@@ -26,6 +26,8 @@ module.exports = function (config){
   //List of reporters to use
   reporters: ['progress'],
 
+  singleRun: true,
+
   plugins : [
             'karma-junit-reporter',
             'karma-phantomjs-launcher',
