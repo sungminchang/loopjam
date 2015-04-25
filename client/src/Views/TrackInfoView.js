@@ -15,6 +15,7 @@ define([
 
     events: {
       'click .playMet': 'playMetronome',
+      'click .visualizer': 'activateVisualiser',
       'click .saveTrackBtn': 'saveTrackModel',
 
     },
@@ -55,6 +56,15 @@ define([
       }
 
       console.log('tempo changed: ', this.model.get('tempo'));
+    },
+
+    activateVisualiser: function() {
+      var visualiserOn = this.model.get('visualiserOn');
+      if (!visualiserOn) {
+        this.model.set('visualiserOn', !visualiserOn);
+      } else {
+        this.model.set('visualiserOn', !visualiserOn);
+      }
     },
 
     saveTrackModel: function(){
