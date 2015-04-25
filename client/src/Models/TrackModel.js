@@ -342,6 +342,17 @@ function(LoopNodeCollection, LoopNodeModel){
 
       },
 
+      playMetronome: function(){
+        if(this.get('updateAnim')){
+          var bar = calcBar(this.get('tempo'));
+          var angularSpeed = calcSpeed(bar);
+          var tempoAdjustment = this.get('tempoAdjustment');
+        }
+        var rotateDeg = this.get('context').currentTime * angularSpeed - tempoAdjustment;
+        var degree = (rotateDeg % 360)
+
+      },
+
       CueAnimation: function(){
 
         if(this.get('updateAnim')){
