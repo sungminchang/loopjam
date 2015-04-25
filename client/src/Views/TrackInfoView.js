@@ -23,14 +23,14 @@ define([
       this.$el.html(this.template(this.model.attributes));
 
       var port = this.model.get('port');
-      var tempo = this.model.get('tempo');
+      var tempo = this.model.get('savedAtTempo') || this.model.get('tempo');
 
       $(this.el).find('#slider-vertical' + port).slider({
         orientation: "vertical",
         range: "min",
         min: 30,
         max: 180,
-        value: 120,
+        value: tempo,
         slide: function( event, ui ) {
           $( "#amount" + port ).val( ui.value );
           this.model.changeTempo(ui.value, this.model.get('context').currentTime);

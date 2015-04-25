@@ -63,10 +63,12 @@ define([
             data: {trackID: id}
           }).done(function(data){
               audioData =  JSON.parse(data.audioData);
+              debugger;
               for(var i = 0; i < audioData.length; i++){
                 audioData[i].port = i + 1;
               }
               this.track = new TrackModel({audioData: audioData});
+              this.track.set('savedAtTempo', data.tempo);
               var trackView = new TrackView({model: this.track});
 
             $this.mainView.renderTrackView(trackView);
