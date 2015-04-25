@@ -2,6 +2,66 @@
 @import '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css';
 @import 'src/flat-ui.min.css';
 
+/*Dark: #1C2932
+2nd Dark: #273A47
+Mid-Dark: #395567;
+Mid: #A5BAC5;
+Light: #B8CCD5;
+Very Light: #CFDEE5
+Red: #EC4F43;
+Green: #56BA9A;
+*/
+
+.navbar{
+  background: #1C2932;
+  margin-bottom:0px;
+  border-radius: 0px;
+}
+
+body{
+  background-color: #1C2932;
+}
+
+.loopNodesView{
+  padding:25px; 
+  background-color:#395567; 
+  margin-top:-40px; 
+  height:1000px; 
+  box-shadow: 10px 10px 10px 10px rgba(0,0,0,0.25);
+}
+
+.sideBar{
+  padding:25px; 
+  background-color:#273A47; 
+  margin-top:-40px; 
+  height:1000px; 
+  box-shadow: 3px 3px 5px 0px rgba(0,0,0,0.25);
+}
+
+.btn-danger{
+  background-color: #EC4F43
+}
+
+.btn-success{
+  background-color: #56BA9A
+}
+
+.fa-circle-o-notch{
+  color: #EC4F43;
+}
+
+.loopBackground{
+  fill:  #1C2932;
+  stroke-width: 5px;
+  stroke:#1C2932;
+}
+
+.loopForeground{
+  fill: #1C2932;
+  stroke-width: 5px;
+  stroke:#1C2932;
+}
+
 /*a{
   color:inherit;
 }
@@ -20,10 +80,6 @@ h1, h2, h3, h4{
  display: block; margin-bottom: 10px; 
 } 
 */
-.navbar{
-  margin-bottom:0px;
-  border-radius: 0px
-}
 
 .btn-xxl {
   padding: 20px 26px;
@@ -57,105 +113,106 @@ h1, h2, h3, h4{
 
 .btn-record {
   transition: fill 0.5s ease;
-   fill: black;}
+   fill: #395567;}
 
 .btn-record:hover {
-  fill: red; }
+  fill: #EC4F43; }
 
 .record-wait {
-  animation: wait 1s;
-  -moz-animation: wait 1s infinite;
+  animation: wait 0.5s;
+  -moz-animation: wait 0.5s infinite;
   /* Firefox */
-  -webkit-animation: wait 1s infinite;
+  -webkit-animation: wait 0.5s infinite;
   /* Safari and Chrome */ }
 
 .play-wait {
-  animation: playwait 1s;
-  -moz-animation: playwait 1s infinite;
+  animation: playwait 0.5s;
+  -moz-animation: playwait 0.5s infinite;
   /* Firefox */
-  -webkit-animation: playwait 1s infinite;
+  -webkit-animation: playwait 0.5s infinite;
   /* Safari and Chrome */ }
 
 @-moz-keyframes wait {
   0% {
-    fill: red; }
+    fill: #EC4F43; }
 
   50% {
-    fill: black; }
+    fill: #A5BAC5; }
 
   100% {
-    fill: red; } }
+    fill: #EC4F43; } }
 
 @-webkit-keyframes wait {
   0% {
-    fill: red; }
+    fill: #EC4F43; }
 
   50% {
-    fill: black;}
+    fill: #A5BAC5;}
 
   100% {
-    fill: red; } }
+    fill: #EC4F43; } }
 
 @-moz-keyframes playwait {
   0% {
-    fill: #339900; }
+    fill: #56BA9A; }
 
   50% {
     fill: orange; }
 
   100% {
-    fill: #339900; } }
+    fill: #56BA9A; } }
 
 @-webkit-keyframes playwait {
   0% {
-    fill: #339900; }
+    fill: #56BA9A; }
 
   50% {
     fill: orange; }
 
   100% {
-    fill: #339900; } }
+    fill: #56BA9A; } }
 
 .pause {
-  opacity: 0.5;
+  opacity: 0.8;
   transition: opacity 0.5s ease;
   display: none; }
 
 .pause:hover {
-  opacity: 0.7; }
+  opacity: 1; }
 
 .record-new {
   transition: opacity 0.5s ease;
-  opacity: 0.5; }
+  opacity: 0.8; }
 
 .record-new:hover {
-  opacity: 0.7; }
+  opacity: 1; }
 
 .play {
-  opacity: 0.5;
+  opacity: 0.8;
   display: none; }
 
 .play:hover {
-  opacity: 0.7; }
+  opacity: 1; }
 
 .btn-play {
   position: absolute;
   left: 108px;
   top: 87px;
-  font-size: 24px;
-  opacity: 0.5; }
+  font-size: 38px;
+  opacity: 1; 
+}
 
 .btn-pause {
   position: absolute;
   left: 105px;
   top: 87px;
-  font-size: 24px;
-  opacity: 0.5; }
+  font-size: 38px;
+  opacity: 1; }
 
 .btn-svg {
   position: absolute;
-  left: 55px;
-  top: 40px; }
+  left: 60px;
+  top: 45px; }
 
   .menu {
     -webkit-filter: url("#shadowed-goo");
@@ -163,7 +220,7 @@ h1, h2, h3, h4{
   }
 
   .menu-item, .menu-open-button {
-    background: grey;
+    background: #1C2932;
     border-radius: 100%;
     width: 80px;
     height: 80px;
@@ -227,7 +284,7 @@ h1, h2, h3, h4{
 
   .menu-item:hover {
     background: rgb(238, 238, 238);
-    color: grey;
+    color: #1C2932;
   }
   .menu-item:nth-child(3) {
     -webkit-transition-duration: 70ms;

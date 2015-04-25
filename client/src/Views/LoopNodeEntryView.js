@@ -17,8 +17,8 @@ define([
   createLoopNode: function(loopNodeClass){
     var d3Container = {};
 
-    var width = 200,
-    height = 200,
+    var width = 210,
+    height = 210,
     tau = 2 * Math.PI
 
     var arc = d3.svg.arc().innerRadius(60).outerRadius(100).startAngle(0);
@@ -31,11 +31,19 @@ define([
     .append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
 
-    var foreground = svg.append("path")
-        .datum({endAngle: .0 * tau})
-        .style("fill", "orange")
-        .attr("d", arc);
-      
+
+
+    var background = svg.append("path")
+    .attr("class", "loopBackground")
+    .datum({endAngle: tau})
+    .attr("d", arc);
+
+
+var foreground = svg.append("path")
+    .attr("class", "loopForeground")
+    .datum({endAngle: .1 * tau})
+    .attr("d", arc);
+  
       d3Container.svg = svg;
 
       return d3Container;

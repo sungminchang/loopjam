@@ -26,7 +26,7 @@ define([
       var tempo = this.model.get('tempo');
 
       $(this.el).find('#slider-vertical' + port).slider({
-        orientation: "horizontal",
+        orientation: "vertical",
         range: "min",
         min: 30,
         max: 180,
