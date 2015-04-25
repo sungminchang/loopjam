@@ -62,7 +62,7 @@ function(LoopNodeCollection, LoopNodeModel){
         if (currentLoop.get('source')) {
           this.pause(currentLoop);
         }
-        this.get('loopNodes').remove(currentLoop);
+        // this.get('loopNodes').remove(currentLoop);
       }.bind(this))
 
       this.get('loopNodes').on("add", function(){

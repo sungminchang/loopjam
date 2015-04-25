@@ -6,7 +6,7 @@ define([
 
     initialize: function() {
       this.collection.on('add', this.renderNewLoopNode, this);
-      this.collection.on('remove', this.removeLoopNode, this);
+      this.collection.on('removeLoopNode', this.removeLoopNode, this);
       this.collection.on('rerender', this.render, this);
       
     },
@@ -55,13 +55,23 @@ define([
       var loopNodeDivs = this.$el.find('.col-md-4.col-sm-6');
       var port = currentLoop.get('port');
       var loopNodeDiv = loopNodeDivs[port - 1];
-      $(loopNodeDiv).parent().remove();
-
+      $(loopNodeDiv).parent().fadeOut(300);
       this.$el.append($addButton);
 
-      this.render();
-      
-      this.collection.each(function(loopNode){loopNode.set('rerender', !loopNode.get('rerender'))})
+      setTimeout(function() {
+        $(loopNodeDiv).parent().remove();
+        // this.collection.trigger('removeLoopNode', currentLoop);
+
+        this.collection.remove(currentLoop);
+        
+        var newSelectedNode = this.collection.models[port - 1];
+        newSelectedNode.trigger('selected', newSelectedNode);
+        
+        this.render();
+        this.collection.each(function(loopNode){loopNode.set('rerender', !loopNode.get('rerender'))})
+
+          
+      }.bind(this), 300);
 
 
       // this.delegateEvents(this.events);

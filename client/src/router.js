@@ -3,8 +3,9 @@ define([
   'Views/AppView',
   'Models/TrackModel',
   'Views/TrackView',
-  'Views/MainView'
-], function(AppModel, AppView, TrackModel, TrackView, MainView){
+  'Views/MainView',
+  'text!templates/BrowserAlertViewTemplate.html'
+], function(AppModel, AppView, TrackModel, TrackView, MainView, BrowserAlertTemplate){
   var AppRouter = Backbone.Router.extend({
     routes: {
       // Routes
@@ -15,6 +16,31 @@ define([
       '*badUrl': 'default'
     },
 
+    execute: function(callback, args) {
+      var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+        // Opera 8.0+ (UA detection to detect Blink/v8-powered Opera)
+      var isFirefox = typeof InstallTrigger !== 'undefined';   // Firefox 1.0+
+      var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
+          // At least Safari 3+: "[object HTMLElementConstructor]"
+      var isChrome = !!window.chrome && !isOpera;              // Chrome 1+
+      var isIE = /*@cc_on!@*/false || !!document.documentMode; // At least IE6
+      if (!isChrome) {
+        this.loadBrowserAlertView();
+      } else {
+        if (args) {
+          callback.apply(null, args);
+        } else {
+          callback();
+        }
+      }
+    },
+
+    browserAlertTemplate: Handlebars.compile(BrowserAlertTemplate),
+
+    loadBrowserAlertView: function() {
+      var BrowserAlertTemplate = this.browserAlertTemplate;
+      $('body').find('.main').html(BrowserAlertTemplate());
+    },
 
     loadMainView: function(){
       // kill any running audiocontext
