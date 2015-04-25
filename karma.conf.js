@@ -34,12 +34,12 @@ module.exports = function (config){
 
   singleRun: true,
 
-  plugins : [
-            'karma-junit-reporter',
-            'karma-phantomjs-launcher',
-            'karma-jasmine',
-            'karma-chai',
-            'karma-mocha'
-            ],
+  // plugins : [
+  //           'karma-junit-reporter',
+  //           'karma-phantomjs-launcher',
+  //           'karma-jasmine',
+  //           'karma-chai',
+  //           'karma-mocha'
+  //           ],
   });
 }
