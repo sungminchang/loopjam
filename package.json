@@ -20,7 +20,6 @@
     "karma-mocha": "^0.1.10",
     "karma-phantomjs-launcher": "^0.1.4",
     "mocha": "^2.2.4",
-    "phantomjs": "^1.9.16",
     "requirejs": "~2.1.11"
   },
   "dependencies": {
@@ -49,6 +48,7 @@
     "passport-local": "^1.0.0",
     "pg": "^4.3.0",
     "pg-hstore": "^2.3.2",
+    "phantomjs": "^1.9.16",
     "sequelize": "^2.0.5"
   },
   "engines": {
