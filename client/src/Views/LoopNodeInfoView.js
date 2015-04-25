@@ -42,7 +42,7 @@ define([
       var volume = this.model.get('volume');
 
       this.$el.find('.slider-vertical' + port).slider({
-        orientation: "horizontal",
+        orientation: "vertical",
         range: "min",
         min: 0,
         max: 100,

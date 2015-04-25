@@ -24,7 +24,7 @@ define([
       var port = this.model.get('port');
 
       $(this.el).find('#slider-vertical' + port).slider({
-        orientation: "horizontal",
+        orientation: "vertical",
         range: "min",
         min: 30,
         max: 180,
