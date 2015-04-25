@@ -7,8 +7,11 @@ module.exports = function (config){
   frameworks: ['jasmine'],
   //List of files to load
   files: [
-  'client/src/app.js',
+  'test/test.js',
+  
   ],
+  //set the port number
+  port: 1337,
   // List of files/patterns to exclude from loaded files.
   exclude: [],
   //Enable or disable watching files and executing the tests whenever one of these files changes.
@@ -22,13 +25,13 @@ module.exports = function (config){
     // PhantomJS
   browsers : ['Chrome'],
   //List of reporters to use
-  reporters: ['progress']
-  // plugins : [
-  //       'karma-junit-reporter',
-  //       'karma-chrome-launcher',
-  //       'karma-jasmine',
-  //       'karma-chai',
-  //       'karma-phantomjs-launcher'
-  //   ]
+  reporters: ['progress'],
+
+  plugins : [
+            'karma-junit-reporter',
+            'karma-chrome-launcher',
+            'karma-phantomjs-launcher',
+            'karma-jasmine'
+            ],
   });
 }
