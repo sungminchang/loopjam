@@ -72,23 +72,23 @@ module.exports = function (grunt) {
         server: 'Google Chrome'
       }
     },
-    karma: {
-      unit: {
-        configFile: 'karma.conf.js',
-        background: true,
-        singleRun: true,
-      },
-      continuous:{
-        configFile: 'karma.conf.js',
-        singleRun: true,
-        browsers: ['PhantomJS']
-      },
-      travis: {
-        configFile: 'karma.conf.js',
-        singleRun: true,
-        browsers: ['PhantomJS']
-      }
-    },
+    // karma: {
+    //   unit: {
+    //     configFile: 'karma.conf.js',
+    //     background: true,
+    //     singleRun: true,
+    //   },
+    //   continuous:{
+    //     configFile: 'karma.conf.js',
+    //     singleRun: true,
+    //     browsers: ['PhantomJS']
+    //   },
+    //   travis: {
+    //     configFile: 'karma.conf.js',
+    //     singleRun: true,
+    //     browsers: ['PhantomJS']
+    //   }
+    // },
     watch: {
       express: {
         files: ['./server.js'],
@@ -96,11 +96,11 @@ module.exports = function (grunt) {
         options: {
           spawn: false,
         }
-      },
-      karma: {
-        files: ['test/test.js'],
-        tasks: ['karma:continuous:run']
       }
+      // karma: {
+      //   files: ['test/test.js'],
+      //   tasks: ['karma:continuous:run']
+      // }
     },
     shell: {
       prodServer: {
@@ -124,7 +124,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-nodemon');
-  grunt.loadNpmTasks('grunt-karma');
+  // grunt.loadNpmTasks('grunt-karma');
 
   //Server Development
   grunt.registerTask('server-dev', function (target) {
