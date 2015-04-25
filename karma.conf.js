@@ -8,7 +8,6 @@ module.exports = function (config){
   //List of files to load
   files: [
   'test/test.js',
-  
   ],
   //set the port number
   port: 1337,
@@ -23,7 +22,7 @@ module.exports = function (config){
     // Opera
     // Safari
     // PhantomJS
-  browsers : ['Chrome'],
+  browsers : ['PhantomJS'],
   //List of reporters to use
   reporters: ['progress'],
 
