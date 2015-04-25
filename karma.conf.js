@@ -4,11 +4,13 @@ module.exports = function (config){
   // Base path, that will be used to resolve all relative paths defined in files and exclude
   basePath: '',
   //Testing frameworks to use
-  frameworks: ['jasmine'],
+  frameworks: ['jasmine','chai','mocha'],
   //List of files to load
   files: [
-  'client/src/app.js',
+  'test/test.js',
   ],
+  //set the port number
+  port: 1337,
   // List of files/patterns to exclude from loaded files.
   exclude: [],
   //Enable or disable watching files and executing the tests whenever one of these files changes.
@@ -20,15 +22,17 @@ module.exports = function (config){
     // Opera
     // Safari
     // PhantomJS
-  browsers : ['Chrome'],
+  browsers : ['PhantomJS'],
   //List of reporters to use
-  reporters: ['progress']
-  // plugins : [
-  //       'karma-junit-reporter',
-  //       'karma-chrome-launcher',
-  //       'karma-jasmine',
-  //       'karma-chai',
-  //       'karma-phantomjs-launcher'
-  //   ]
+  reporters: ['progress'],
+
+  plugins : [
+            'karma-junit-reporter',
+            'karma-chrome-launcher',
+            'karma-phantomjs-launcher',
+            'karma-jasmine',
+            'karma-chai',
+            'karma-mocha'
+            ],
   });
 }

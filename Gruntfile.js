@@ -61,17 +61,6 @@ module.exports = function (grunt) {
       },
       files: ['client/src/app.js']
     },
-
-    karma: {
-      unit: {
-        configFile : 'karma.conf.js'
-      },
-      continuous: {
-        configFile: 'karma.conf.js',
-        singleRun: true,
-        browsers: ['PhantomJS']
-      }
-    },
     nodemon: {
       dev: {
         script: './server.js'
@@ -83,6 +72,23 @@ module.exports = function (grunt) {
         server: 'Google Chrome'
       }
     },
+    karma: {
+      unit: {
+        configFile: 'karma.conf.js',
+        background: true,
+        singleRun: true,
+      },
+      continuous:{
+        configFile: 'karma.conf.js',
+        singleRun: true,
+        browsers: ['PhantomJS']
+      },
+      travis: {
+        configFile: 'karma.conf.js',
+        singleRun: true,
+        browsers: ['PhantomJS']
+      }
+    },
     watch: {
       express: {
         files: ['./server.js'],
@@ -90,12 +96,11 @@ module.exports = function (grunt) {
         options: {
           spawn: false,
         }
+      },
+      karma: {
+        files: ['test/test.js'],
+        tasks: ['karma:continuous:run']
       }
-      // },
-      // karma: {
-      //   files:['test/*.js'],
-      //   tasks: ['karma:unit:run']
-      // }
     },
     shell: {
       prodServer: {
@@ -136,8 +141,8 @@ module.exports = function (grunt) {
     //Register Unit Tasks
 
   grunt.registerTask('build', ['jshint','clean','concat','uglify','cssmin']);
-  grunt.registerTask('default', ['express:dev', 'watch','nodemon','karma:unit']);
+  grunt.registerTask('default', ['express:dev', 'watch','karma:continuous:start', 'nodemon']);
   grunt.registerTask('unit-test', ['karma:unit']);
-  //Initiated in scripts line in package.json
-  grunt.registerTask('test', ['jshint', 'express:dev']);
+  grunt.registerTask('test', ['jshint','karma:travis']);
+  grunt.registerTask('devmode',['karma:continuous','watch']);
 }
