@@ -140,8 +140,7 @@ module.exports = function (grunt) {
 
     //Register Unit Tasks
 grunt.registerTask('build',[])
-  grunt.registerTask('default', ['express:dev', 'watch','karma:continuous:start', 'nodemon']);
-  grunt.registerTask('unit-test', ['karma:unit']);
+  grunt.registerTask('default', ['express:dev', 'watch', 'nodemon']);
   grunt.registerTask('test', ['jshint']);
-  grunt.registerTask('devmode',['karma:continuous','watch']);
+  // grunt.registerTask('devmode',['karma:continuous','watch']);
 }
