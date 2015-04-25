@@ -83,7 +83,6 @@ define([
       $(".main").html("404: the page doesn't exist. You tried to access: " + badUrl);
     }
 
-
   });
 
   return AppRouter;

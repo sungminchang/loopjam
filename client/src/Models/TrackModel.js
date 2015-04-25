@@ -376,8 +376,8 @@ function(LoopNodeCollection, LoopNodeModel){
             }
 
           // console.log(degree)
-              d3.select(loopNodesClasses[i]).select('path').datum({endAngle: degree * (2 * Math.PI)})
-              .style("fill", "skyblue")
+              d3.select(loopNodesClasses[i]).select('.loopForeground').datum({endAngle: degree * (2 * Math.PI)})
+              .style("fill", "#395567")
               .attr("d", arc);
               // $loopNodesClasses[i].val(degree).trigger('change');
             
