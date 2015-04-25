@@ -143,6 +143,6 @@ module.exports = function (grunt) {
   grunt.registerTask('build', ['jshint','clean','concat','uglify','cssmin']);
   grunt.registerTask('default', ['express:dev', 'watch','karma:continuous:start', 'nodemon']);
   grunt.registerTask('unit-test', ['karma:unit']);
-  grunt.registerTask('test', ['jshint', 'express:dev','karma:travis']);
+  grunt.registerTask('test', ['jshint','karma:travis']);
   grunt.registerTask('devmode',['karma:continuous','watch']);
 }
