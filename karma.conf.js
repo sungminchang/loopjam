@@ -22,7 +22,7 @@ module.exports = function (config){
     // Opera
     // Safari
     // PhantomJS
-  browsers : ['PhantomJS'],
+  browsers : ['Chrome'],
   //List of reporters to use
   reporters: ['progress'],
 
