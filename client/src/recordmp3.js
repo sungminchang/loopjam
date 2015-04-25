@@ -2,7 +2,7 @@
 
   var WORKER_PATH = 'src/recorderWorker.js';
 
-  var Recorder = function(source, cfg){
+  var Recorder = function(source, cfg, track){
     var config = cfg || {};
     var bufferLen = config.bufferLen || 1024;
     console.log(bufferLen)
@@ -84,6 +84,8 @@
             data = parseWav(buffer);
             
     		console.log("Converting to Mp3");
+        track.set('converting', track.get('converting') + 1);
+        track.trigger('disableSave');
 
         encoderWorker.postMessage({ 
           cmd: 'init', 
@@ -106,6 +108,11 @@
         encoderWorker.onmessage = function(e) {
           if (e.data.cmd === 'data') {
       			console.log("Done converting to Mp3");
+            track.set('converting', track.get('converting') - 1);
+            // // Trigger a method that leads to unlocking the save track button
+            if (track.get('converting') === 0) {
+              track.trigger('enableSave');
+            }
       			console.log ("The Mp3 data " + e.data.buf);
       			var mp3Blob = new Blob([new Uint8Array(e.data.buf)], {type: 'audio/mp3'});
       			

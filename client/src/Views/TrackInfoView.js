@@ -9,7 +9,8 @@ define([
 
       this.model.on('modalShowWaiting', this.modalShowWaiting, this)
       this.model.on('modalShowShare', this.modalShowShare, this)
-
+      this.model.on('enableSave', this.enableSave, this);
+      this.model.on('disableSave', this.disableSave, this);
     },
 
     events: {
@@ -99,6 +100,16 @@ define([
       
       $(this.el).find('.saved-body').html(modalBody); 
       $(this.el).find('.saved-footer').html(modalFooter);    
+    },
+
+    disableSave: function() {
+      console.log('disabling the save!');
+      this.$el.find('.btn.btn-default').attr('disabled', true);
+    },
+
+    enableSave: function() {
+      console.log('about to enable the save button');
+      this.$el.find('.btn.btn-default').attr('disabled', false);
     }
   });
 

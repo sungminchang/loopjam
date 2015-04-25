@@ -23,7 +23,8 @@ function(LoopNodeCollection, LoopNodeModel){
       bgFreqCanvasCtx: null,
       trackName: null,
       hashURL: null,
-      updateAnim: true
+      updateAnim: true,
+      converting: 0
     },
 
     initialize: function(params) {
@@ -77,7 +78,6 @@ function(LoopNodeCollection, LoopNodeModel){
         this.set('updateAnim', true);
       }.bind(this));
 
-      this
         // --> 'Remove' Event
 
 
@@ -146,7 +146,11 @@ function(LoopNodeCollection, LoopNodeModel){
         // input.connect(context.destination);
         console.log('Input connected to audio context destination.');
         
-        this.set('recorder', new Recorder(input));
+
+
+        this.set('recorder', new Recorder(input, null, this));
+
+
         console.log('Recorder initialised.');
       },
 
@@ -526,9 +530,8 @@ function(LoopNodeCollection, LoopNodeModel){
           trackData.audioData.push(nodeData);
         }
 
-
         var trackSaveCallback = function(URLArray){
-
+          
           this.trigger("modalShowWaiting");
 
           var uploadSync = function(i){
@@ -540,17 +543,17 @@ function(LoopNodeCollection, LoopNodeModel){
               headers: {'x-ms-blob-type': 'BlockBlob'},
               data: mp3Data,
               success: function(data){
-                debugger;
                 if(i !== URLArray.length - 2) uploadSync(i + 1);
-                else if (i === URLArray.length - 2){
+                else if (i === URLArray.length - 2){   
                   this.set('hashURL', URLArray[URLArray.length - 1]);
-                  this.trigger("modalShowShare")
+                  this.trigger("modalShowShare");
                 }
                 console.log(mp3Data, "accepted");
+                
               }.bind(this)
             });            
           }.bind(this)
-
+ 
           uploadSync(0)
 
         }.bind(this)
