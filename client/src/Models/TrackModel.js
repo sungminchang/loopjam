@@ -14,28 +14,22 @@ function(LoopNodeCollection, LoopNodeModel){
       loopNodes: null,  //soundData
       selectedLoopNode: null,
       animationTimer: null,
-      metronomeNode: null,
-      metronomeBuffer: null,
       metronomePlaying: false,
+      mFlag0: true,
+      mFlag1: true,
+      mFlag2: true,
+      mFlag3: true,
       analyser: null,
       visualFreqData: null,
       bgFreqCanvas: null,
       bgFreqCanvasCtx: null,
       trackName: null,
       hashURL: null,
-      converting: 0,
-      metronomeOn: true,
-      mFlag0: true,
-      mFlag1: true,
-      mFlag2: true,
-      mFlag3: true
+      converting: 0
+
     },
 
     initialize: function(params) {
-
-      var metronome = new LoopNodeModel();
-      metronome.set('url', 'audio/metronome.mp3');
-      this.set('metronomeNode', metronome);
 
       var loopNodesForTrack = new LoopNodeCollection(params.audioData);
       this.set('loopNodes', loopNodesForTrack)
@@ -124,8 +118,6 @@ function(LoopNodeCollection, LoopNodeModel){
 
    
         //buffer is loaded and added to each loop node as 'buffer' attribute 
-        var bufferLoader = new BufferLoader(this.get('context'));
-        bufferLoader.loadBuffer(this.get('metronomeNode'));
 
         this.get('loopNodes').forEach(function(loopNode){
           var bufferLoader = new BufferLoader(this.get('context'));
@@ -340,6 +332,9 @@ function(LoopNodeCollection, LoopNodeModel){
       
       setd3timer: function(){
         d3.timer(function(){
+
+
+
           this.CueAnimation();
           this.playMetronome();
           //  this.freqAnimationUpdate();
@@ -348,13 +343,15 @@ function(LoopNodeCollection, LoopNodeModel){
       },
 
       playMetronome: function(){
+        var noteLength = 0.05;
+        var playOn = this.get('metronomePlaying');
+
+        var context = this.get('context'); 
+        var currentTime = context.currentTime;
         var bar = calcBar(this.get('tempo'));
         var angularSpeed = calcSpeed(bar);
         var tempoAdjustment = this.get('tempoAdjustment');
-        var context = this.get('context'); 
-        var noteLength = 0.05;
-        var playOn = this.get('metronomeOn');
-        var currentTime = context.currentTime;
+
         var rotateDeg = currentTime * angularSpeed - tempoAdjustment;
         var degree = (rotateDeg % 360);
 
@@ -362,6 +359,7 @@ function(LoopNodeCollection, LoopNodeModel){
         var mFlag1 = this.get('mFlag1');
         var mFlag2 = this.get('mFlag2');
         var mFlag3 = this.get('mFlag3');
+
         var remainingDegree, nextNoteTime, osc;
 
         if(degree >= 0 && degree < 90 && mFlag0){
@@ -426,44 +424,31 @@ function(LoopNodeCollection, LoopNodeModel){
       },
 
       CueAnimation: function(){
-          var loopNodes = this.get('loopNodes');
-          var loopNodesArr = [];
-          var loopNodesClasses = [];
-          var $loopNodesClasses = [];
-          loopNodes.each(function(loopNode, i){
-            loopNodesArr[i] = loopNode;
-            loopNodesClasses[i] = '.loopNode' + loopNode.get('port');
-            $loopNodesClasses[i] = $(loopNodesClasses[i]);
-          }.bind(this));          
-          this.set('updateAnime', false);
-          var bar = calcBar(this.get('tempo'));
-          var angularSpeed = calcSpeed(bar);
-          var tempoAdjustment = this.get('tempoAdjustment');
+        var loopNodes = this.get('loopNodes');
+        var bar = calcBar(this.get('tempo'));
+        var angularSpeed = calcSpeed(bar);
+        var tempoAdjustment = this.get('tempoAdjustment');
 
-        loopNodesArr.forEach(function(loopNode, i) {
+        loopNodes.forEach(function(loopNode) {
           var rotateDeg = (this.get('context').currentTime * angularSpeed - tempoAdjustment) / loopNode.get('multiplier');
           var degree = (rotateDeg % 360)
-
           degree = degree / 360
 
+          // Recording && play flags for cursor
+          if((!loopNode.get('queue') && loopNode.get('recording') && !loopNode.get('playing') && !loopNode.get('recorded')) 
+            || (!loopNode.get('queue') && !loopNode.get('recording') && loopNode.get('playing') && loopNode.get('recorded'))){
+            var arc = d3.svg.arc().innerRadius(60).outerRadius(100).startAngle(0);
+          } else {
+            var arc = d3.svg.arc().innerRadius(60).outerRadius(100).startAngle(degree * (2 * Math.PI) - 0.15);
+          }
 
-            // Recording && play flags for cursor
-            if((!loopNode.get('queue') && loopNode.get('recording') && !loopNode.get('playing') && !loopNode.get('recorded')) 
-              || (!loopNode.get('queue') && !loopNode.get('recording') && loopNode.get('playing') && loopNode.get('recorded'))){
-              var arc = d3.svg.arc().innerRadius(60).outerRadius(100).startAngle(0);
-            } else {
-              var arc = d3.svg.arc().innerRadius(60).outerRadius(100).startAngle(degree * (2 * Math.PI) - 0.15);
-            }
-
-          // console.log(degree)
-              d3.select(loopNodesClasses[i]).select('.loopForeground').datum({endAngle: degree * (2 * Math.PI)})
-              .style("fill", "#395567")
-              .attr("d", arc);
-              // $loopNodesClasses[i].val(degree).trigger('change');
+          var loopNodeClass = '.loopNode' + loopNode.get('port');
+          d3.select(loopNodeClass).select('.loopForeground').datum({endAngle: degree * (2 * Math.PI)})
+          .style("fill", "#395567")
+          .attr("d", arc);
+          // $loopNodesClasses[i].val(degree).trigger('change');
             
           }.bind(this));
-        // frequency analyzer
-        // this.freqAnimationUpdate();
       },
 
       changeTempo: function(bpm, t){
@@ -474,11 +459,6 @@ function(LoopNodeCollection, LoopNodeModel){
         this.set('tempo', bpm);
 
         var loopNodes = this.get('loopNodes');
-        var metronomeNode = this.get('metronomeNode');
-        var metronomeNodeSource = metronomeNode.get('source');
-        if (metronomeNodeSource) {
-          metronomeNodeSource.playbackRate.value = parseInt(bpm) / 120;
-        }
 
         loopNodes.each(function(loopNode, i){
           // if (i === 0) { return true;}
