@@ -4,7 +4,7 @@ module.exports = function (config){
   // Base path, that will be used to resolve all relative paths defined in files and exclude
   basePath: '',
   //Testing frameworks to use
-  frameworks: ['jasmine'],
+  frameworks: ['jasmine','chai','mocha'],
   //List of files to load
   files: [
   'test/test.js',
@@ -30,7 +30,9 @@ module.exports = function (config){
             'karma-junit-reporter',
             'karma-chrome-launcher',
             'karma-phantomjs-launcher',
-            'karma-jasmine'
+            'karma-jasmine',
+            'karma-chai',
+            'karma-mocha'
             ],
   });
 }
