@@ -23,7 +23,7 @@ define([
       this.$el.html(this.template(this.model.attributes));
 
       var port = this.model.get('port');
-      var tempo = this.model.get('savedAtTempo') || this.model.get('tempo');
+      var tempo = this.model.get('tempo') || 120;
 
       $(this.el).find('#slider-vertical' + port).slider({
         orientation: "vertical",
