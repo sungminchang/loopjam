@@ -13,7 +13,7 @@ module.exports = function (config){
   // 'https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.2/handlebars.min.js',
   // 'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js'
 
-  // 'test/test.js',
+  'test/test.js',
   ],
   //set the port number
   port: 1337,
