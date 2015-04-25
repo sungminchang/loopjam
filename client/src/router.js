@@ -63,7 +63,6 @@ define([
             data: {trackID: id}
           }).done(function(data){
               audioData =  JSON.parse(data.audioData);
-              debugger;
               for(var i = 0; i < audioData.length; i++){
                 audioData[i].port = i + 1;
               }
