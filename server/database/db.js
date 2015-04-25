@@ -21,7 +21,8 @@ var Users = sequelize.define('Users', {
 var Tracks = sequelize.define('Tracks', {
 	trackname: Sequelize.STRING,
 	audioData: Sequelize.TEXT,
-  trackID: Sequelize.STRING
+  trackID: Sequelize.STRING,
+  tempo: Sequelize.INTEGER
 });
 
 //Establish Table Relationships

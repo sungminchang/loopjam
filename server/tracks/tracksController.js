@@ -18,6 +18,7 @@ module.exports.saveTrack = function(req,res){
 
 	var reqTrack = req.body.audioData;
 	var trackName = req.body.trackname;
+	var tempo = req.body.tempo;
 	var currentDate = Date.now().valueOf().toString();
 	var trackHash = crypto.createHash('sha1').update(trackName + currentDate).digest('hex').slice(5);
 	var outputURLs = [];
@@ -30,7 +31,7 @@ module.exports.saveTrack = function(req,res){
 	}
 	console.log('outputURLs', outputURLs);
 	reqTrack = JSON.stringify(reqTrack);
-		models.Tracks.findOrCreate({where:{trackname:trackName, audioData: reqTrack, trackID: trackHash}})
+		models.Tracks.findOrCreate({where:{trackname:trackName, tempo: tempo, audioData: reqTrack, trackID: trackHash}})
 		.then(function(response){				
 		res.send(csap.createSharedAccess(outputURLs, trackHash));
 	});
