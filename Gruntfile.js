@@ -139,7 +139,7 @@ module.exports = function (grunt) {
   });
 
     //Register Unit Tasks
-
+grunt.registerTask('build',[])
   grunt.registerTask('default', ['express:dev', 'watch','karma:continuous:start', 'nodemon']);
   grunt.registerTask('unit-test', ['karma:unit']);
   grunt.registerTask('test', ['karma:travis']);
