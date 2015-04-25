@@ -15,6 +15,7 @@ define([
 
     events: {
       'click .playMet': 'playMetronome',
+      'click .visualizer': 'activateVisualiser',
       'click .saveTrackBtn': 'saveTrackModel',
 
     },
@@ -47,18 +48,23 @@ define([
 
     playMetronome: function() {
       var metronomePlaying = this.model.get('metronomePlaying');
-      var metronomeNode = this.model.get('metronomeNode');
-      var metronomeBuffer = metronomeNode.get('buffer');
 
       if (!metronomePlaying) {
         this.model.set('metronomePlaying', !metronomePlaying);
-        this.model.queue(metronomeNode);
       } else {
         this.model.set('metronomePlaying', !metronomePlaying);
-        this.model.pause(metronomeNode);
       }
 
       console.log('tempo changed: ', this.model.get('tempo'));
+    },
+
+    activateVisualiser: function() {
+      var visualiserOn = this.model.get('visualiserOn');
+      if (!visualiserOn) {
+        this.model.set('visualiserOn', !visualiserOn);
+      } else {
+        this.model.set('visualiserOn', !visualiserOn);
+      }
     },
 
     saveTrackModel: function(){

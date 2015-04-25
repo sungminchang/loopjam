@@ -66,13 +66,13 @@ define([
               for(var i = 0; i < audioData.length; i++){
                 audioData[i].port = i + 1;
               }
-              this.track = new TrackModel({audioData: audioData});
-              this.track.set('tempo', data.tempo);
-              var trackView = new TrackView({model: this.track});
+              $this.track = new TrackModel({audioData: audioData});
+              $this.track.set('tempo', data.tempo);
+              var trackView = new TrackView({model: $this.track});
 
             $this.mainView.renderTrackView(trackView);
-            this.track.setd3timer();
-            this.track.get('loopNodes').each(function(loopNode){loopNode.set('rerender', !loopNode.get('rerender'))})
+            $this.track.setd3timer();
+            $this.track.get('loopNodes').each(function(loopNode){loopNode.set('rerender', !loopNode.get('rerender'))})
 
             });
       }
