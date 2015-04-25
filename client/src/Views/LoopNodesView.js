@@ -61,7 +61,6 @@ define([
 
       this.render();
       
-
       this.collection.each(function(loopNode){loopNode.set('rerender', !loopNode.get('rerender'))})
 
 

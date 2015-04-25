@@ -533,7 +533,7 @@ function(LoopNodeCollection, LoopNodeModel){
       saveTrack: function(trackName){
         this.set('trackName', trackName);
         var saveAttrKeys =['url', 'speed', 'multiplier', 'recordedAtBpm', 'mp3Multipier', 'recorded'];
-        var trackData = {trackname: trackName, audioData: []};
+        var trackData = {trackname: trackName, tempo: this.get('tempo'), audioData: []};
 
         var LoopNodesAttrArray = this.get('loopNodes').toJSON('url');
         for(var i = 0; i < LoopNodesAttrArray.length; i++){
