@@ -32,6 +32,10 @@ define([
       // Show All Tracks page
     },
     showTrackView: function(id){
+      if(this.track){
+        this.track.get('context').close()
+      }
+      
       if(!this.mainView){
         this.mainView = new MainView();
         $('body').html(this.mainView.render().el);
