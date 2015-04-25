@@ -211,8 +211,6 @@ function(LoopNodeCollection, LoopNodeModel){
 
         var delay = barTime - barTimePlayed;
 
-        console.log('tempoAdjustment', tempoAdjustment, 'barTimePlayed', barTimePlayed, 'delay', delay);
-
         console.log('Will delay by ', delay, 'seconds');
         var delayInMilliseconds = delay.toString().split('.');
         delayInMilliseconds[1] = delayInMilliseconds[1].slice(0,3)
@@ -220,19 +218,46 @@ function(LoopNodeCollection, LoopNodeModel){
 
         console.log("Context Current-time", this.get('context').currentTime)
         console.log("Record will start in:", delayInMilliseconds, "ms")
-        console.log("Expected time of recording:", currentTime*1000 + delayInMilliseconds, "ms")
+        console.log("Expected time of recording:", currentTime * 1000 + delayInMilliseconds, "ms")
         console.log("Record will stop in:", delayInMilliseconds + barTime * 1000, "ms")
         
         var barTimeInMS = barTime * 1000;
 
-        setTimeout(this.startRecording.bind(this, currentLoop), delayInMilliseconds - 20)
-        setTimeout(this.stopRecording.bind(this, currentLoop), delayInMilliseconds + barTimeInMS + 50)
-        
+        var startRecordTime = currentTime * 1000 + delayInMilliseconds - 20;
+        var stopRecordTime = currentTime * 1000 + delayInMilliseconds + barTimeInMS + 50;
+        var loadBufferTime = currentTime * 1000 + delayInMilliseconds + barTimeInMS + 300;
+
+        var startFlag = true;
+        var stopFlag = false;
+        var bufferFlag = false;  
+
         var bufferLoader = new BufferLoader(this.get('context'));
-        bufferLoader.loadBuffer(this.get('metronomeNode'));
-        setTimeout(function(){
-          bufferLoader.loadBuffer(currentLoop)
-        }, delayInMilliseconds + barTimeInMS + 300)
+
+        d3.timer(function(){
+          var time = this.get('context').currentTime * 1000;
+          if(time >= startRecordTime && startFlag){
+            this.startRecording(currentLoop);
+            startFlag = false;
+            stopFlag = true;
+          } else if (time >= stopRecordTime && stopFlag){
+            this.stopRecording(currentLoop);
+            stopFlag = false;
+            bufferFlag = true; 
+          } else if (time >= loadBufferTime && bufferFlag){
+            bufferLoader.loadBuffer(currentLoop);
+            return true;
+          }
+
+        }.bind(this));
+
+        // setTimeout(this.startRecording.bind(this, currentLoop), delayInMilliseconds - 20)
+        // setTimeout(this.stopRecording.bind(this, currentLoop), delayInMilliseconds + barTimeInMS + 50)
+        
+        // var bufferLoader = new BufferLoader(this.get('context'));
+        // bufferLoader.loadBuffer(this.get('metronomeNode'));
+        // setTimeout(function(){
+        //   bufferLoader.loadBuffer(currentLoop)
+        // }, delayInMilliseconds + barTimeInMS + 300)
       },
       
       startRecording: function(currentLoop) {
@@ -409,25 +434,16 @@ function(LoopNodeCollection, LoopNodeModel){
 
         var context = this.get('context');
 
-        // Grab the data object associated with the button.
-
-        // console.log('playing a sound: ', soundData);
-        // Grab the amount of time a bar takes to complete.
-        // var multiplier = currentLoop.get('multiplier');
         var currentTime = context.currentTime;
         var tempo = this.get('tempo');
-
-        // The remainder tells us how much of the bartime we have 
-        // completed thus far.
-
-
-
         var recordedAtBpm = currentLoop.get('recordedAtBpm') || 120;
         var multiplier = currentLoop.get('multiplier');
         var barTime = currentLoop.get('speed');
         var tempoAdjustment = this.get('tempoAdjustment');
         var mp3Multiplier = currentLoop.get('mp3Multiplier');
 
+        // The remainder tells us how much of the bartime we have 
+        // completed thus far.
         var remainder = (currentTime - tempoAdjustment / 360 * calcBar(tempo))  % (multiplier * calcBar(tempo));
         console.log('currentTime:', currentTime);
 
@@ -448,7 +464,7 @@ function(LoopNodeCollection, LoopNodeModel){
         console.log('source', source);
 
         var tempBuffer = currentLoop.get('buffer');
-        console.log(tempBuffer);
+        console.log("tempBuffer: ", tempBuffer);
 
         source.buffer = createRotatedAudioBuffer(this.get('context'), tempBuffer, tempBuffer.duration - barTime * mp3Multiplier);
         
@@ -533,29 +549,39 @@ function(LoopNodeCollection, LoopNodeModel){
         var trackSaveCallback = function(URLArray){
           
           this.trigger("modalShowWaiting");
+          var counter = 0;
 
           var uploadSync = function(i){
-
-            var mp3Data = this.get('loopNodes').where({port: i + 1})[0].get('mp3Data');
-            $.ajax({
-              type: "PUT",
-              url: URLArray[i],
-              headers: {'x-ms-blob-type': 'BlockBlob'},
-              data: mp3Data,
-              success: function(data){
-                if(i !== URLArray.length - 2) uploadSync(i + 1);
-                else if (i === URLArray.length - 2){   
-                  this.set('hashURL', URLArray[URLArray.length - 1]);
-                  this.trigger("modalShowShare");
-                }
-                console.log(mp3Data, "accepted");
-                
-              }.bind(this)
-            });            
+            var loopNode = this.get('loopNodes').where({port: i + 1})[0]; 
+            var url = loopNode.get('url');
+            if(url.substr(url.length - 10) !== ".mp3Base64"){
+              var mp3Data = loopNode.get('mp3Data');
+              $.ajax({
+                type: "PUT",
+                url: URLArray[counter],
+                headers: {'x-ms-blob-type': 'BlockBlob'},
+                data: mp3Data,
+                success: function(data){
+                  if(counter < URLArray.length - 2) {
+                    counter++;
+                    uploadSync(i + 1);
+                  }
+                  else if(counter === URLArray.length - 2){
+                    this.set('hashURL', URLArray[URLArray.length - 1]);
+                    this.trigger("modalShowShare")
+                  }
+                  console.log(mp3Data, "accepted");
+                }.bind(this)
+              });            
+            } else {
+              uploadSync(i + 1);
+              console.log("port ", loopNode.get('port'), " skipped");
+            }  
           }.bind(this)
- 
-          uploadSync(0)
 
+          if(URLArray.length - 1){
+            uploadSync(0);
+          }
         }.bind(this)
 
         $.ajax({
