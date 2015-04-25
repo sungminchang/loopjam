@@ -28,7 +28,7 @@ var Tracks = sequelize.define('Tracks', {
 //Establish Table Relationships
 Users.hasMany(Tracks);
 Tracks.belongsTo(Users);
-sequelize.sync({force:true});
+sequelize.sync();
 
 //Check connection to database
 sequelize.authenticate().complete(function(err) {
