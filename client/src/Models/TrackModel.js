@@ -23,8 +23,12 @@ function(LoopNodeCollection, LoopNodeModel){
       bgFreqCanvasCtx: null,
       trackName: null,
       hashURL: null,
-      updateAnim: true,
-      converting: 0
+      converting: 0,
+      metronomeOn: true,
+      mFlag0: true,
+      mFlag1: true,
+      mFlag2: true,
+      mFlag3: true
     },
 
     initialize: function(params) {
@@ -337,25 +341,91 @@ function(LoopNodeCollection, LoopNodeModel){
       setd3timer: function(){
         d3.timer(function(){
           this.CueAnimation();
+          this.playMetronome();
           //  this.freqAnimationUpdate();
         }.bind(this));
 
       },
 
       playMetronome: function(){
-        if(this.get('updateAnim')){
-          var bar = calcBar(this.get('tempo'));
-          var angularSpeed = calcSpeed(bar);
-          var tempoAdjustment = this.get('tempoAdjustment');
+        var bar = calcBar(this.get('tempo'));
+        var angularSpeed = calcSpeed(bar);
+        var tempoAdjustment = this.get('tempoAdjustment');
+        var context = this.get('context'); 
+        var noteLength = 0.05;
+        var playOn = this.get('metronomeOn');
+        var currentTime = context.currentTime;
+        var rotateDeg = currentTime * angularSpeed - tempoAdjustment;
+        var degree = (rotateDeg % 360);
+
+        var mFlag0 = this.get('mFlag0');
+        var mFlag1 = this.get('mFlag1');
+        var mFlag2 = this.get('mFlag2');
+        var mFlag3 = this.get('mFlag3');
+        var remainingDegree, nextNoteTime, osc;
+
+        if(degree >= 0 && degree < 90 && mFlag0){
+          remainingDegree = 90 - degree;
+          nextNoteTime = remainingDegree / angularSpeed + currentTime;
+
+          if(playOn){ 
+            osc = context.createOscillator();
+            osc.connect(context.destination);      
+            osc.frequency.value = 220.0;
+            osc.start(nextNoteTime);
+            osc.stop(nextNoteTime + noteLength);
+          }   
+
+          this.set('mFlag0', false);
+          this.set('mFlag3', true);
+        } else if(degree >= 90 && degree < 180 && mFlag1){
+          remainingDegree = 180 - degree;
+          nextNoteTime = remainingDegree / angularSpeed + currentTime;
+
+          if(playOn){        
+            osc = context.createOscillator();
+            osc.connect(context.destination);      
+            osc.frequency.value = 220.0;
+            osc.start(nextNoteTime);
+            osc.stop(nextNoteTime + noteLength);
+          }   
+
+          this.set('mFlag1', false);
+        } else if(degree >= 180 && degree < 270 && mFlag2){
+          remainingDegree = 270 - degree;
+          nextNoteTime = remainingDegree / angularSpeed + currentTime;
+
+          if(playOn){        
+            osc = context.createOscillator();
+            osc.connect(context.destination);      
+            osc.frequency.value = 220.0;
+            osc.start(nextNoteTime);
+            osc.stop(nextNoteTime + noteLength);
+          }   
+
+          this.set('mFlag2', false);
+        } else if(degree >= 270 && degree < 360 && mFlag3){
+          remainingDegree = 360 - degree;
+          nextNoteTime = remainingDegree / angularSpeed + currentTime;
+
+          if(playOn){        
+            osc = context.createOscillator();
+            osc.connect(context.destination);      
+            osc.frequency.value = 440.0;
+            osc.start(nextNoteTime);
+            osc.stop(nextNoteTime + noteLength);
+          }   
+
+          this.set('mFlag3', false);
+          this.set('mFlag0', true);
+          this.set('mFlag1', true);
+          this.set('mFlag2', true);
         }
-        var rotateDeg = this.get('context').currentTime * angularSpeed - tempoAdjustment;
-        var degree = (rotateDeg % 360)
+
 
       },
 
       CueAnimation: function(){
-
-        if(this.get('updateAnim')){
           var loopNodes = this.get('loopNodes');
           var loopNodesArr = [];
           var loopNodesClasses = [];
@@ -369,7 +439,6 @@ function(LoopNodeCollection, LoopNodeModel){
           var bar = calcBar(this.get('tempo'));
           var angularSpeed = calcSpeed(bar);
           var tempoAdjustment = this.get('tempoAdjustment');
-        }
 
         loopNodesArr.forEach(function(loopNode, i) {
           var rotateDeg = (this.get('context').currentTime * angularSpeed - tempoAdjustment) / loopNode.get('multiplier');
