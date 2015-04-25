@@ -343,7 +343,11 @@ function(LoopNodeCollection, LoopNodeModel){
       },
 
       playMetronome: function(){
+        // metronome sound attrib
         var noteLength = 0.05;
+        var metLowFreq = 330;
+        var metHighFreq = 660;
+
         var playOn = this.get('metronomePlaying');
 
         var context = this.get('context'); 
@@ -369,7 +373,7 @@ function(LoopNodeCollection, LoopNodeModel){
           if(playOn){ 
             osc = context.createOscillator();
             osc.connect(context.destination);      
-            osc.frequency.value = 220.0;
+            osc.frequency.value = metLowFreq;
             osc.start(nextNoteTime);
             osc.stop(nextNoteTime + noteLength);
           }   
@@ -383,7 +387,7 @@ function(LoopNodeCollection, LoopNodeModel){
           if(playOn){        
             osc = context.createOscillator();
             osc.connect(context.destination);      
-            osc.frequency.value = 220.0;
+            osc.frequency.value = metLowFreq;
             osc.start(nextNoteTime);
             osc.stop(nextNoteTime + noteLength);
           }   
@@ -396,7 +400,7 @@ function(LoopNodeCollection, LoopNodeModel){
           if(playOn){        
             osc = context.createOscillator();
             osc.connect(context.destination);      
-            osc.frequency.value = 220.0;
+            osc.frequency.value = metLowFreq;
             osc.start(nextNoteTime);
             osc.stop(nextNoteTime + noteLength);
           }   
@@ -409,7 +413,7 @@ function(LoopNodeCollection, LoopNodeModel){
           if(playOn){        
             osc = context.createOscillator();
             osc.connect(context.destination);      
-            osc.frequency.value = 440.0;
+            osc.frequency.value = metHighFreq;
             osc.start(nextNoteTime);
             osc.stop(nextNoteTime + noteLength);
           }   
