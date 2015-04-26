@@ -21,6 +21,24 @@ html, body
   background-color: #273A47;
 }
 
+.pageLoadBox{
+  width: 500px;
+  height: 200px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin: -100px 0 0 -250px;
+}
+
+.loaderBox{
+  position: relative;
+  width: 150px;
+  height: 150px;
+  left: 170px;
+  top: -10px;
+
+}
+
 .navbar{
   background: #1C2932;
   margin-bottom:0px;
@@ -34,6 +52,7 @@ body{
   padding:25px; 
   background-color:#395567; 
   margin-top:-40px; 
+  height:625px;
 }
 
 .sideBar{

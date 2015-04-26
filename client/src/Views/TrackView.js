@@ -12,6 +12,7 @@ define([
       this.model.on("change:selectedLoopNode", this.updateLoopNodeInfoView, this);
       // $(window).resize(this.createFreqVisualizer).bind(this);
 
+
       window.onbeforeunload = function (e) {
           e = e || window.event;
           var hash = (window.location.hash);
@@ -25,6 +26,8 @@ define([
             return 'Before you go, you might want to save your Track.';
           }
       };
+
+ 
     },
 
     events:{
@@ -45,14 +48,16 @@ define([
       this.$el.find('.trackInfoView').append(new TrackInfoView({model: this.model}).render().el);
       this.$el.find('.loopNodesView').append(new LoopNodesView({collection: this.model.get('loopNodes')}).render().el);
 
-      // set height to window
-      this.$el.find('.loopNodesView').height($( window ).height());
-
       //Event listening for mp3 data retrieval
       this.$el.find('.mp3Blob').on('newmp3', this.attachMp3ToNode.bind(this));
       
+      $(document).ready(function(){
+        this.createFreqVisualizer();
+      }.bind(this));
 
-      this.createFreqVisualizer();
+      $(window).on('resize', function(){
+        this.createFreqVisualizer();
+      }.bind(this));
 
       return this;
     },
@@ -73,20 +78,24 @@ define([
 
     createFreqVisualizer: function(){
       // Refacor this code later to move out of track View, posssibly
-      var height = $( window ).height();
-      var width = $( window ).width();
+      var height = $('.loopNodesView').outerHeight();
+      var width = $('.loopNodesView').outerWidth();
+
+      // var padding = $('.loopNodesView').css('padding');
+      // padding = parseInt(padding.substr(0, padding.length-2));
 
       var canvas_div = this.$el.find('.bgVisualizerView')
       canvas_div.height(height);
       canvas_div.width(width);
       canvas_div.css('position','absolute');
-      canvas_div.css('z-index', -1);
+      canvas_div.css('z-index', 0);
+      canvas_div.css('top', 0);
+      canvas_div.css('left', 0);
+
 
       var canvas = this.$el.find('.bgfreqVisCanvas');
       canvas.attr('height', canvas_div.height());
       canvas.attr('width', canvas_div.width());
-
-
 
       var ctx = canvas[0].getContext("2d");
       ctx.imageSmoothingEnabled = !1;

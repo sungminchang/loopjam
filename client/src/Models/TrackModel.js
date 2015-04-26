@@ -185,6 +185,10 @@ function(LoopNodeCollection, LoopNodeModel){
           yPos = canvas.height();   
           width = colWidth - 1;
           height = -(Math.floor(freq / 255 * canvas.height()) + 1); 
+          // var rand1 = Math.floor(Math.random() * 255);
+          // var rand2 = Math.floor(Math.random() * 255);
+          // var rand3 = Math.floor(Math.random() * 255);
+          // ctx.fillStyle = 'rgb('+ rand1 +','+ rand2 +',' + rand3 + ')';
           ctx.fillRect(xPos, yPos, width, height);
         }
 
