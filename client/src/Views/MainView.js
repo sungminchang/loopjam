@@ -23,17 +23,17 @@ define([
       var navView = new NavView();
       this.$el.find('.navBar').html(navView.render().el);
 
-      this.$el.find('#table').bootstrapTable({
-        url: '/tracks',
-        responseHandler: function(d) {
-          for (var i = 0; i < d.length; i++) {
-            var trackname = d[i]['trackname'].toString();
-            var trackID = d[i]['trackID'].toString();
-            d[i]['trackname'] = '<a href="/#/tracks/' + trackID + '">' + trackname + ' </a> ';
-          }
-          return d;
-        }
-      });
+      // this.$el.find('#table').bootstrapTable({
+      //   url: '/tracks',
+      //   responseHandler: function(d) {
+      //     for (var i = 0; i < d.length; i++) {
+      //       var trackname = d[i]['trackname'].toString();
+      //       var trackID = d[i]['trackID'].toString();
+      //       d[i]['trackname'] = '<a href="/#/tracks/' + trackID + '">' + trackname + ' </a> ';
+      //     }
+      //     return d;
+      //   }
+      // });
       return this;
     },
     renderAppView: function(){

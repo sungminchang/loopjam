@@ -1,7 +1,7 @@
 define([
   'text!templates/AppViewTemplate.html',
-  'text!templates/RecentTracksViewTemplate.html',
-], function(template, recentTracksTemplate){
+  'text!templates/MiniTrackInfoTemplate.html',
+], function(template, miniTrackInfo){
   var AppView = Backbone.View.extend({
 
     template: Handlebars.compile(template),
@@ -21,21 +21,23 @@ define([
       return this;
     },
 
-
-
     renderRecentTracks: function() {
       this.$el.find('.recentTracks').children().detach();
-      var recentsTemplate = Handlebars.compile(recentTracksTemplate)
-      this.$el.find('.recentTracks').html(recentsTemplate());
-      var $this = this;
+      var miniTemplate = Handlebars.compile(miniTrackInfo)
+      var that = this;
     
-      $this.$el.find('#table').bootstrapTable({
+      $.ajax({
+        type: 'GET',
         url: '/tracks',
-        responseHandler: function(d) {
+        success: function(d) {
           for (var i = 0; i < d.length; i++) {
-            var trackname = d[i]['trackname'].toString();
-            var trackID = d[i]['trackID'].toString();
-            d[i]['trackname'] = '<a href="/#/tracks/' + trackID + '">' + trackname + ' </a> ';
+            var trackInfo = {};
+            var dateCreated = new Date(d[0].createdAt).toString().split(' ');
+            trackInfo.dateCreated = dateCreated[1] + "/" + dateCreated[2] + "/" + dateCreated[3]
+            trackInfo.trackname = d[i]['trackname'].toString();
+            trackInfo.trackID = d[i]['trackID'].toString();
+            trackInfo.numberofloops = JSON.parse(d[0].audioData).length
+            that.$el.find('.recentTracks').append(miniTemplate(trackInfo));
           }
           return d;
         }

@@ -1,5 +1,6 @@
 @import '//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css';
 @import '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css';
+@import url(http://fonts.googleapis.com/css?family=Lato);
 @import 'src/flat-ui.min.css';
 
 /*Dark: #1C2932
@@ -14,8 +15,7 @@
 
 html, body
 {
-    height: 100%;
-    min-height: 100%;
+    font-family: 'Lato', sans-serif;
     margin: 0;
     padding: 0;
   background-color: #273A47;
@@ -31,9 +31,12 @@ body{
 }
 
 .loopNodesView{
+  width: 65%;
+  height: 500px;
   padding:25px; 
-  background-color:#395567; 
-  margin-top:-40px; 
+  background-color: #395567;
+/* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+  margin-top:-40px;
 }
 
 .sideBar{
@@ -80,8 +83,8 @@ h1, h2, h3, h4{
 */
 
 .btn-xxl {
-  padding: 20px 26px;
-  font-size: 35px;
+  padding: 18px 24px;
+  font-size: 24px;
   border-radius: 8px;
 }
 
