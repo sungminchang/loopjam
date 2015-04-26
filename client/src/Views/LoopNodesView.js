@@ -62,11 +62,11 @@ define([
         $(loopNodeDiv).parent().remove();
         // this.collection.trigger('removeLoopNode', currentLoop);
 
-        debugger;
+        this.collection.remove(currentLoop);
+        
         var newSelectedNode = this.collection.models[port - 1];
         newSelectedNode.trigger('selected', newSelectedNode);
         
-        this.collection.remove(currentLoop);
         this.render();
         this.collection.each(function(loopNode){loopNode.set('rerender', !loopNode.get('rerender'))})
 
