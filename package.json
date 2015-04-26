@@ -4,7 +4,8 @@
   "private": true,
   "description": "An interactive platform for creating live music online.",
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
