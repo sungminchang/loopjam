@@ -14,7 +14,7 @@ var LoopNodeModel = Backbone.Model.extend({
     // port: loopNodeForTrack.nextPort(),
     startPlayingTime: null,
     endPlayingTime: null,
-    d3Obj: null,
+    d3Obj: null,  
     recorded: false,
     recording: false,
     playing: false,
