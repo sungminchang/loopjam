@@ -25,6 +25,7 @@ define([
       var isChrome = !!window.chrome && !isOpera;              // Chrome 1+
       var isIE = /*@cc_on!@*/false || !!document.documentMode; // At least IE6
       if (!isChrome) {
+        console.log('askjflasj laj laskjdf laksjdf lk asdf a');
         this.loadBrowserAlertView();
       } else {
         if (args) {
@@ -39,7 +40,7 @@ define([
 
     loadBrowserAlertView: function() {
       var BrowserAlertTemplate = this.browserAlertTemplate;
-      $('body').find('.main').html(BrowserAlertTemplate());
+      $('body').html(BrowserAlertTemplate());
     },
 
     loadMainView: function(){
