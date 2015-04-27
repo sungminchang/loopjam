@@ -55,6 +55,12 @@ define([
         this.createFreqVisualizer();
       }.bind(this));
 
+      // not idle, but works.
+      setTimeout(function(){
+        console.log('setTimeout', this);
+        this.createFreqVisualizer();
+      }.bind(this), 300);
+
       $(window).on('resize', function(){
         this.createFreqVisualizer();
       }.bind(this));

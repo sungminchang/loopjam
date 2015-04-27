@@ -609,7 +609,9 @@ function(LoopNodeCollection, LoopNodeModel){
           }
           nodeData.mp3Multiplier = 2;
           nodeData.recorded = true;
-          trackData.audioData.push(nodeData);
+          if(nodeData.url !== ""){
+            trackData.audioData.push(nodeData);
+          }
         }
 
         var trackSaveCallback = function(URLArray){
@@ -620,7 +622,7 @@ function(LoopNodeCollection, LoopNodeModel){
           var uploadSync = function(i){
             var loopNode = this.get('loopNodes').where({port: i + 1})[0]; 
             var url = loopNode.get('url');
-            if(url.substr(url.length - 10) !== ".mp3Base64"){
+            if(url !== "" && url.substr(url.length - 10) !== ".mp3Base64"){
               var mp3Data = loopNode.get('mp3Data');
               $.ajax({
                 type: "PUT",
