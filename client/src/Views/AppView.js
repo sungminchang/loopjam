@@ -30,13 +30,14 @@ define([
         type: 'GET',
         url: '/tracks',
         success: function(d) {
+          debugger;
           for (var i = 0; i < d.length; i++) {
             var trackInfo = {};
             var dateCreated = new Date(d[0].createdAt).toString().split(' ');
             trackInfo.dateCreated = dateCreated[1] + "/" + dateCreated[2] + "/" + dateCreated[3]
             trackInfo.trackname = d[i]['trackname'].toString();
             trackInfo.trackID = d[i]['trackID'].toString();
-            trackInfo.numberofloops = JSON.parse(d[0].audioData).length
+            trackInfo.numberofloops = JSON.parse(d[i].audioData).length
             that.$el.find('.recentTracks').append(miniTemplate(trackInfo));
           }
           return d;
