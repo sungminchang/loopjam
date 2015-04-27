@@ -25,7 +25,6 @@ define([
       var isChrome = !!window.chrome && !isOpera;              // Chrome 1+
       var isIE = /*@cc_on!@*/false || !!document.documentMode; // At least IE6
       if (!isChrome) {
-        console.log('askjflasj laj laskjdf laksjdf lk asdf a');
         this.loadBrowserAlertView();
       } else {
         if (args) {
